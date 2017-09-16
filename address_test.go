@@ -54,28 +54,24 @@ func TestGetAddresses(t *testing.T) {
 
 	for i := range response.Addresses {
 		addr := response.Addresses[i]
+
+		t.Log("Check address: " + addr.Address)
+
 		switch addr.Address {
 		case "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa":
-			t.Logf("Check address: %s", addr.Address)
-
 			if addr.NTx < 1105 {
 				t.Fatal("Failed check number of transactions")
 			}
-
-			if len(addr.Txs) != 0 {
-				t.Fatal("Failed check count of transactions")
-			}
 		case "12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX":
-			t.Logf("Check address: %s", addr.Address)
-
 			if addr.NTx < 57 {
 				t.Fatal("Failed check number of transactions")
 			}
-
-			if len(addr.Txs) != 0 {
-				t.Fatal("Failed check count of transactions")
-			}
+		default:
+			t.Fatal("Do not ordered address: " + addr.Address)
 		}
 
+		if len(addr.Txs) != 0 {
+			t.Fatal("Failed check count of transactions")
+		}
 	}
 }
