@@ -1,6 +1,9 @@
 package blockchain
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 type Address struct {
 	Hash160       string `json:"hash160"` // Does not exist in the case multiaddr
@@ -59,16 +62,46 @@ type Info struct {
 	LatestBlock *LatestBlock `json:"latest_block"`
 }
 
-func (c *Client) GetAddress(address string) (response *Address, e error) {
-	var path = "/address/" + address + "?format=json"
+func (c *Client) GetAddress(address string, params ...string) (response *Address, e error) {
+	var offset string = "0"
+	var limit string = "50"
+
+	switch len(params) {
+	case 0:
+	case 1:
+		offset = params[0]
+	case 2:
+		offset = params[0]
+		limit = params[1]
+	default:
+		e = errors.New("Bad params")
+		return
+	}
+
+	var path = "/address/" + address + "?format=json&limit=" + limit + "&offset=" + offset
 	response = &Address{}
 	e = c.DoRequest(path, response)
 
 	return
 }
 
-func (c *Client) GetAddresses(addresses []string) (response *MultiAddr, e error) {
-	var path = "/multiaddr?active=" + strings.Join(addresses, "|")
+func (c *Client) GetAddresses(addresses []string, params ...string) (response *MultiAddr, e error) {
+	var offset string = "0"
+	var limit string = "50"
+
+	switch len(params) {
+	case 0:
+	case 1:
+		offset = params[0]
+	case 2:
+		offset = params[0]
+		limit = params[1]
+	default:
+		e = errors.New("Bad params")
+		return
+	}
+
+	var path = "/multiaddr?active=" + strings.Join(addresses, "|") + "&limit=" + limit + "&offset=" + offset
 	response = &MultiAddr{}
 	e = c.DoRequest(path, response)
 

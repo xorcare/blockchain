@@ -6,7 +6,7 @@ import (
 
 func TestGetAddress(t *testing.T) {
 	c := New()
-	response, e := c.GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
+	response, e := c.GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", "10", "50")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -55,8 +55,6 @@ func TestGetAddresses(t *testing.T) {
 	for i := range response.Addresses {
 		addr := response.Addresses[i]
 
-		t.Log("Check address: " + addr.Address)
-
 		switch addr.Address {
 		case "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa":
 			if addr.NTx < 1105 {
@@ -74,4 +72,34 @@ func TestGetAddresses(t *testing.T) {
 			t.Fatal("Failed check count of transactions")
 		}
 	}
+}
+
+func TestGetAddressMoreParams(t *testing.T) {
+	c := New()
+	response, e := c.GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", "2147483647")
+	if e != nil {
+		t.Fatal(e)
+	}
+
+	if len(response.Txs) != 0 {
+		t.Fatal("Wrong count txs")
+	}
+}
+
+func TestGetAddressesMoreParams(t *testing.T) {
+	addresses := []string{
+		"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+		"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
+	}
+
+	c := New()
+	response, e := c.GetAddresses(addresses, "2147483647")
+	if e != nil {
+		t.Fatal(e)
+	}
+
+	if len(response.Txs) != 0 {
+		t.Fatal("Wrong count txs")
+	}
+
 }
