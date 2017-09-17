@@ -51,13 +51,6 @@ type SymbolBtc struct {
 	Local              bool    `json:"local"`
 }
 
-type LatestBlock struct {
-	BlockIndex uint64 `json:"block_index"`
-	Hash       string `json:"hash"`
-	Height     uint64 `json:"height"`
-	Time       uint64 `json:"time"`
-}
-
 type Info struct {
 	NConnected  uint64       `json:"nconnected"`
 	Conversion  float64      `json:"conversion"`
