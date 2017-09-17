@@ -32,7 +32,7 @@ type BlockHeight struct {
 func (c *Client) GetBlock(block string) (response *Block, e error) {
 	response = &Block{}
 	var path string = "/rawblock/" + block
-	e = c.doRequest(path, response)
+	e = c.DoRequest(path, response)
 
 	return
 }
@@ -40,7 +40,7 @@ func (c *Client) GetBlock(block string) (response *Block, e error) {
 func (c *Client) GetBlockHeight(blockHeight string) (response *BlockHeight, e error) {
 	response = &BlockHeight{}
 	var path string = "/block-height/" + blockHeight + "?format=json"
-	e = c.doRequest(path, response)
+	e = c.DoRequest(path, response)
 
 	return
 }
@@ -48,7 +48,7 @@ func (c *Client) GetBlockHeight(blockHeight string) (response *BlockHeight, e er
 func (c *Client) GetLatestBlock() (response *LatestBlock, e error) {
 	response = &LatestBlock{}
 	var path string = "/latestblock"
-	e = c.doRequest(path, response)
+	e = c.DoRequest(path, response)
 
 	return
 }

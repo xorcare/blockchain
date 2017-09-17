@@ -62,7 +62,7 @@ type Info struct {
 func (c *Client) GetAddress(address string) (response *Address, e error) {
 	var path = "/address/" + address + "?format=json"
 	response = &Address{}
-	e = c.doRequest(path, response)
+	e = c.DoRequest(path, response)
 
 	return
 }
@@ -70,7 +70,7 @@ func (c *Client) GetAddress(address string) (response *Address, e error) {
 func (c *Client) GetAddresses(addresses []string) (response *MultiAddr, e error) {
 	var path = "/multiaddr?active=" + strings.Join(addresses, "|")
 	response = &MultiAddr{}
-	e = c.doRequest(path, response)
+	e = c.DoRequest(path, response)
 
 	return
 }

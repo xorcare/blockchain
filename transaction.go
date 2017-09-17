@@ -59,7 +59,7 @@ type Txs struct {
 func (c *Client) GetTransaction(transaction string) (response *Tx, e error) {
 	response = &Tx{}
 	var path string = "/rawtx/" + transaction + "?format=json"
-	e = c.doRequest(path, response)
+	e = c.DoRequest(path, response)
 
 	return
 }
@@ -67,7 +67,7 @@ func (c *Client) GetTransaction(transaction string) (response *Tx, e error) {
 func (c *Client) GetUnconfirmedTransactions() (reaponse *Txs, e error) {
 	reaponse = &Txs{}
 	var path string = "/unconfirmed-transactions" + "?format=json"
-	e = c.doRequest(path, reaponse)
+	e = c.DoRequest(path, reaponse)
 
 	return
 }

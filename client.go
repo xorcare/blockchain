@@ -7,22 +7,22 @@ import (
 	"net/http"
 )
 
-// Go client blockchain.info api
+// Golang client blockchain api -> https://blockchain.info/api
 
 const (
-	apiRootTor = "https://blockchainbdgpzk.onion"
-	apiRootNet = "https://blockchain.info"
+	ApiRootTor = "https://blockchainbdgpzk.onion"
+	ApiRootNet = "https://blockchain.info"
 )
 
 type Client struct {
-	*http.Client
+	Http    *http.Client
 	ApiRoot string
 }
 
-func (c *Client) doRequest(path string, i interface{}) (e error) {
+func (c *Client) DoRequest(path string, i interface{}) (e error) {
 	fullPath := c.ApiRoot + path
 
-	response, e := c.Get(fullPath)
+	response, e := c.Http.Get(fullPath)
 	if e != nil {
 		return
 	}
@@ -41,9 +41,9 @@ func (c *Client) doRequest(path string, i interface{}) (e error) {
 }
 
 func New() *Client {
-	return &Client{Client: &http.Client{}, ApiRoot: apiRootNet}
+	return &Client{Http: &http.Client{}, ApiRoot: ApiRootNet}
 }
 
 func NewTor() *Client {
-	return &Client{Client: &http.Client{}, ApiRoot: apiRootTor}
+	return &Client{Http: &http.Client{}, ApiRoot: ApiRootTor}
 }
