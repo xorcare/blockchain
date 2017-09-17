@@ -101,5 +101,4 @@ func TestGetAddressesMoreParams(t *testing.T) {
 	if len(response.Txs) != 0 {
 		t.Fatal("Wrong count txs")
 	}
-
 }

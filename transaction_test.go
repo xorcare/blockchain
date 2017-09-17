@@ -10,7 +10,6 @@ func TestGetUnconfirmedTransactions(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	_ = txs
 
 	for i := range txs.Txs {
 		tx := txs.Txs[i]
