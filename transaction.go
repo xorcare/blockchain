@@ -17,7 +17,7 @@ type Tx struct {
 	Fee         uint64    `json:"fee"`
 	LockTime    uint64    `json:"lock_time"`
 	DoubleSpend bool      `json:"double_spend"`
-	Balance     uint64    `json:"balance"`
+	Balance     int64     `json:"balance"`
 	Rbf         bool      `json:"rbf"`
 }
 
