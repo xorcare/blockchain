@@ -1,3 +1,7 @@
+// Copyright 2017 Vasilyuk Vasiliy. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 package blockchain
 
 import "testing"
@@ -28,6 +32,6 @@ func TestGetChartPools(t *testing.T) {
 	}
 
 	for k, v := range *pools {
-		t.Logf("%s: %d",k,v)
+		t.Logf("%s: %d", k, v)
 	}
 }

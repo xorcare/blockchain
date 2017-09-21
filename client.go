@@ -1,3 +1,9 @@
+// Copyright 2017 Vasilyuk Vasiliy. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Golang client blockchain api -> https://blockchain.info/api
+
 package blockchain
 
 import (
@@ -6,8 +12,6 @@ import (
 	"io/ioutil"
 	"net/http"
 )
-
-// Golang client blockchain api -> https://blockchain.info/api
 
 const (
 	ApiRootTor = "https://blockchainbdgpzk.onion"
