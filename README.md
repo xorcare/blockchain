@@ -1,4 +1,5 @@
 # Package blockchain
+[![Build Status](https://travis-ci.org/By-Vasiliy/blockchain.svg?branch=master)](https://travis-ci.org/By-Vasiliy/blockchain)
 
 *Go client blockchain.info api*
 
