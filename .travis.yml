@@ -1,16 +1,13 @@
 language: go
 
 go:
-  - 1.5
-  - 1.6
-  - 1.7
-  - 1.8
+  - 1.9.x
   - 1.x
-  - tip
   - master
 os:
   - linux
   - osx
+  - windows
 env:
   - GOARCH=386
   - GOARCH=amd64
