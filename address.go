@@ -4,27 +4,23 @@
 
 package blockchain
 
-import (
-	"strings"
-)
+import "strings"
 
 type Address struct {
-	Hash160       string `json:"hash160"` // Does not exist in the case multiaddr
+	Hash160       string `json:"hash160,omitempty"` // Exist only in the case address
 	Address       string `json:"address"`
 	NTx           uint64 `json:"n_tx"`
 	TotalReceived uint64 `json:"total_received"`
 	TotalSent     uint64 `json:"total_sent"`
 	FinalBalance  uint64 `json:"final_balance"`
-	Txs           []*Tx  `json:"txs"` // Does not exist in the case multiaddr
-
-	// Exist in the case multiaddr
-	ChangeIndex  uint64 `json:"change_index"`
-	AccountIndex uint64 `json:"account_index"`
+	Txs           []*Tx  `json:"txs,omitempty"`
+	ChangeIndex   uint64 `json:"change_index,omitempty"`  // Exist only in the case multiaddr
+	AccountIndex  uint64 `json:"account_index,omitempty"` // Exist only in the case multiaddr
 }
 
 type MultiAddr struct {
-	RecommendIncludeFee bool       `json:"recommend_include_fee"`
-	SharedcoinEndpoint  string     `json:"sharedcoin_endpoint"`
+	RecommendIncludeFee bool       `json:"recommend_include_fee,omitempty"`
+	SharedcoinEndpoint  string     `json:"sharedcoin_endpoint,omitempty"`
 	Wallet              *Wallet    `json:"wallet"`
 	Addresses           []*Address `json:"addresses"`
 	Txs                 []*Tx      `json:"txs"`

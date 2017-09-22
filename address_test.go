@@ -4,9 +4,7 @@
 
 package blockchain
 
-import (
-	"testing"
-)
+import "testing"
 
 func TestGetAddress(t *testing.T) {
 	c := New()
