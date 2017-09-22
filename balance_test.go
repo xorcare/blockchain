@@ -211,23 +211,6 @@ func TestGetBalance(t *testing.T) {
 		"1F22VKzwQWf2LoSziz78Zc5e7owfrHDRCy",
 		"1AL11Yfw2ZP9C4wGiWf99jwZyTjWWY4JVn",
 		"1LKriCmDaBz4SfCoDjcjR1b9CmQTHibCcr",
-		"1HwmP33SaknLYShXfjVU8KmVThU3JiuVgH",
-		"1PAL9ZNuwAcufS8xSnGMCpQqECFF9g9QN1",
-		"1P8BjGr7JG8zfDTZBE4Kat2KthsDJ9xg5e",
-		"14fKXAX9CFFGVE2txHtTbLX5owb6x9dYh3",
-		"1ExG3uFvQJ12uXotnp78enyMZbfEizWzRn",
-		"1AxA6X2FSY5NSZzWS25RXA7j6uhTGEZ9eD",
-		"12zBX15JrZjgxLkvr3rVUcVcD6323rZ3bY",
-		"13QWmek3hEUhhcXL6PkyaQvW8cYuZwGFpM",
-		"1F7RYd4KM2AesmFx83JYgLKibYrfxcWYaV",
-		"1GpHVwFv8Qnxov68HxZwdfvMDtEaYucGcR",
-		"16hWr6twFK4Rt5tAJmoqDeSVQsxZ1tFuJa",
-		"12vhcB2bfspTua6XLpLcZPP4zpkudmw2re",
-		"1EvRbs7Fc6R6V8LsnoD3Ntng9vWfmreeRT",
-		"16DvfwUBRqaZGaMWnzSnX8TPUantMKXhjV",
-		"1Po1b27dVXkmyQdKXk5AvHUzdgEk5MvMvC",
-		"1GB9LgiyE6Upg2qbVGy2phKfgVZB681WhC",
-		"1NZA1LZDbyeE9qdHWeJnN5DN7ZDJShsssU",
 	}
 
 	balances, e := c.GetBalance(address)

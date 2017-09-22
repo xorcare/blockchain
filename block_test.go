@@ -17,7 +17,7 @@ func TestGetBlock(t *testing.T) {
 	checkFirstBlock(t, block)
 }
 
-func TestGetBlocks(t *testing.T) {
+func TestGetBlockHeight(t *testing.T) {
 	c := New()
 	blockHeight, e := c.GetBlockHeight("0")
 	if e != nil {
@@ -29,6 +29,34 @@ func TestGetBlocks(t *testing.T) {
 	}
 
 	checkFirstBlock(t, blockHeight.Blocks[0])
+}
+
+func TestGetBlocks(t *testing.T) {
+	c := New()
+	blocks, e := c.GetBlocks("1231006505000")
+	if e != nil {
+		t.Fatal(e)
+	}
+
+	if len(blocks.Blocks) < 1 {
+		t.Fatal("Error blocks are not loaded")
+	}
+
+	if blocks.Blocks[0].Hash != "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f" {
+		t.Fatal("Wrong length value on field 'Hash'")
+	}
+
+	if blocks.Blocks[0].Height != 0 {
+		t.Fatal("Wrong value on field 'Height'")
+	}
+
+	if blocks.Blocks[0].Time != 1231006505 {
+		t.Fatal("Wrong value on field 'Time'")
+	}
+
+	if blocks.Blocks[0].MainChain != true {
+		t.Fatal("Wrong count items on field 'MainChain'")
+	}
 }
 
 func TestGetLatestBlock(t *testing.T) {

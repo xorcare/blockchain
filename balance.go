@@ -17,9 +17,8 @@ type Balance struct {
 }
 
 func (c *Client) GetBalance(addresses []string) (response *Balances, e error) {
-	var path = "/balance?active=" + strings.Join(addresses, "|")
 	response = &Balances{}
-	e = c.DoRequest(path, response)
+	e = c.DoRequest("/balance", response, map[string]string{"active": strings.Join(addresses, "|")})
 
 	return
 }

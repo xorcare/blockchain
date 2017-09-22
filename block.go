@@ -29,30 +29,34 @@ type LatestBlock struct {
 	TxIndexes  []uint64 `json:"txIndexes"`
 }
 
-type BlockHeight struct {
+type Blocks struct {
 	Blocks []*Block `json:"blocks"`
 }
 
 func (c *Client) GetBlock(block string) (response *Block, e error) {
 	response = &Block{}
-	var path string = "/rawblock/" + block
-	e = c.DoRequest(path, response)
+	e = c.DoRequest("/rawblock/"+block, response, map[string]string{"format": "json"})
 
 	return
 }
 
-func (c *Client) GetBlockHeight(blockHeight string) (response *BlockHeight, e error) {
-	response = &BlockHeight{}
-	var path string = "/block-height/" + blockHeight + "?format=json"
-	e = c.DoRequest(path, response)
+func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e error) {
+	response = &Blocks{}
+	e = c.DoRequest("/block-height/"+blockHeight, response, map[string]string{"format": "json"})
+
+	return
+}
+
+func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e error) {
+	response = &Blocks{}
+	e = c.DoRequest("/blocks/"+blockHeight, response, map[string]string{"format": "json"})
 
 	return
 }
 
 func (c *Client) GetLatestBlock() (response *LatestBlock, e error) {
 	response = &LatestBlock{}
-	var path string = "/latestblock"
-	e = c.DoRequest(path, response)
+	e = c.DoRequest("/latestblock", response, map[string]string{"format": "json"})
 
 	return
 }

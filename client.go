@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 const (
@@ -23,9 +24,14 @@ type Client struct {
 	ApiRoot string
 }
 
-func (c *Client) DoRequest(path string, i interface{}) (e error) {
-	fullPath := c.ApiRoot + path
+func (c *Client) DoRequest(path string, i interface{}, params map[string]string) (e error) {
+	params["format"] = "json"
+	urlValues := url.Values{}
+	for k, v := range params {
+		urlValues.Set(k, v)
+	}
 
+	fullPath := c.ApiRoot + path + "?" + (urlValues.Encode())
 	response, e := c.Http.Get(fullPath)
 	if e != nil {
 		return

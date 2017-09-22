@@ -22,16 +22,20 @@ type Value struct {
 
 func (c *Client) GetPools() (response *ChartPools, e error) {
 	response = &ChartPools{}
-	var path = "/pools?format=json"
-	e = c.DoRequest(path, response)
+	e = c.DoRequest("/pools", response, map[string]string{"format": "json"})
 
 	return
 }
 
-func (c *Client) GetChart(chartType string) (response *Chart, e error) {
+func (c *Client) GetChart(chartType string, params ...map[string]string) (response *Chart, e error) {
+	options := map[string]string{"format": "json"}
+	if len(params) > 0 {
+		for k, v := range params[0] {
+			options[k] = v
+		}
+	}
 	response = &Chart{}
-	var path = "/charts/" + chartType + "?format=json"
-	e = c.DoRequest(path, response)
+	e = c.DoRequest("/charts/"+chartType, response, options)
 
 	return
 }

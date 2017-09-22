@@ -5,7 +5,6 @@
 package blockchain
 
 import (
-	"errors"
 	"strings"
 )
 
@@ -66,48 +65,28 @@ type Info struct {
 	LatestBlock *LatestBlock `json:"latest_block"`
 }
 
-func (c *Client) GetAddress(address string, params ...string) (response *Address, e error) {
-	var offset string = "0"
-	var limit string = "50"
-
-	switch len(params) {
-	case 0:
-	case 1:
-		offset = params[0]
-	case 2:
-		offset = params[0]
-		limit = params[1]
-	default:
-		e = errors.New("Bad params")
-		return
+func (c *Client) GetAddress(address string, params ...map[string]string) (response *Address, e error) {
+	options := map[string]string{"format": "json"}
+	if len(params) > 0 {
+		for k, v := range params[0] {
+			options[k] = v
+		}
 	}
-
-	var path = "/address/" + address + "?format=json&limit=" + limit + "&offset=" + offset
 	response = &Address{}
-	e = c.DoRequest(path, response)
+	e = c.DoRequest("/address/"+address, response, options)
 
 	return
 }
 
-func (c *Client) GetAddresses(addresses []string, params ...string) (response *MultiAddr, e error) {
-	var offset string = "0"
-	var limit string = "50"
-
-	switch len(params) {
-	case 0:
-	case 1:
-		offset = params[0]
-	case 2:
-		offset = params[0]
-		limit = params[1]
-	default:
-		e = errors.New("Bad params")
-		return
+func (c *Client) GetAddresses(addresses []string, params ...map[string]string) (response *MultiAddr, e error) {
+	options := map[string]string{"active": strings.Join(addresses, "|")}
+	if len(params) > 0 {
+		for k, v := range params[0] {
+			options[k] = v
+		}
 	}
-
-	var path = "/multiaddr?active=" + strings.Join(addresses, "|") + "&limit=" + limit + "&offset=" + offset
 	response = &MultiAddr{}
-	e = c.DoRequest(path, response)
+	e = c.DoRequest("/multiaddr", response, options)
 
 	return
 }

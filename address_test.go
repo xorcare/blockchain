@@ -10,7 +10,7 @@ import (
 
 func TestGetAddress(t *testing.T) {
 	c := New()
-	response, e := c.GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", "10", "50")
+	response, e := c.GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -80,7 +80,7 @@ func TestGetAddresses(t *testing.T) {
 
 func TestGetAddressMoreParams(t *testing.T) {
 	c := New()
-	response, e := c.GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", "2147483647")
+	response, e := c.GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", map[string]string{"offset": "2147483647"})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -97,7 +97,7 @@ func TestGetAddressesMoreParams(t *testing.T) {
 	}
 
 	c := New()
-	response, e := c.GetAddresses(addresses, "2147483647")
+	response, e := c.GetAddresses(addresses, map[string]string{"offset": "2147483647"})
 	if e != nil {
 		t.Fatal(e)
 	}
