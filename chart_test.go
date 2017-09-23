@@ -4,11 +4,13 @@
 
 package blockchain
 
-import "testing"
+import (
+	"encoding/json"
+	"testing"
+)
 
 func TestGetChart(t *testing.T) {
-	c := New()
-	chart, e := c.GetChart("market-price")
+	chart, e := New().GetChart("market-price")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -25,8 +27,7 @@ func TestGetChart(t *testing.T) {
 }
 
 func TestGetChartPools(t *testing.T) {
-	c := New()
-	pools, e := c.GetPools()
+	pools, e := New().GetPools()
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -34,4 +35,17 @@ func TestGetChartPools(t *testing.T) {
 	for k, v := range *pools {
 		t.Logf("%s: %d", k, v)
 	}
+}
+
+func TestGetStats(t *testing.T) {
+	stats, e := New().GetStats()
+	if e != nil {
+		t.Fatal(e)
+	}
+
+	bytes, e := json.MarshalIndent(stats, "", "\t")
+	if e != nil {
+		t.Fatal(e)
+	}
+	t.Log(string(bytes))
 }

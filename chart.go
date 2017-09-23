@@ -4,6 +4,7 @@
 
 package blockchain
 
+//Chart API data struct
 type Chart struct {
 	Status      string   `json:"status"`
 	Name        string   `json:"name"`
@@ -13,13 +14,51 @@ type Chart struct {
 	Values      []*Value `json:"values"`
 }
 
+// Pools information map
 type ChartPools map[string]uint64
 
+//Charts API values
 type Value struct {
 	X uint64  `json:"x"`
 	Y float64 `json:"y"`
 }
 
+type Stats struct {
+	MarketPriceUsd                float64 `json:"market_price_usd"`
+	HashRate                      float64 `json:"hash_rate"`
+	TotalFeesBtc                  int64   `json:"total_fees_btc"`
+	NBtcMined                     int64   `json:"n_btc_mined"`
+	NTx                           uint64  `json:"n_tx"`
+	NBlocksMined                  uint64  `json:"n_blocks_mined"`
+	MinutesBetweenBlocks          float64 `json:"minutes_between_blocks"`
+	Totalbc                       int64   `json:"totalbc"`
+	NBlocksTotal                  uint64  `json:"n_blocks_total"`
+	EstimatedTransactionVolumeUsd float64 `json:"estimated_transaction_volume_usd"`
+	BlocksSize                    uint64  `json:"blocks_size"`
+	MinersRevenueUsd              float64 `json:"miners_revenue_usd"`
+	Nextretarget                  int64   `json:"nextretarget"`
+	Difficulty                    int64   `json:"difficulty"`
+	EstimatedBtcSent              int64   `json:"estimated_btc_sent"`
+	MinersRevenueBtc              int64   `json:"miners_revenue_btc"`
+	TotalBtcSent                  int64   `json:"total_btc_sent"`
+	TradeVolumeBtc                float64 `json:"trade_volume_btc"`
+	TradeVolumeUsd                float64 `json:"trade_volume_usd"`
+	Timestamp                     uint64  `json:"timestamp"`
+}
+
+// Stats API Get the data behind Blockchain's stats
+// This method can be used to get the data behind Blockchain.info's stats.
+// URL: https://blockchain.info/stats
+func (c *Client) GetStats() (response *Stats, e error) {
+	response = &Stats{}
+	e = c.DoRequest("/stats", response, map[string]string{"format": "json"})
+
+	return
+}
+
+// Pools API Get the data behind Blockchain's pools information
+// This method can be used to get the data behind Blockchain.info's pools information.
+// URL: https://blockchain.info/pools
 func (c *Client) GetPools() (response *ChartPools, e error) {
 	response = &ChartPools{}
 	e = c.DoRequest("/pools", response, map[string]string{"format": "json"})
@@ -27,19 +66,10 @@ func (c *Client) GetPools() (response *ChartPools, e error) {
 	return
 }
 
-func (c *Client) GetChart(chartType string, params ...map[string]string) (response *Chart, e error) {
-	options := map[string]string{"format": "json"}
-	if len(params) > 0 {
-		for k, v := range params[0] {
-			options[k] = v
-		}
-	}
-	response = &Chart{}
-	e = c.DoRequest("/charts/"+chartType, response, options)
-
-	return
-}
-
+// Charts API Get the data behind Blockchain's charts
+// This method can be used to get and manipulate data behind all Blockchain.info's charts.
+// URL: https://blockchain.info/charts
+//
 // CURRENCY STATISTICS
 //
 // https://blockchain.info/charts/total-bitcoins
@@ -59,7 +89,8 @@ func (c *Client) GetChart(chartType string, params ...map[string]string) (respon
 // https://blockchain.info/charts/trade-volume
 // USD Exchange Trade Volume
 // The total USD value of trading volume on major bitcoin exchanges.
-
+//
+//
 // BLOCK DETAILS
 //
 // https://blockchain.info/charts/blocks-size
@@ -95,7 +126,8 @@ func (c *Client) GetChart(chartType string, params ...map[string]string) (respon
 // New York Agreement support
 // Percentage of blocks signalling for the New York Agreement over the last
 // 200 blocks
-
+//
+//
 // MINING INFORMATION
 //
 // https://blockchain.info/charts/hash-rate
@@ -127,8 +159,21 @@ func (c *Client) GetChart(chartType string, params ...map[string]string) (respon
 // https://blockchain.info/charts/cost-per-transaction
 // Cost per Transaction
 // A chart showing miners revenue divided by the number of transactions.
-
+//
+//
 // BLOCKCHAIN WALLET ACTIVITY
 //
 // https://blockchain.info/charts/my-wallet-n-users
 // Blockchain Wallet Users
+func (c *Client) GetChart(chartType string, params ...map[string]string) (response *Chart, e error) {
+	options := map[string]string{"format": "json"}
+	if len(params) > 0 {
+		for k, v := range params[0] {
+			options[k] = v
+		}
+	}
+	response = &Chart{}
+	e = c.DoRequest("/charts/"+chartType, response, options)
+
+	return
+}
