@@ -4,16 +4,14 @@
 
 package blockchain
 
-import (
-	"strings"
-)
+import "strings"
 
 type Balances map[string]*Balance
 
 type Balance struct {
-	FinalBalance  int `json:"final_balance"`
-	NTx           int `json:"n_tx"`
-	TotalReceived int `json:"total_received"`
+	FinalBalance  uint64 `json:"final_balance"`
+	NTx           uint64 `json:"n_tx"`
+	TotalReceived uint64 `json:"total_received"`
 }
 
 func (c *Client) GetBalance(addresses []string) (response *Balances, e error) {

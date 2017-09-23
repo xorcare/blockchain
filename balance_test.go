@@ -7,8 +7,6 @@ package blockchain
 import "testing"
 
 func TestGetBalance(t *testing.T) {
-	c := New()
-
 	// The first addresses of the first blocks of the bitcoin network
 	address := []string{
 		"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
@@ -213,7 +211,7 @@ func TestGetBalance(t *testing.T) {
 		"1LKriCmDaBz4SfCoDjcjR1b9CmQTHibCcr",
 	}
 
-	balances, e := c.GetBalance(address)
+	balances, e := New().GetBalance(address)
 	if e != nil {
 		t.Fatal(e)
 	}
