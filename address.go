@@ -4,7 +4,10 @@
 
 package blockchain
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 type Address struct {
 	Hash160       string `json:"hash160,omitempty"` // Exist only in the case address
@@ -62,6 +65,10 @@ type Info struct {
 }
 
 func (c *Client) GetAddress(address string, params ...map[string]string) (response *Address, e error) {
+	if address == "" {
+		return nil, errors.New("No Address Provided")
+	}
+
 	options := map[string]string{"format": "json"}
 	if len(params) > 0 {
 		for k, v := range params[0] {
@@ -75,12 +82,17 @@ func (c *Client) GetAddress(address string, params ...map[string]string) (respon
 }
 
 func (c *Client) GetAddresses(addresses []string, params ...map[string]string) (response *MultiAddr, e error) {
+	if len(addresses) < 2 {
+		return nil, errors.New("Invalid argument, you must pass an array with two or more addresses!")
+	}
+
 	options := map[string]string{"active": strings.Join(addresses, "|")}
 	if len(params) > 0 {
 		for k, v := range params[0] {
 			options[k] = v
 		}
 	}
+
 	response = &MultiAddr{}
 	e = c.DoRequest("/multiaddr", response, options)
 

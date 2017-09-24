@@ -7,8 +7,7 @@ package blockchain
 import "testing"
 
 func TestGetAddress(t *testing.T) {
-	c := New()
-	response, e := c.GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
+	response, e := New().GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -36,8 +35,7 @@ func TestGetAddresses(t *testing.T) {
 		"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
 	}
 
-	c := New()
-	response, e := c.GetAddresses(addresses)
+	response, e := New().GetAddresses(addresses)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -77,8 +75,7 @@ func TestGetAddresses(t *testing.T) {
 }
 
 func TestGetAddressMoreParams(t *testing.T) {
-	c := New()
-	response, e := c.GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", map[string]string{"offset": "2147483647"})
+	response, e := New().GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", map[string]string{"offset": "2147483647"})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -94,13 +91,24 @@ func TestGetAddressesMoreParams(t *testing.T) {
 		"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
 	}
 
-	c := New()
-	response, e := c.GetAddresses(addresses, map[string]string{"offset": "2147483647"})
+	response, e := New().GetAddresses(addresses, map[string]string{"offset": "2147483647"})
 	if e != nil {
 		t.Fatal(e)
 	}
 
 	if len(response.Txs) != 0 {
 		t.Fatal("Wrong count txs")
+	}
+}
+
+func TestAddressesBadParams(t *testing.T) {
+	_, e := New().GetAddresses([]string{})
+	if e == nil {
+		t.Fatal("There must be a mistake")
+	}
+
+	_, e = New().GetAddress("")
+	if e == nil {
+		t.Fatal("There must be a mistake")
 	}
 }

@@ -234,3 +234,10 @@ func TestGetBalance(t *testing.T) {
 		t.Fatal("The number of addresses does not match the number received balances")
 	}
 }
+
+func TestBalanceBadParams(t *testing.T) {
+	_, e := New().GetBalance([]string{})
+	if e == nil {
+		t.Fatal("There must be a mistake")
+	}
+}

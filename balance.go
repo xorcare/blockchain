@@ -4,7 +4,10 @@
 
 package blockchain
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 type Balances map[string]*Balance
 
@@ -15,6 +18,10 @@ type Balance struct {
 }
 
 func (c *Client) GetBalance(addresses []string) (response *Balances, e error) {
+	if len(addresses) == 0 {
+		return nil, errors.New("No Address Provided")
+	}
+
 	response = &Balances{}
 	e = c.DoRequest("/balance", response, map[string]string{"active": strings.Join(addresses, "|")})
 
