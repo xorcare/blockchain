@@ -4,9 +4,7 @@
 
 package blockchain
 
-import (
-	"testing"
-)
+import "testing"
 
 func TestGetUnconfirmedTransactions(t *testing.T) {
 	c := New()
@@ -54,6 +52,8 @@ func TestGetTransaction(t *testing.T) {
 }
 
 func checkFirstTx(t *testing.T, tx *Tx) {
+	t.Logf("Started: checkFirstTx")
+
 	if tx.Hash != "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b" {
 		t.Fatal("Wrong value on field 'Tx[0].Hash'")
 	}
@@ -102,35 +102,40 @@ func checkFirstTx(t *testing.T, tx *Tx) {
 		t.Fatal("Wrong value on field 'Tx[0].Inputs[0].Script'")
 	}
 
-	out0 := tx.Out[0]
+	checkFirstTxOut(t, tx.Out[0])
 
-	if out0.Spent != false {
+}
+
+func checkFirstTxOut(t *testing.T, out *Out) {
+	t.Logf("Started: checkFirstTxOut")
+
+	if out.Spent != false {
 		t.Fatal("Wrong value on field 'Tx[0].Out[0].Spent'")
 	}
 
-	if out0.TxIndex != 14849 {
+	if out.TxIndex != 14849 {
 		t.Fatal("Wrong value on field 'Tx[0].Out[0].TxIndex'")
 	}
 
-	if out0.Type != 0 {
+	if out.Type != 0 {
 		t.Fatal("Wrong value on field 'Tx[0].Out[0].Type'")
 	}
 
-	if out0.Addr != "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" {
+	if out.Addr != "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" {
 		t.Fatal("Wrong value on field 'Tx[0].Out[0].Addr'")
 	}
 
-	if out0.Value != 5000000000 {
+	if out.Value != 5000000000 {
 		t.Fatal("Wrong value on field 'Tx[0].Out[0].Value'")
 	}
 
-	if out0.N != 0 {
+	if out.N != 0 {
 		t.Fatal("Wrong value on field 'Tx[0].Out[0].N'")
 	}
 
 	outScript := "4104678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb"
 	outScript += "649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5fac"
-	if out0.Script != outScript {
+	if out.Script != outScript {
 		t.Fatal("Wrong value on field 'Tx[0].Out[0].N'")
 	}
 }
