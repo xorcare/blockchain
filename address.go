@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// Description of the address structure returned from the API,
+// Address description of the address structure returned from the API,
 // Some fields in some cases may be empty or absent.
 type Address struct {
 	// Exist only in the case address
@@ -27,7 +27,7 @@ type Address struct {
 	AccountIndex uint64 `json:"account_index,omitempty"`
 }
 
-// The structure of the result when querying multiple addresses
+// MultiAddr structure of the result when querying multiple addresses
 type MultiAddr struct {
 	RecommendIncludeFee bool       `json:"recommend_include_fee,omitempty"`
 	SharedcoinEndpoint  string     `json:"sharedcoin_endpoint,omitempty"`
@@ -37,7 +37,7 @@ type MultiAddr struct {
 	Info                *Info      `json:"info"`
 }
 
-// Summary data about the requested addresses
+// Wallet summary data about the requested addresses
 type Wallet struct {
 	NTx           uint64 `json:"n_tx"`
 	NTxFiltered   uint64 `json:"n_tx_filtered"`
@@ -46,6 +46,7 @@ type Wallet struct {
 	FinalBalance  uint64 `json:"final_balance"`
 }
 
+// SymbolLocal ...
 type SymbolLocal struct {
 	Code               string  `json:"code"`
 	Symbol             string  `json:"symbol"`
@@ -55,6 +56,7 @@ type SymbolLocal struct {
 	Local              bool    `json:"local"`
 }
 
+// SymbolBtc ...
 type SymbolBtc struct {
 	Code               string  `json:"code"`
 	Symbol             string  `json:"symbol"`
@@ -64,6 +66,7 @@ type SymbolBtc struct {
 	Local              bool    `json:"local"`
 }
 
+// Info ...
 type Info struct {
 	NConnected  uint64       `json:"nconnected"`
 	Conversion  float64      `json:"conversion"`
@@ -72,7 +75,7 @@ type Info struct {
 	LatestBlock *LatestBlock `json:"latest_block"`
 }
 
-// Receiving data about one particular address
+// GetAddress is a mechanism which is used to obtain information about the address
 func (c *Client) GetAddress(address string, params ...map[string]string) (response *Address, e error) {
 	if address == "" {
 		return nil, errors.New("No Address Provided")
@@ -90,10 +93,11 @@ func (c *Client) GetAddress(address string, params ...map[string]string) (respon
 	return
 }
 
-// Method for obtaining data about the set of addresses. No more than 80 addresses a time.
+// GetAddresses is a mechanism which is used to obtain information about the addresses
 func (c *Client) GetAddresses(addresses []string, params ...map[string]string) (response *MultiAddr, e error) {
 	if len(addresses) < 2 {
-		return nil, errors.New("Invalid argument, you must pass an array with two or more addresses!")
+		e = errors.New("Must pass an array with two or more addresses")
+		return
 	}
 
 	options := map[string]string{"active": strings.Join(addresses, "|")}
