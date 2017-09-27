@@ -4,7 +4,9 @@
 
 package blockchain
 
-// The structure of one specific block
+import "errors"
+
+// Block the structure of one specific block
 type Block struct {
 	Hash       string `json:"hash"`
 	Ver        uint64 `json:"ver"`
@@ -22,7 +24,7 @@ type Block struct {
 	Tx         []*Tx  `json:"tx"`
 }
 
-// The structure of the last block in the chain
+// LatestBlock the structure of the last block in the chain
 type LatestBlock struct {
 	Hash       string   `json:"hash"`
 	Time       uint64   `json:"time"`
@@ -31,36 +33,48 @@ type LatestBlock struct {
 	TxIndexes  []uint64 `json:"txIndexes"`
 }
 
-// The structure of the set of blocks
+// Blocks the structure of the set of blocks
 type Blocks struct {
 	Blocks []*Block `json:"blocks"`
 }
 
-// Get the block on its hash
+// GetBlock get the block by the hash
 func (c *Client) GetBlock(block string) (response *Block, e error) {
+	if block == "" {
+		return nil, errors.New("Empty parameter is wrong")
+	}
+
 	response = &Block{}
 	e = c.DoRequest("/rawblock/"+block, response, map[string]string{"format": "json"})
 
 	return
 }
 
-// Get the block at his height from the beginning of the chain
+// GetBlockHeight get the block at height
 func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e error) {
+	if blockHeight == "" {
+		return nil, errors.New("Empty parameter is wrong")
+	}
+
 	response = &Blocks{}
 	e = c.DoRequest("/block-height/"+blockHeight, response, map[string]string{"format": "json"})
 
 	return
 }
 
-// Getting blocks at a certain height
+// GetBlocks getting blocks at a certain height
 func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e error) {
+	if blockHeight == "" {
+		return nil, errors.New("Empty parameter is wrong")
+	}
+
 	response = &Blocks{}
 	e = c.DoRequest("/blocks/"+blockHeight, response, map[string]string{"format": "json"})
 
 	return
 }
 
-// Receive the latest block of the main chain
+// GetLatestBlock receive the latest block of the main chain
 func (c *Client) GetLatestBlock() (response *LatestBlock, e error) {
 	response = &LatestBlock{}
 	e = c.DoRequest("/latestblock", response, map[string]string{"format": "json"})
