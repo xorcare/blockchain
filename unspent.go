@@ -4,15 +4,18 @@
 
 package blockchain
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
-// Unspent outputs set
+// UnspentOutputs the set of unspent outputs
 type UnspentOutputs struct {
 	Notice         string           `json:"notice,omitempty"`
 	UnspentOutputs []*UnspentOutput `json:"unspent_outputs"`
 }
 
-// Unspent outputs struct
+// UnspentOutput the basic structure unspent outputs
 type UnspentOutput struct {
 	TxAge     string `json:"tx_age"`
 	TxHash    string `json:"tx_hash"`
@@ -22,8 +25,12 @@ type UnspentOutput struct {
 	Value     int64  `json:"value"`
 }
 
-// Getting unspent outputs multiple addresses
+// GetUnspent specifies the mechanism by getting unspent outputs multiple addresses
 func (c *Client) GetUnspent(addresses []string, params ...map[string]string) (response *UnspentOutputs, e error) {
+	if len(addresses) == 0 {
+		return nil, errors.New("No Address Provided")
+	}
+
 	options := map[string]string{"active": strings.Join(addresses, "|")}
 	if len(params) > 0 {
 		for k, v := range params[0] {
