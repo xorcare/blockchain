@@ -6,6 +6,7 @@ package blockchain
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -77,8 +78,9 @@ type Info struct {
 
 // GetAddress is a mechanism which is used to obtain information about the address
 func (c *Client) GetAddress(address string, params ...map[string]string) (response *Address, e error) {
-	if address == "" {
-		return nil, errors.New("No Address Provided")
+	addressLength := len(address)
+	if address == "" || addressLength > 35 || addressLength < 26 {
+		return nil, errors.New("Address is wrong")
 	}
 
 	options := map[string]string{"format": "json"}
@@ -96,8 +98,14 @@ func (c *Client) GetAddress(address string, params ...map[string]string) (respon
 // GetAddresses is a mechanism which is used to obtain information about the addresses
 func (c *Client) GetAddresses(addresses []string, params ...map[string]string) (response *MultiAddr, e error) {
 	if len(addresses) < 2 {
-		e = errors.New("Must pass an array with two or more addresses")
-		return
+		return nil, errors.New("Must pass an array with two or more addresses")
+	}
+
+	for n, addr := range addresses {
+		addressLength := len(addr)
+		if addr == "" || addressLength > 35 || addressLength < 26 {
+			return nil, fmt.Errorf("Address numder %d is wrong", n)
+		}
 	}
 
 	options := map[string]string{"active": strings.Join(addresses, "|")}

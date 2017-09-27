@@ -4,7 +4,9 @@
 
 package blockchain
 
-// The basic structure of the transaction
+import "errors"
+
+// Tx the basic structure of the transaction
 type Tx struct {
 	Result      int64     `json:"result"`
 	Ver         uint64    `json:"ver"`
@@ -26,7 +28,7 @@ type Tx struct {
 	Rbf         bool      `json:"rbf"`
 }
 
-// The main structure of the inputs
+// Inputs the main structure of the inputs
 type Inputs struct {
 	Sequence uint64      `json:"sequence"`
 	Witness  interface{} `json:"witness"`
@@ -34,6 +36,7 @@ type Inputs struct {
 	Script   string      `json:"script"`
 }
 
+// PrevOut ...
 type PrevOut struct {
 	AddrTagLink string `json:"addr_tag_link"`
 	AddrTag     string `json:"addr_tag"`
@@ -46,7 +49,7 @@ type PrevOut struct {
 	Script      string `json:"script"`
 }
 
-// The main structure of the inputs
+// Out the main structure of the inputs
 type Out struct {
 	AddrTagLink string `json:"addr_tag_link"`
 	AddrTag     string `json:"addr_tag"`
@@ -59,20 +62,24 @@ type Out struct {
 	Script      string `json:"script"`
 }
 
-// Transaction set
+// Txs transaction set
 type Txs struct {
 	Txs []*Tx `json:"txs"`
 }
 
-// Get the transaction on its hash
+// GetTransaction get the transaction on its hash
 func (c *Client) GetTransaction(transaction string) (response *Tx, e error) {
+	if transaction == "" || len(transaction) != 64 {
+		return nil, errors.New("Transaction hash is wrong")
+	}
+
 	response = &Tx{}
 	e = c.DoRequest("/rawtx/"+transaction, response, map[string]string{"format": "json"})
 
 	return
 }
 
-// Get the unconfirmed transactions
+// GetUnconfirmedTransactions get the unconfirmed transactions
 func (c *Client) GetUnconfirmedTransactions() (reaponse *Txs, e error) {
 	reaponse = &Txs{}
 	e = c.DoRequest("/unconfirmed-transactions", reaponse, map[string]string{"format": "json"})

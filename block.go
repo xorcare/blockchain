@@ -39,13 +39,13 @@ type Blocks struct {
 }
 
 // GetBlock get the block by the hash
-func (c *Client) GetBlock(block string) (response *Block, e error) {
-	if block == "" {
-		return nil, errors.New("Empty parameter is wrong")
+func (c *Client) GetBlock(blockHash string) (response *Block, e error) {
+	if blockHash == "" || len(blockHash) != 64 {
+		return nil, errors.New("Block hash is wrong")
 	}
 
 	response = &Block{}
-	e = c.DoRequest("/rawblock/"+block, response, map[string]string{"format": "json"})
+	e = c.DoRequest("/rawblock/"+blockHash, response, map[string]string{"format": "json"})
 
 	return
 }
@@ -53,7 +53,7 @@ func (c *Client) GetBlock(block string) (response *Block, e error) {
 // GetBlockHeight get the block at height
 func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e error) {
 	if blockHeight == "" {
-		return nil, errors.New("Empty parameter is wrong")
+		return nil, errors.New("Empty block height is wrong")
 	}
 
 	response = &Blocks{}
@@ -65,7 +65,7 @@ func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e error) 
 // GetBlocks getting blocks at a certain height
 func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e error) {
 	if blockHeight == "" {
-		return nil, errors.New("Empty parameter is wrong")
+		return nil, errors.New("Empty block height is wrong")
 	}
 
 	response = &Blocks{}

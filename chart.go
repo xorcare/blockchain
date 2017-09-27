@@ -14,15 +14,16 @@ type Chart struct {
 	Values      []*Value `json:"values"`
 }
 
-// Pools information map
+// ChartPools pools information map
 type ChartPools map[string]uint64
 
-// Charts API values
+// Value charts API values
 type Value struct {
 	X uint64  `json:"x"`
 	Y float64 `json:"y"`
 }
 
+// Stats reflects the structure of the statistics
 type Stats struct {
 	MarketPriceUsd                float64 `json:"market_price_usd"`
 	HashRate                      float64 `json:"hash_rate"`
@@ -46,7 +47,7 @@ type Stats struct {
 	Timestamp                     uint64  `json:"timestamp"`
 }
 
-// Stats API Get the data behind Blockchain's stats
+// GetStats is a special mechanism to obtain data behind Blockchain's stats
 // This method can be used to get the data behind Blockchain.info's stats.
 // URL: https://blockchain.info/stats
 func (c *Client) GetStats() (response *Stats, e error) {
@@ -56,7 +57,7 @@ func (c *Client) GetStats() (response *Stats, e error) {
 	return
 }
 
-// Pools API Get the data behind Blockchain's pools information
+// GetPools is a special mechanism to obtain data behind Blockchain's pools information
 // This method can be used to get the data behind Blockchain.info's pools information.
 // URL: https://blockchain.info/pools
 func (c *Client) GetPools() (response *ChartPools, e error) {
@@ -66,7 +67,7 @@ func (c *Client) GetPools() (response *ChartPools, e error) {
 	return
 }
 
-// Charts API Get the data behind Blockchain's charts.
+// GetChart is a special mechanism to obtain data on the charts Blockchain.
 // This method can be used to get and manipulate data behind all Blockchain.info's charts.
 // URL: https://blockchain.info/charts
 //

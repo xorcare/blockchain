@@ -49,7 +49,7 @@ func (c *Client) DoRequest(path string, i interface{}, params map[string]string)
 		return
 	}
 	if response.Status[0] != '2' {
-		return fmt.Errorf("Response error status %3s: %c", response.Status, string(bytes))
+		return fmt.Errorf("Response error status %3s: %s", response.Status, string(bytes))
 	}
 
 	return json.Unmarshal(bytes, &i)
