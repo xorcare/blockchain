@@ -15,20 +15,20 @@ import (
 )
 
 const (
-	// The service address in the tor network
+	// ApiRootTor the root address in the tor network
 	ApiRootTor = "https://blockchainbdgpzk.onion"
 
-	// The service address in the network
+	// ApiRootNet the root address in the network
 	ApiRootNet = "https://blockchain.info"
 )
 
-// The basic structure of the client
+// Client specifies the mechanism by which individual API requests are made.
 type Client struct {
-	Http    *http.Client
-	ApiRoot string
+	http    *http.Client
+	apiRoot string
 }
 
-// Method to query the API. Automatically attempts to convert the response into the supplied type.
+// DoRequest to send an http request, which is then converted to the passed type.
 func (c *Client) DoRequest(path string, i interface{}, params map[string]string) (e error) {
 	params["format"] = "json"
 	urlValues := url.Values{}
@@ -36,8 +36,8 @@ func (c *Client) DoRequest(path string, i interface{}, params map[string]string)
 		urlValues.Set(k, v)
 	}
 
-	fullPath := c.ApiRoot + path + "?" + (urlValues.Encode())
-	response, e := c.Http.Get(fullPath)
+	fullPath := c.apiRoot + path + "?" + (urlValues.Encode())
+	response, e := c.http.Get(fullPath)
 	if e != nil {
 		return
 	}
@@ -55,12 +55,17 @@ func (c *Client) DoRequest(path string, i interface{}, params map[string]string)
 	return json.Unmarshal(bytes, &i)
 }
 
-// Creating a new client running in the Internet
+// New specifies the mechanism by create new client the network internet
 func New() *Client {
-	return &Client{Http: &http.Client{}, ApiRoot: ApiRootNet}
+	return &Client{http: &http.Client{}, apiRoot: ApiRootNet}
 }
 
-// Create a new customer operating in the tor network
+// NewTor specifies the mechanism by create new client the network internet
 func NewTor() *Client {
-	return &Client{Http: &http.Client{}, ApiRoot: ApiRootTor}
+	return &Client{http: &http.Client{}, apiRoot: ApiRootTor}
+}
+
+// SetHttp http client setter
+func (s *Client) SetHttp(c *http.Client) {
+	s.http = c
 }
