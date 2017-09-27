@@ -66,6 +66,6 @@ func NewTor() *Client {
 }
 
 // SetHttp http client setter
-func (s *Client) SetHttp(c *http.Client) {
-	s.http = c
+func (s *Client) SetHttp(client *http.Client) {
+	s.http = client
 }
