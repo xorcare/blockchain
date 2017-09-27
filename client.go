@@ -15,11 +15,11 @@ import (
 )
 
 const (
-	// ApiRootTor the root address in the tor network
-	ApiRootTor = "https://blockchainbdgpzk.onion"
+	// APIRootTor the root address in the tor network
+	APIRootTor = "https://blockchainbdgpzk.onion"
 
-	// ApiRootNet the root address in the network
-	ApiRootNet = "https://blockchain.info"
+	// APIRootNet the root address in the network
+	APIRootNet = "https://blockchain.info"
 )
 
 // Client specifies the mechanism by which individual API requests are made.
@@ -49,7 +49,7 @@ func (c *Client) DoRequest(path string, i interface{}, params map[string]string)
 		return
 	}
 	if response.Status[0] != '2' {
-		return fmt.Errorf("Response error status %3s: %s", response.Status, string(bytes))
+		return fmt.Errorf("Response error status %3s: %c", response.Status, string(bytes))
 	}
 
 	return json.Unmarshal(bytes, &i)
@@ -57,15 +57,15 @@ func (c *Client) DoRequest(path string, i interface{}, params map[string]string)
 
 // New specifies the mechanism by create new client the network internet
 func New() *Client {
-	return &Client{http: &http.Client{}, apiRoot: ApiRootNet}
+	return &Client{http: &http.Client{}, apiRoot: APIRootNet}
 }
 
 // NewTor specifies the mechanism by create new client the network internet
 func NewTor() *Client {
-	return &Client{http: &http.Client{}, apiRoot: ApiRootTor}
+	return &Client{http: &http.Client{}, apiRoot: APIRootTor}
 }
 
-// SetHttp http client setter
-func (s *Client) SetHttp(client *http.Client) {
-	s.http = client
+// SetHTTP http client setter
+func (c *Client) SetHTTP(cli *http.Client) {
+	c.http = cli
 }
