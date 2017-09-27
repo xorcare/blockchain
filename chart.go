@@ -4,7 +4,7 @@
 
 package blockchain
 
-//Chart API data struct
+// Chart API data struct
 type Chart struct {
 	Status      string   `json:"status"`
 	Name        string   `json:"name"`
@@ -17,7 +17,7 @@ type Chart struct {
 // Pools information map
 type ChartPools map[string]uint64
 
-//Charts API values
+// Charts API values
 type Value struct {
 	X uint64  `json:"x"`
 	Y float64 `json:"y"`
@@ -66,35 +66,35 @@ func (c *Client) GetPools() (response *ChartPools, e error) {
 	return
 }
 
-// Charts API Get the data behind Blockchain's charts
+// Charts API Get the data behind Blockchain's charts.
 // This method can be used to get and manipulate data behind all Blockchain.info's charts.
 // URL: https://blockchain.info/charts
 //
 // CURRENCY STATISTICS
 //
 // https://blockchain.info/charts/total-bitcoins
-// Bitcoins in circulation
+// Bitcoins in circulation.
 // The total number of bitcoins that have already been mined; in other words,
 // the current supply of bitcoins on the network.
 //
 // https://blockchain.info/charts/market-price
-// Market Price (USD)
+// Market Price (USD).
 // Average USD market price across major bitcoin exchanges.
 //
 // https://blockchain.info/charts/market-cap
-// Market Capitalization
+// Market Capitalization.
 // The total USD value of bitcoin supply in circulation, as calculated by the
 // daily average market price across major exchanges.
 //
 // https://blockchain.info/charts/trade-volume
-// USD Exchange Trade Volume
+// USD Exchange Trade Volume.
 // The total USD value of trading volume on major bitcoin exchanges.
 //
 //
 // BLOCK DETAILS
 //
 // https://blockchain.info/charts/blocks-size
-// Blockchain Size
+// Blockchain Size.
 // The total size of all block headers and transactions. Not including
 // database indexes.
 //
@@ -103,16 +103,16 @@ func (c *Client) GetPools() (response *ChartPools, e error) {
 // The average block size in MB.
 //
 // https://blockchain.info/charts/n-orphaned-blocks
-// Number Of Orphaned Blocks
+// Number Of Orphaned Blocks.
 // The total number of blocks mined but ultimately not attached to the main
 // Bitcoin blockchain.
 //
 // https://blockchain.info/charts/n-transactions-per-block
-// Average Number Of Transactions Per Block
+// Average Number Of Transactions Per Block.
 // The average number of transactions per block.
 //
 // https://blockchain.info/charts/median-confirmation-time
-// Median Confirmation Time
+// Median Confirmation Time.
 // The median time for a transaction to be accepted into a mined block and
 // added to the public ledger.
 //
@@ -123,7 +123,7 @@ func (c *Client) GetPools() (response *ChartPools, e error) {
 // Percentage of blocks signalling Bitcoin Unlimited support
 //
 // https://blockchain.info/charts/nya-support
-// New York Agreement support
+// New York Agreement support.
 // Percentage of blocks signalling for the New York Agreement over the last
 // 200 blocks
 //
@@ -131,33 +131,33 @@ func (c *Client) GetPools() (response *ChartPools, e error) {
 // MINING INFORMATION
 //
 // https://blockchain.info/charts/hash-rate
-// Hash Rate
+// Hash Rate.
 // The estimated number of tera hashes per second the Bitcoin network is
 // performing.
 //
 // https://blockchain.info/pools
-// Hashrate Distribution
+// Hashrate Distribution.
 // An estimation of hashrate distribution amongst the largest mining pools
 //
 // https://blockchain.info/charts/difficulty
-// Difficulty
+// Difficulty.
 // A relative measure of how difficult it is to find a new block.
 //
 // https://blockchain.info/charts/miners-revenue
-// Mining Revenue
+// Mining Revenue.
 // Total value of coinbase block rewards and transaction fees paid to miners.
 //
 // https://blockchain.info/charts/transaction-fees
-// Total Transaction Fees
+// Total Transaction Fees.
 // The total value of all transaction fees paid to miners (not including the
 // coinbase value of block rewards).
 //
 // https://blockchain.info/charts/cost-per-transaction-percent
-// Cost % of Transaction Volume
+// Cost % of Transaction Volume.
 // A chart showing miners revenue as percentage of the transaction volume.
 //
 // https://blockchain.info/charts/cost-per-transaction
-// Cost per Transaction
+// Cost per Transaction.
 // A chart showing miners revenue divided by the number of transactions.
 //
 //

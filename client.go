@@ -15,15 +15,20 @@ import (
 )
 
 const (
+	// The service address in the tor network
 	ApiRootTor = "https://blockchainbdgpzk.onion"
+
+	// The service address in the network
 	ApiRootNet = "https://blockchain.info"
 )
 
+// The basic structure of the client
 type Client struct {
 	Http    *http.Client
 	ApiRoot string
 }
 
+// Method to query the API. Automatically attempts to convert the response into the supplied type.
 func (c *Client) DoRequest(path string, i interface{}, params map[string]string) (e error) {
 	params["format"] = "json"
 	urlValues := url.Values{}
@@ -50,10 +55,12 @@ func (c *Client) DoRequest(path string, i interface{}, params map[string]string)
 	return json.Unmarshal(bytes, &i)
 }
 
+// Creating a new client running in the Internet
 func New() *Client {
 	return &Client{Http: &http.Client{}, ApiRoot: ApiRootNet}
 }
 
+// Create a new customer operating in the tor network
 func NewTor() *Client {
 	return &Client{Http: &http.Client{}, ApiRoot: ApiRootTor}
 }

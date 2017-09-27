@@ -6,11 +6,13 @@ package blockchain
 
 import "strings"
 
+// Unspent outputs set
 type UnspentOutputs struct {
 	Notice         string           `json:"notice,omitempty"`
 	UnspentOutputs []*UnspentOutput `json:"unspent_outputs"`
 }
 
+// Unspent outputs struct
 type UnspentOutput struct {
 	TxAge     string `json:"tx_age"`
 	TxHash    string `json:"tx_hash"`
@@ -20,6 +22,7 @@ type UnspentOutput struct {
 	Value     int64  `json:"value"`
 }
 
+// Getting unspent outputs multiple addresses
 func (c *Client) GetUnspent(addresses []string, params ...map[string]string) (response *UnspentOutputs, e error) {
 	options := map[string]string{"active": strings.Join(addresses, "|")}
 	if len(params) > 0 {

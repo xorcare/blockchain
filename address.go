@@ -9,18 +9,25 @@ import (
 	"strings"
 )
 
+// Description of the address structure returned from the API,
+// Some fields in some cases may be empty or absent.
 type Address struct {
-	Hash160       string `json:"hash160,omitempty"` // Exist only in the case address
+	// Exist only in the case address
+	Hash160 string `json:"hash160,omitempty"`
+
 	Address       string `json:"address"`
 	NTx           uint64 `json:"n_tx"`
 	TotalReceived uint64 `json:"total_received"`
 	TotalSent     uint64 `json:"total_sent"`
 	FinalBalance  uint64 `json:"final_balance"`
 	Txs           []*Tx  `json:"txs,omitempty"`
-	ChangeIndex   uint64 `json:"change_index,omitempty"`  // Exist only in the case multiaddr
-	AccountIndex  uint64 `json:"account_index,omitempty"` // Exist only in the case multiaddr
+
+	// Exist only in the case multiaddr
+	ChangeIndex  uint64 `json:"change_index,omitempty"`
+	AccountIndex uint64 `json:"account_index,omitempty"`
 }
 
+// The structure of the result when querying multiple addresses
 type MultiAddr struct {
 	RecommendIncludeFee bool       `json:"recommend_include_fee,omitempty"`
 	SharedcoinEndpoint  string     `json:"sharedcoin_endpoint,omitempty"`
@@ -30,6 +37,7 @@ type MultiAddr struct {
 	Info                *Info      `json:"info"`
 }
 
+// Summary data about the requested addresses
 type Wallet struct {
 	NTx           uint64 `json:"n_tx"`
 	NTxFiltered   uint64 `json:"n_tx_filtered"`
@@ -64,6 +72,7 @@ type Info struct {
 	LatestBlock *LatestBlock `json:"latest_block"`
 }
 
+// Receiving data about one particular address
 func (c *Client) GetAddress(address string, params ...map[string]string) (response *Address, e error) {
 	if address == "" {
 		return nil, errors.New("No Address Provided")
@@ -81,6 +90,7 @@ func (c *Client) GetAddress(address string, params ...map[string]string) (respon
 	return
 }
 
+// Method for obtaining data about the set of addresses. No more than 80 addresses a time.
 func (c *Client) GetAddresses(addresses []string, params ...map[string]string) (response *MultiAddr, e error) {
 	if len(addresses) < 2 {
 		return nil, errors.New("Invalid argument, you must pass an array with two or more addresses!")

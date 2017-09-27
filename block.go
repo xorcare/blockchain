@@ -4,6 +4,7 @@
 
 package blockchain
 
+// The structure of one specific block
 type Block struct {
 	Hash       string `json:"hash"`
 	Ver        uint64 `json:"ver"`
@@ -21,6 +22,7 @@ type Block struct {
 	Tx         []*Tx  `json:"tx"`
 }
 
+// The structure of the last block in the chain
 type LatestBlock struct {
 	Hash       string   `json:"hash"`
 	Time       uint64   `json:"time"`
@@ -29,10 +31,12 @@ type LatestBlock struct {
 	TxIndexes  []uint64 `json:"txIndexes"`
 }
 
+// The structure of the set of blocks
 type Blocks struct {
 	Blocks []*Block `json:"blocks"`
 }
 
+// Get the block on its hash
 func (c *Client) GetBlock(block string) (response *Block, e error) {
 	response = &Block{}
 	e = c.DoRequest("/rawblock/"+block, response, map[string]string{"format": "json"})
@@ -40,6 +44,7 @@ func (c *Client) GetBlock(block string) (response *Block, e error) {
 	return
 }
 
+// Get the block at his height from the beginning of the chain
 func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e error) {
 	response = &Blocks{}
 	e = c.DoRequest("/block-height/"+blockHeight, response, map[string]string{"format": "json"})
@@ -47,6 +52,7 @@ func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e error) 
 	return
 }
 
+// Getting blocks at a certain height
 func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e error) {
 	response = &Blocks{}
 	e = c.DoRequest("/blocks/"+blockHeight, response, map[string]string{"format": "json"})
@@ -54,6 +60,7 @@ func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e error) {
 	return
 }
 
+// Receive the latest block of the main chain
 func (c *Client) GetLatestBlock() (response *LatestBlock, e error) {
 	response = &LatestBlock{}
 	e = c.DoRequest("/latestblock", response, map[string]string{"format": "json"})
