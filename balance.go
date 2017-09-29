@@ -11,7 +11,7 @@ import (
 )
 
 // Balances structure of the response to the balance request
-type Balances map[string]*Balance
+type Balances map[string]Balance
 
 // Balance describes the available data at the same address
 // when you request a balance
@@ -24,7 +24,7 @@ type Balance struct {
 // GetBalance the method for obtaining the balance of one or more
 // addresses. For times check out the better not more than 200
 // locations.
-func (c *Client) GetBalance(addresses []string) (response *Balances, e error) {
+func (c *Client) GetBalance(addresses []string) (response Balances, e error) {
 	if len(addresses) == 0 {
 		return nil, errors.New("No Address Provided")
 	}
@@ -36,8 +36,10 @@ func (c *Client) GetBalance(addresses []string) (response *Balances, e error) {
 		}
 	}
 
-	response = &Balances{}
-	e = c.DoRequest("/balance", response, map[string]string{"active": strings.Join(addresses, "|")})
+	response = Balances{}
+	e = c.DoRequest("/balance", &response, map[string]string{
+		"active": strings.Join(addresses, "|"),
+	})
 
 	return
 }

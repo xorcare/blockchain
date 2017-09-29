@@ -9,8 +9,7 @@ import (
 )
 
 func TestGetBlock(t *testing.T) {
-	c := New()
-	block, e := c.GetBlock("000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f")
+	block, e := New().GetBlock("000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -18,8 +17,7 @@ func TestGetBlock(t *testing.T) {
 }
 
 func TestGetBlockHeight(t *testing.T) {
-	c := New()
-	blockHeight, e := c.GetBlockHeight("0")
+	blockHeight, e := New().GetBlockHeight("0")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -32,8 +30,7 @@ func TestGetBlockHeight(t *testing.T) {
 }
 
 func TestGetBlocks(t *testing.T) {
-	c := New()
-	blocks, e := c.GetBlocks("1231006505000")
+	blocks, e := New().GetBlocks("1231006505000")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -60,8 +57,7 @@ func TestGetBlocks(t *testing.T) {
 }
 
 func TestGetLatestBlock(t *testing.T) {
-	c := New()
-	block, e := c.GetLatestBlock()
+	block, e := New().GetLatestBlock()
 	if e != nil {
 		t.Fatal(e)
 	}

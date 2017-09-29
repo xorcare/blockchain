@@ -60,9 +60,9 @@ func (c *Client) GetStats() (response *Stats, e error) {
 // GetPools is a special mechanism to obtain data behind Blockchain's pools information
 // This method can be used to get the data behind Blockchain.info's pools information.
 // URL: https://blockchain.info/pools
-func (c *Client) GetPools() (response *ChartPools, e error) {
-	response = &ChartPools{}
-	e = c.DoRequest("/pools", response, map[string]string{"format": "json"})
+func (c *Client) GetPools() (response ChartPools, e error) {
+	response = ChartPools{}
+	e = c.DoRequest("/pools", &response, map[string]string{"format": "json"})
 
 	return
 }

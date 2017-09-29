@@ -32,7 +32,7 @@ func TestGetChartPools(t *testing.T) {
 		t.Fatal(e)
 	}
 
-	for k, v := range *pools {
+	for k, v := range pools {
 		t.Logf("%s: %d", k, v)
 	}
 }

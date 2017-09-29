@@ -216,8 +216,7 @@ func TestGetBalance(t *testing.T) {
 		t.Fatal(e)
 	}
 
-	for k, v := range *balances {
-
+	for k, v := range balances {
 		if v.FinalBalance > v.TotalReceived {
 			t.Fatal("Error parsing total received")
 		}
@@ -229,8 +228,8 @@ func TestGetBalance(t *testing.T) {
 		t.Logf("%34s %11d %11d %5d", k, v.FinalBalance, v.TotalReceived, v.NTx)
 	}
 
-	t.Logf("Total addreses: %3d, total balances %3d", len(address), len(*balances))
-	if len(address) != len(*balances) {
+	t.Logf("Total addreses: %3d, total balances %3d", len(address), len(balances))
+	if len(address) != len(balances) {
 		t.Fatal("The number of addresses does not match the number received balances")
 	}
 }
