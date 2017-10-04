@@ -21,7 +21,7 @@ type Block struct {
 	BlockIndex uint64 `json:"block_index"`
 	MainChain  bool   `json:"main_chain"`
 	Height     uint64 `json:"height"`
-	Tx         []*Tx  `json:"tx"`
+	Tx         []Tx   `json:"tx"`
 }
 
 // LatestBlock the structure of the last block in the chain
@@ -35,7 +35,7 @@ type LatestBlock struct {
 
 // Blocks the structure of the set of blocks
 type Blocks struct {
-	Blocks []*Block `json:"blocks"`
+	Blocks []Block `json:"blocks"`
 }
 
 // GetBlock get the block by the hash

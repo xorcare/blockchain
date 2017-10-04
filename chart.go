@@ -6,12 +6,12 @@ package blockchain
 
 // Chart API data struct
 type Chart struct {
-	Status      string   `json:"status"`
-	Name        string   `json:"name"`
-	Unit        string   `json:"unit"`
-	Period      string   `json:"period"`
-	Description string   `json:"description"`
-	Values      []*Value `json:"values"`
+	Status      string  `json:"status"`
+	Name        string  `json:"name"`
+	Unit        string  `json:"unit"`
+	Period      string  `json:"period"`
+	Description string  `json:"description"`
+	Values      []Value `json:"values"`
 }
 
 // ChartPools pools information map

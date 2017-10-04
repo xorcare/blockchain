@@ -40,14 +40,6 @@ func TestGetAddresses(t *testing.T) {
 		t.Fatal(e)
 	}
 
-	if response.Info == nil {
-		t.Fatal("Failed check Info")
-	}
-
-	if response.Wallet == nil {
-		t.Fatal("Failed check Wallet")
-	}
-
 	if len(response.Txs) < 50 {
 		t.Fatal("Failed check Txs")
 	}

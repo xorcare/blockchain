@@ -12,8 +12,8 @@ import (
 
 // UnspentOutputs the set of unspent outputs
 type UnspentOutputs struct {
-	Notice         string           `json:"notice,omitempty"`
-	UnspentOutputs []*UnspentOutput `json:"unspent_outputs"`
+	Notice         string          `json:"notice,omitempty"`
+	UnspentOutputs []UnspentOutput `json:"unspent_outputs"`
 }
 
 // UnspentOutput the basic structure unspent outputs

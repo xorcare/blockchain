@@ -21,7 +21,7 @@ type Address struct {
 	TotalReceived uint64 `json:"total_received"`
 	TotalSent     uint64 `json:"total_sent"`
 	FinalBalance  uint64 `json:"final_balance"`
-	Txs           []*Tx  `json:"txs,omitempty"`
+	Txs           []Tx   `json:"txs,omitempty"`
 
 	// Exist only in the case multiaddr
 	ChangeIndex  uint64 `json:"change_index,omitempty"`
@@ -30,12 +30,12 @@ type Address struct {
 
 // MultiAddr structure of the result when querying multiple addresses
 type MultiAddr struct {
-	RecommendIncludeFee bool       `json:"recommend_include_fee,omitempty"`
-	SharedcoinEndpoint  string     `json:"sharedcoin_endpoint,omitempty"`
-	Wallet              *Wallet    `json:"wallet"`
-	Addresses           []*Address `json:"addresses"`
-	Txs                 []*Tx      `json:"txs"`
-	Info                *Info      `json:"info"`
+	RecommendIncludeFee bool      `json:"recommend_include_fee,omitempty"`
+	SharedcoinEndpoint  string    `json:"sharedcoin_endpoint,omitempty"`
+	Wallet              Wallet    `json:"wallet"`
+	Addresses           []Address `json:"addresses"`
+	Txs                 []Tx      `json:"txs"`
+	Info                Info      `json:"info"`
 }
 
 // Wallet summary data about the requested addresses
@@ -69,11 +69,11 @@ type SymbolBtc struct {
 
 // Info ...
 type Info struct {
-	NConnected  uint64       `json:"nconnected"`
-	Conversion  float64      `json:"conversion"`
-	SymbolLocal *SymbolLocal `json:"symbol_local"`
-	SymbolBtc   *SymbolBtc   `json:"symbol_btc"`
-	LatestBlock *LatestBlock `json:"latest_block"`
+	NConnected  uint64      `json:"nconnected"`
+	Conversion  float64     `json:"conversion"`
+	SymbolLocal SymbolLocal `json:"symbol_local"`
+	SymbolBtc   SymbolBtc   `json:"symbol_btc"`
+	LatestBlock LatestBlock `json:"latest_block"`
 }
 
 // GetAddress is a mechanism which is used to obtain information about the address

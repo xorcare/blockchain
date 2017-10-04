@@ -5,7 +5,3 @@ go:
 os:
   - linux
   - osx
-  - windows
-env:
-  - GOARCH=386
-  - GOARCH=amd64

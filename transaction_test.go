@@ -46,10 +46,10 @@ func TestGetTransaction(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	checkFirstTx(t, tx)
+	checkFirstTx(t, *tx)
 }
 
-func checkFirstTx(t *testing.T, tx *Tx) {
+func checkFirstTx(t *testing.T, tx Tx) {
 	t.Logf("Started: checkFirstTx")
 
 	if tx.Hash != "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b" {
@@ -104,7 +104,7 @@ func checkFirstTx(t *testing.T, tx *Tx) {
 
 }
 
-func checkFirstTxOut(t *testing.T, out *Out) {
+func checkFirstTxOut(t *testing.T, out Out) {
 	t.Logf("Started: checkFirstTxOut")
 
 	if out.Spent != false {

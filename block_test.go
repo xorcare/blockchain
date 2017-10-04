@@ -13,7 +13,7 @@ func TestGetBlock(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	checkFirstBlock(t, block)
+	checkFirstBlock(t, *block)
 }
 
 func TestGetBlockHeight(t *testing.T) {
@@ -136,7 +136,7 @@ func TestGetLatestBlock(t *testing.T) {
 //   ]
 //}
 
-func checkFirstBlock(t *testing.T, block *Block) {
+func checkFirstBlock(t *testing.T, block Block) {
 	if block.Hash != "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f" {
 		t.Fatal("Wrong value on field 'Hash'")
 	}
@@ -173,7 +173,5 @@ func checkFirstBlock(t *testing.T, block *Block) {
 		t.Fatal("Wrong count items on field 'Tx'")
 	}
 
-	tx0 := block.Tx[0]
-
-	checkFirstTx(t, tx0)
+	checkFirstTx(t, block.Tx[0])
 }
