@@ -97,8 +97,8 @@ func (c *Client) GetAddress(address string, params ...map[string]string) (respon
 
 // GetAddresses is a mechanism which is used to obtain information about the addresses
 func (c *Client) GetAddresses(addresses []string, params ...map[string]string) (response *MultiAddr, e error) {
-	if len(addresses) < 2 {
-		return nil, errors.New("Must pass an array with two or more addresses")
+	if len(addresses) == 0 {
+		return nil, errors.New("No Address Provided")
 	}
 
 	for n, addr := range addresses {
