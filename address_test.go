@@ -66,6 +66,30 @@ func TestGetAddresses(t *testing.T) {
 	}
 }
 
+func TestGetAddressesOneAddress(t *testing.T) {
+	addresses := []string{
+		"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+	}
+
+	response, e := New().GetAddresses(addresses)
+	if e != nil {
+		t.Fatal(e)
+	}
+
+	addr := response.Addresses[0]
+	if addr.Address != "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" {
+		t.Fatal("Failed check address in the addr")
+	}
+
+	if addr.NTx < 1000 {
+		t.Fatal("Failed check number of transactions")
+	}
+
+	if len(addr.Txs) != 0 {
+		t.Fatal("Wrong count of transactions")
+	}
+}
+
 func TestGetAddressMoreParams(t *testing.T) {
 	response, e := New().GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", map[string]string{"offset": "2147483647"})
 	if e != nil {
