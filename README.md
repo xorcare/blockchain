@@ -1,6 +1,6 @@
-# Package blockchain
+# Blockchain API library (Go, v1)
 
-*Go client blockchain.info api*
+Golang package for interacting with the blockchain.info API.
 
 [![Build Status](https://travis-ci.org/vasilyukvasiliy/blockchain.svg?branch=master)](https://travis-ci.org/vasilyukvasiliy/blockchain)
 [![Go Report Card](https://goreportcard.com/badge/github.com/vasilyukvasiliy/blockchain)](https://goreportcard.com/report/github.com/vasilyukvasiliy/blockchain)
