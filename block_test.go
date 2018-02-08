@@ -29,6 +29,33 @@ func TestGetBlockHeight(t *testing.T) {
 	checkFirstBlock(t, blockHeight.Blocks[0])
 }
 
+func TestGetBlockHeightSpecialBlocksRecruitment(t *testing.T) {
+	tests := []struct {
+		height string
+	}{
+		{"0"},
+		{"100000"},
+		{"124724"},
+		{"200000"},
+		{"256818"},
+		{"300000"},
+		{"400000"},
+		{"500000"},
+	}
+	for _, test := range tests {
+		t.Run(test.height, func(t *testing.T) {
+			blockHeight, e := New().GetBlockHeight(test.height)
+			if e != nil {
+				t.Fatal(e)
+			}
+
+			if len(blockHeight.Blocks) != 1 {
+				t.Fatal("Wrong count items of field 'Blocks'")
+			}
+		})
+	}
+}
+
 func TestGetBlocks(t *testing.T) {
 	blocks, e := New().GetBlocks("1231006505000")
 	if e != nil {

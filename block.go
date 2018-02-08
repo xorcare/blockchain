@@ -9,12 +9,12 @@ import "errors"
 // Block the structure of one specific block
 type Block struct {
 	Hash       string `json:"hash"`
-	Ver        uint64 `json:"ver"`
+	Ver        int64  `json:"ver"`
 	PrevBlock  string `json:"prev_block"`
 	MrklRoot   string `json:"mrkl_root"`
 	Time       uint64 `json:"time"`
 	Bits       uint64 `json:"bits"`
-	Fee        uint64 `json:"fee"`
+	Fee        int64  `json:"fee"`
 	Nonce      uint64 `json:"nonce"`
 	NTx        uint64 `json:"n_tx"`
 	Size       uint64 `json:"size"`

@@ -44,7 +44,7 @@ type Stats struct {
 	TotalBtcSent                  int64   `json:"total_btc_sent"`
 	TradeVolumeBtc                float64 `json:"trade_volume_btc"`
 	TradeVolumeUsd                float64 `json:"trade_volume_usd"`
-	Timestamp                     uint64  `json:"timestamp"`
+	Timestamp                     float64 `json:"timestamp"`
 }
 
 // GetStats is a special mechanism to obtain data behind Blockchain's stats

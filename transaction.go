@@ -9,7 +9,7 @@ import "errors"
 // Tx the basic structure of the transaction
 type Tx struct {
 	Result      int64    `json:"result"`
-	Ver         uint64   `json:"ver"`
+	Ver         int64    `json:"ver"`
 	Size        uint64   `json:"size"`
 	Inputs      []Inputs `json:"inputs"`
 	Time        uint64   `json:"time"`
@@ -21,7 +21,7 @@ type Tx struct {
 	RelayedBy   string   `json:"relayed_by"`
 	Out         []Out    `json:"out"`
 	Weight      uint64   `json:"weight"`
-	Fee         uint64   `json:"fee"`
+	Fee         int64    `json:"fee"`
 	LockTime    uint64   `json:"lock_time"`
 	DoubleSpend bool     `json:"double_spend"`
 	Balance     int64    `json:"balance"`
