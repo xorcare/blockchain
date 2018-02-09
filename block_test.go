@@ -34,13 +34,11 @@ func TestGetBlockHeightSpecialBlocksRecruitment(t *testing.T) {
 		height string
 	}{
 		{"0"},
-		{"100000"},
 		{"124724"},
-		{"200000"},
 		{"256818"},
-		{"300000"},
-		{"400000"},
-		{"500000"},
+		{"337877"},
+		{"447402"},
+		{"462467"},
 	}
 	for _, test := range tests {
 		t.Run(test.height, func(t *testing.T) {

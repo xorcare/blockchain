@@ -22,7 +22,7 @@ type Tx struct {
 	Out         []Out    `json:"out"`
 	Weight      uint64   `json:"weight"`
 	Fee         int64    `json:"fee"`
-	LockTime    uint64   `json:"lock_time"`
+	LockTime    int64    `json:"lock_time"`
 	DoubleSpend bool     `json:"double_spend"`
 	Balance     int64    `json:"balance"`
 	Rbf         bool     `json:"rbf"`
