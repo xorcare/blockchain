@@ -76,8 +76,13 @@ type Info struct {
 	LatestBlock LatestBlock `json:"latest_block"`
 }
 
-// GetAddress is a mechanism which is used to obtain information about the address
-func (c *Client) GetAddress(address string, params ...map[string]string) (response *Address, e error) {
+// GetAddress alias GetAddressAdvanced without additional parameters
+func (c *Client) GetAddress(address string) (*Address, error) {
+	return c.GetAddressAdvanced(address, map[string]string{})
+}
+
+// GetAddressAdvanced is a mechanism which is used to obtain information about the address
+func (c *Client) GetAddressAdvanced(address string, params ...map[string]string) (response *Address, e error) {
 	addressLength := len(address)
 	if address == "" || addressLength > 35 || addressLength < 26 {
 		return nil, errors.New("Address is wrong")
@@ -95,8 +100,13 @@ func (c *Client) GetAddress(address string, params ...map[string]string) (respon
 	return
 }
 
-// GetAddresses is a mechanism which is used to obtain information about the addresses
-func (c *Client) GetAddresses(addresses []string, params ...map[string]string) (response *MultiAddr, e error) {
+// GetAddresses alias GetAddressesAdvanced without additional parameters
+func (c *Client) GetAddresses(addresses []string) (*MultiAddr, error) {
+	return c.GetAddressesAdvanced(addresses, map[string]string{})
+}
+
+// GetAddressesAdvanced is a mechanism which is used to obtain information about the addresses
+func (c *Client) GetAddressesAdvanced(addresses []string, params ...map[string]string) (response *MultiAddr, e error) {
 	if len(addresses) == 0 {
 		return nil, errors.New("No Address Provided")
 	}

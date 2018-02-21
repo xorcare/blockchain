@@ -4,10 +4,13 @@
 
 package blockchain
 
-import "testing"
+import (
+	"encoding/json"
+	"testing"
+)
 
 func TestGetAddress(t *testing.T) {
-	response, e := New().GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
+	response, e := New().GetAddressAdvanced("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -35,7 +38,7 @@ func TestGetAddresses(t *testing.T) {
 		"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
 	}
 
-	response, e := New().GetAddresses(addresses)
+	response, e := New().GetAddressesAdvanced(addresses)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -71,7 +74,7 @@ func TestGetAddressesOneAddress(t *testing.T) {
 		"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
 	}
 
-	response, e := New().GetAddresses(addresses)
+	response, e := New().GetAddressesAdvanced(addresses)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -91,7 +94,7 @@ func TestGetAddressesOneAddress(t *testing.T) {
 }
 
 func TestGetAddressMoreParams(t *testing.T) {
-	response, e := New().GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", map[string]string{"offset": "2147483647"})
+	response, e := New().GetAddressAdvanced("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", map[string]string{"offset": "2147483647"})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -107,7 +110,7 @@ func TestGetAddressesMoreParams(t *testing.T) {
 		"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
 	}
 
-	response, e := New().GetAddresses(addresses, map[string]string{"offset": "2147483647"})
+	response, e := New().GetAddressesAdvanced(addresses, map[string]string{"offset": "2147483647"})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -118,13 +121,35 @@ func TestGetAddressesMoreParams(t *testing.T) {
 }
 
 func TestAddressesBadParams(t *testing.T) {
-	_, e := New().GetAddresses([]string{})
+	_, e := New().GetAddressesAdvanced([]string{})
 	if e == nil {
 		t.Fatal("There must be a mistake")
 	}
 
-	_, e = New().GetAddress("")
+	_, e = New().GetAddressAdvanced("")
 	if e == nil {
 		t.Fatal("There must be a mistake")
+	}
+}
+
+func BenchmarkAddressUnmarshal(b *testing.B) {
+	b.StopTimer()
+	response, e := New().GetAddressAdvanced("16rCmCmbuWDhPjWTrpQGaU3EPdZF7MTdUk", map[string]string{})
+	if e != nil {
+		b.Fatal(e)
+	}
+	bytes, e := json.Marshal(response)
+	if e != nil {
+		b.Fatal(e)
+	}
+
+	address := &Address{}
+	b.ReportAllocs()
+	b.StartTimer()
+	for i := 0; i < b.N; i++ {
+		e := json.Unmarshal(bytes, address)
+		if e != nil {
+			b.Fatal(e)
+		}
 	}
 }

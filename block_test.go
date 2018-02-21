@@ -34,6 +34,24 @@ func TestGetBlockHeightSpecialBlocksRecruitment(t *testing.T) {
 		height string
 	}{
 		{"0"},
+		{"2"},
+		{"4"},
+		{"8"},
+		{"16"},
+		{"32"},
+		{"64"},
+		{"128"},
+		{"256"},
+		{"512"},
+		{"1024"},
+		{"2048"},
+		{"4096"},
+		{"8192"},
+		{"16384"},
+		{"65536"},
+		{"131072"},
+		{"262144"},
+		// Special block set
 		{"124724"},
 		{"256818"},
 		{"337877"},
@@ -41,16 +59,15 @@ func TestGetBlockHeightSpecialBlocksRecruitment(t *testing.T) {
 		{"462467"},
 	}
 	for _, test := range tests {
-		t.Run(test.height, func(t *testing.T) {
-			blockHeight, e := New().GetBlockHeight(test.height)
-			if e != nil {
-				t.Fatal(e)
-			}
+		t.Log("Height:", test.height)
+		blockHeight, e := New().GetBlockHeight(test.height)
+		if e != nil {
+			t.Fatal("Height:", test.height, e)
+		}
 
-			if len(blockHeight.Blocks) != 1 {
-				t.Fatal("Wrong count items of field 'Blocks'")
-			}
-		})
+		if len(blockHeight.Blocks) != 1 {
+			t.Fatal("Height:", test.height, "wrong count items of field 'Blocks'")
+		}
 	}
 }
 

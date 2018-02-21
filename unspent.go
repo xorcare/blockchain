@@ -26,8 +26,13 @@ type UnspentOutput struct {
 	Value     int64  `json:"value"`
 }
 
-// GetUnspent specifies the mechanism by getting unspent outputs multiple addresses
-func (c *Client) GetUnspent(addresses []string, params ...map[string]string) (response *UnspentOutputs, e error) {
+// GetUnspent alias GetUnspentAdvanced without additional parameters
+func (c *Client) GetUnspent(addresses []string) (*UnspentOutputs, error) {
+	return c.GetUnspentAdvanced(addresses, map[string]string{})
+}
+
+// GetUnspentAdvanced specifies the mechanism by getting unspent outputs multiple addresses
+func (c *Client) GetUnspentAdvanced(addresses []string, params ...map[string]string) (response *UnspentOutputs, e error) {
 	if len(addresses) == 0 {
 		return nil, errors.New("No Address Provided")
 	}
