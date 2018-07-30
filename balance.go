@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-// Balances structure of the response to the balance request
+// Balances structure of the Response to the balance request
 type Balances map[string]Balance
 
 // Balance describes the available data at the same address
