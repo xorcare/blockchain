@@ -10,17 +10,17 @@ import (
 )
 
 func TestGetAddress(t *testing.T) {
-	response, e := New().GetAddressAdvanced("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
+	response, e := New().GetAddressAdv("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
 	if e != nil {
 		t.Fatal(e)
 	}
 
 	if response.Address != "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" {
-		t.Fatal("Failed check address in the response")
+		t.Fatal("Failed check address in the Response")
 	}
 
 	if response.Hash160 != "62e907b15cbf27d5425399ebf6f0fb50ebb88f18" {
-		t.Fatal("Failed check Hash160 in the response")
+		t.Fatal("Failed check Hash160 in the Response")
 	}
 
 	if response.NTx < 1000 {
@@ -38,7 +38,7 @@ func TestGetAddresses(t *testing.T) {
 		"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
 	}
 
-	response, e := New().GetAddressesAdvanced(addresses)
+	response, e := New().GetAddressesAdv(addresses)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -74,7 +74,7 @@ func TestGetAddressesOneAddress(t *testing.T) {
 		"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
 	}
 
-	response, e := New().GetAddressesAdvanced(addresses)
+	response, e := New().GetAddressesAdv(addresses)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -94,7 +94,7 @@ func TestGetAddressesOneAddress(t *testing.T) {
 }
 
 func TestGetAddressMoreParams(t *testing.T) {
-	response, e := New().GetAddressAdvanced("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", map[string]string{"offset": "2147483647"})
+	response, e := New().GetAddressAdv("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", map[string]string{"offset": "2147483647"})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -110,7 +110,7 @@ func TestGetAddressesMoreParams(t *testing.T) {
 		"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
 	}
 
-	response, e := New().GetAddressesAdvanced(addresses, map[string]string{"offset": "2147483647"})
+	response, e := New().GetAddressesAdv(addresses, map[string]string{"offset": "2147483647"})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -121,12 +121,12 @@ func TestGetAddressesMoreParams(t *testing.T) {
 }
 
 func TestAddressesBadParams(t *testing.T) {
-	_, e := New().GetAddressesAdvanced([]string{})
+	_, e := New().GetAddressesAdv([]string{})
 	if e == nil {
 		t.Fatal("There must be a mistake")
 	}
 
-	_, e = New().GetAddressAdvanced("")
+	_, e = New().GetAddressAdv("")
 	if e == nil {
 		t.Fatal("There must be a mistake")
 	}
@@ -134,7 +134,7 @@ func TestAddressesBadParams(t *testing.T) {
 
 func BenchmarkAddressUnmarshal(b *testing.B) {
 	b.StopTimer()
-	response, e := New().GetAddressAdvanced("16rCmCmbuWDhPjWTrpQGaU3EPdZF7MTdUk", map[string]string{})
+	response, e := New().GetAddressAdv("16rCmCmbuWDhPjWTrpQGaU3EPdZF7MTdUk", map[string]string{})
 	if e != nil {
 		b.Fatal(e)
 	}

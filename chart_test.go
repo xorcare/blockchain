@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetChart(t *testing.T) {
-	chart, e := New().GetChartAdvanced("market-price")
+	chart, e := New().GetChartAdv("market-price")
 	if e != nil {
 		t.Fatal(e)
 	}

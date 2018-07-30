@@ -67,7 +67,7 @@ func (c *Client) GetPools() (response ChartPools, e error) {
 	return
 }
 
-// GetChartAdvanced is a special mechanism to obtain data on the charts Blockchain.
+// GetChartAdv is a special mechanism to obtain data on the charts Blockchain.
 // This method can be used to get and manipulate data behind all Blockchain.info's charts.
 // URL: https://blockchain.info/charts
 //
@@ -166,7 +166,7 @@ func (c *Client) GetPools() (response ChartPools, e error) {
 //
 // https://blockchain.info/charts/my-wallet-n-users
 // Blockchain Wallet Users
-func (c *Client) GetChartAdvanced(chartType string, params ...map[string]string) (response *Chart, e error) {
+func (c *Client) GetChartAdv(chartType string, params ...map[string]string) (response *Chart, e error) {
 	options := map[string]string{"format": "json"}
 	if len(params) > 0 {
 		for k, v := range params[0] {
@@ -179,7 +179,7 @@ func (c *Client) GetChartAdvanced(chartType string, params ...map[string]string)
 	return
 }
 
-// GetChart alias GetChartAdvanced without additional parameters
+// GetChart alias GetChartAdv without additional parameters
 func (c *Client) GetChart(chartType string) (*Chart, error) {
-	return c.GetChartAdvanced(chartType, map[string]string{})
+	return c.GetChartAdv(chartType, map[string]string{})
 }
