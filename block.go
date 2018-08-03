@@ -37,9 +37,9 @@ type Blocks struct {
 }
 
 // GetBlock get the block by the hash
-func (c *Client) GetBlock(blockHash string) (response *Block, e *Error) {
+func (c *Client) GetBlock(blockHash string) (response *Block, e error) {
 	if blockHash == "" || len(blockHash) != 64 {
-		return nil, setErrorOne(BHW)
+		return nil, c.setErrorOne(BHW)
 	}
 
 	response = &Block{}
@@ -49,9 +49,9 @@ func (c *Client) GetBlock(blockHash string) (response *Block, e *Error) {
 }
 
 // GetBlockHeight get the block at height
-func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e *Error) {
+func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e error) {
 	if blockHeight == "" {
-		return nil, setErrorOne(BEW)
+		return nil, c.setErrorOne(BEW)
 	}
 
 	response = &Blocks{}
@@ -61,9 +61,9 @@ func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e *Error)
 }
 
 // GetBlocks getting blocks at a certain height
-func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e *Error) {
+func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e error) {
 	if blockHeight == "" {
-		return nil, setErrorOne(BEW)
+		return nil, c.setErrorOne(BEW)
 	}
 
 	response = &Blocks{}
@@ -73,7 +73,7 @@ func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e *Error) {
 }
 
 // GetLatestBlock receive the latest block of the main chain
-func (c *Client) GetLatestBlock() (response *LatestBlock, e *Error) {
+func (c *Client) GetLatestBlock() (response *LatestBlock, e error) {
 	response = &LatestBlock{}
 	e = c.DoRequest("/latestblock", response, map[string]string{"format": "json"})
 

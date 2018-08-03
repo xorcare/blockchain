@@ -4,7 +4,9 @@
 
 package blockchain
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestGetBalance(t *testing.T) {
 	// The first addresses of the first blocks of the bitcoin network
@@ -87,7 +89,6 @@ func TestGetBalance(t *testing.T) {
 		"14U5EYTN54agAngQu92D9gESvHYfKw8EqA",
 		"19X7soRFwUCRX8aUc3NrRZddHgpLmFmpzc",
 		"1H2nuVj2EnEVoYSw3opGjVxJdDqnehiYWN",
-		"1AiBYt8XbsdyPAELFpcSwRpu45eb2bArMf",
 		"12ti6ZDtjJTFnfSXJD1yZeojFdc1u4nJcS",
 		"1BwWdLV5wbnZvSYfNA8zaEMqEDDjvA99wX",
 		"1KmbQCNdfCDkEB6yWw5iLjBTGJ5MYptqAL",
@@ -208,7 +209,6 @@ func TestGetBalance(t *testing.T) {
 		"1Dw5XyQk2pFDNLQUsc2Eknq5ikQAwfRqsR",
 		"1F22VKzwQWf2LoSziz78Zc5e7owfrHDRCy",
 		"1AL11Yfw2ZP9C4wGiWf99jwZyTjWWY4JVn",
-		"1LKriCmDaBz4SfCoDjcjR1b9CmQTHibCcr",
 	}
 
 	balances, e := New().GetBalance(address)

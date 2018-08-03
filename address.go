@@ -75,15 +75,15 @@ type Info struct {
 }
 
 // GetAddress alias GetAddressAdv without additional parameters
-func (c *Client) GetAddress(address string) (*Address, *Error) {
+func (c *Client) GetAddress(address string) (*Address, error) {
 	return c.GetAddressAdv(address, map[string]string{})
 }
 
-// GetAddressAdv is a mechanism which is used to obtain information about the Address
-func (c *Client) GetAddressAdv(address string, params ...map[string]string) (response *Address, e *Error) {
+// GetAddressAdv is a mechanism which is used to obtain information about the address
+func (c *Client) GetAddressAdv(address string, params ...map[string]string) (response *Address, e error) {
 	addressLength := len(address)
 	if address == "" || addressLength > 35 || addressLength < 26 {
-		return nil, setError(WAE, nil, nil, nil)
+		return nil, c.setError(WAE, nil, nil, nil)
 	}
 
 	options := map[string]string{"format": "json"}
@@ -99,19 +99,19 @@ func (c *Client) GetAddressAdv(address string, params ...map[string]string) (res
 }
 
 // GetAddresses alias GetAddressesAdv without additional parameters
-func (c *Client) GetAddresses(addresses []string) (*MultiAddr, *Error) {
+func (c *Client) GetAddresses(addresses []string) (*MultiAddr, error) {
 	return c.GetAddressesAdv(addresses, map[string]string{})
 }
 
-func CheckAddresses(addresses []string) (e *Error) {
+func (c *Client) CheckAddresses(addresses []string) (e error) {
 	if len(addresses) == 0 {
-		return setErrorOne(PAE)
+		return c.setErrorOne(PAE)
 	}
 
 	for _, addr := range addresses {
 		addressLength := len(addr)
 		if addr == "" || addressLength > 35 || addressLength < 26 {
-			return setError(WAE, nil, nil, &addr)
+			return c.setError(WAE, nil, nil, &addr)
 		}
 	}
 
@@ -119,8 +119,8 @@ func CheckAddresses(addresses []string) (e *Error) {
 }
 
 // GetAddressesAdv is a mechanism which is used to obtain information about the addresses
-func (c *Client) GetAddressesAdv(addresses []string, params ...map[string]string) (multiAddr *MultiAddr, e *Error) {
-	e = CheckAddresses(addresses)
+func (c *Client) GetAddressesAdv(addresses []string, params ...map[string]string) (multiAddr *MultiAddr, e error) {
+	e = c.CheckAddresses(addresses)
 	if e != nil {
 		return
 	}

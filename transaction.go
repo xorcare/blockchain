@@ -66,9 +66,9 @@ type Txs struct {
 }
 
 // GetTransaction get the transaction on its hash
-func (c *Client) GetTransaction(transaction string) (response *Tx, e *Error) {
+func (c *Client) GetTransaction(transaction string) (response *Tx, e error) {
 	if transaction == "" || len(transaction) != 64 {
-		return nil, setErrorOne(THW)
+		return nil, c.setErrorOne(THW)
 	}
 
 	response = &Tx{}
@@ -78,7 +78,7 @@ func (c *Client) GetTransaction(transaction string) (response *Tx, e *Error) {
 }
 
 // GetUnconfirmedTransactions get the unconfirmed transactions
-func (c *Client) GetUnconfirmedTransactions() (reaponse *Txs, e *Error) {
+func (c *Client) GetUnconfirmedTransactions() (reaponse *Txs, e error) {
 	reaponse = &Txs{}
 	e = c.DoRequest("/unconfirmed-transactions", reaponse, map[string]string{"format": "json"})
 

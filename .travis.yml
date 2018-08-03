@@ -1,9 +1,4 @@
 language: go
 
 go:
-  - 1.0
   - tip
-  - master
-
-os:
-  - linux

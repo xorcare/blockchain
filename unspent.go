@@ -30,8 +30,8 @@ func (c *Client) GetUnspent(addresses []string) (*UnspentOutputs, error) {
 }
 
 // GetUnspentAdv specifies the mechanism by getting unspent outputs multiple addresses
-func (c *Client) GetUnspentAdv(addresses []string, params ...map[string]string) (response *UnspentOutputs, e *Error) {
-	e = CheckAddresses(addresses)
+func (c *Client) GetUnspentAdv(addresses []string, params ...map[string]string) (response *UnspentOutputs, e error) {
+	e = c.CheckAddresses(addresses)
 	if e != nil {
 		return
 	}

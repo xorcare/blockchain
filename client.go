@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Golang client blockchain api -> https://blockchain.info/api
-
 package blockchain
 
 import (
@@ -15,10 +13,15 @@ import (
 )
 
 const (
-	// APIRootTor the root Address in the tor network
+	Version = "1.0"
+
+	// UserAgent is the header string used to identify this package.
+	UserAgent = "blockchain-api-v1-client-go/" + Version + " (go; github; +https://git.io/v5dN0)"
+
+	// APIRootTor the root address in the tor network
 	APIRootTor = "https://blockchainbdgpzk.onion"
 
-	// APIRootNet the root Address in the network
+	// APIRootNet the root address in the network
 	APIRootNet = "https://blockchain.info"
 )
 
@@ -36,8 +39,25 @@ var (
 
 // Client specifies the mechanism by which individual API requests are made.
 type Client struct {
-	http    *http.Client
-	apiRoot string
+	client    *http.Client
+	BasePath  string // API endpoint base URL
+	UserAgent string // optional additional User-Agent fragment
+	error     *Error
+}
+
+func (c *Client) userAgent() string {
+	if c.UserAgent == "" {
+		return UserAgent
+	}
+
+	return UserAgent + " " + c.UserAgent
+}
+
+func (c *Client) Error() *Error {
+	defer func(c *Client) {
+		c.error = nil
+	}(c)
+	return c.error
 }
 
 type Error struct {
@@ -46,59 +66,75 @@ type Error struct {
 	// ErrorExec information about the error that occurred during
 	// the operation of the standard library or external packages
 	ErrorExec error
-	Response  *http.Response
-	Address   *string
+	// Response http response
+	Response *http.Response
+	// Address wrong address
+	Address *string
 }
 
 func (e Error) Error() string {
 	return e.ErrorMain.Error()
 }
 
-func setErrorOne(e error) *Error {
-	return setError(e, nil, nil, nil)
+func (c *Client) setErrorOne(errorMain error) error {
+	return c.setError(errorMain, nil, nil, nil)
 }
 
-func setError(errorMain error, errorExec error, response *http.Response, address *string) *Error {
+func (c *Client) setErrorTwo(errorMain error, errorExec error) error {
+	return c.setError(errorMain, errorExec, nil, nil)
+}
+
+func (c *Client) setError(errorMain error, errorExec error, response *http.Response, address *string) error {
+	c.error = nil
+
 	if errorMain == nil {
 		return nil
 	}
 
-	return &Error{
+	c.error = &Error{
 		ErrorMain: errorMain,
 		ErrorExec: errorExec,
 		Response:  response,
 		Address:   address,
 	}
+
+	return errorMain
 }
 
-// DoRequest to send an http request, which is then converted to the passed type.
-func (c *Client) DoRequest(path string, i interface{}, params map[string]string) *Error {
+// DoRequest to send an client request, which is then converted to the passed type.
+func (c *Client) DoRequest(path string, i interface{}, params map[string]string) error {
 	params["format"] = "json"
 	urlValues := url.Values{}
 	for k, v := range params {
 		urlValues.Set(k, v)
 	}
 
-	uri := c.apiRoot + path + "?" + (urlValues.Encode())
-	response, e := c.http.Get(uri)
+	req, e := http.NewRequest("GET", c.BasePath+path+"?"+(urlValues.Encode()), nil)
 	if e != nil {
-		return setError(CDE, e, response, nil)
+		return c.setErrorTwo(CDE, e)
 	}
 
-	defer response.Body.Close()
+	req.Header.Set("User-Agent", c.userAgent())
 
-	bytes, e := ioutil.ReadAll(response.Body)
+	resp, e := c.client.Do(req)
 	if e != nil {
-		return setError(RRE, e, response, nil)
+		return c.setError(CDE, e, resp, nil)
 	}
 
-	if response.Status[0] != '2' {
-		return setError(RSE, e, response, nil)
+	defer resp.Body.Close()
+
+	bytes, e := ioutil.ReadAll(resp.Body)
+	if e != nil {
+		return c.setError(RRE, e, resp, nil)
+	}
+
+	if resp.Status[0] != '2' {
+		return c.setError(RSE, e, resp, nil)
 	}
 
 	e = json.Unmarshal(bytes, &i)
 	if e != nil {
-		return setError(RPE, e, response, nil)
+		return c.setError(RPE, e, resp, nil)
 	}
 
 	return nil
@@ -106,15 +142,15 @@ func (c *Client) DoRequest(path string, i interface{}, params map[string]string)
 
 // New specifies the mechanism by create new client the network internet
 func New() *Client {
-	return &Client{http: &http.Client{}, apiRoot: APIRootNet}
+	return &Client{client: &http.Client{}, BasePath: APIRootNet}
 }
 
 // NewTor specifies the mechanism by create new client the network internet
 func NewTor() *Client {
-	return &Client{http: &http.Client{}, apiRoot: APIRootTor}
+	return &Client{client: &http.Client{}, BasePath: APIRootTor}
 }
 
-// SetHTTP http client setter
+// SetHTTP client client setter
 func (c *Client) SetHTTP(cli *http.Client) {
-	c.http = cli
+	c.client = cli
 }
