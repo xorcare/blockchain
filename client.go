@@ -107,7 +107,6 @@ func (c *Client) setError(errorMain error, errorExec error, resp *http.Response,
 func (c *Client) Do(path string, i interface{}, options map[string]string) error {
 	options = ApproveOptions(options)
 
-	options["format"] = "json"
 	values := url.Values{}
 	for k, v := range options {
 		values.Set(k, v)
@@ -145,7 +144,7 @@ func ApproveOptions(options map[string]string) map[string]string {
 	if options == nil {
 		return DefaultOptions
 	}
-
+	options["format"] = "json"
 	return options
 }
 
