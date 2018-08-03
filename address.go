@@ -1,12 +1,10 @@
-// Copyright 2017 Vasiliy Vasilyuk. All rights reserved.
+// Copyright 2017-2018 Vasiliy Vasilyuk. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 package blockchain
 
-import (
-	"strings"
-)
+import "strings"
 
 // Address description of the address structure returned from the API,
 // Some fields in some cases may be empty or absent.
@@ -26,8 +24,8 @@ type Address struct {
 	AccountIndex uint64 `json:"account_index,omitempty"`
 }
 
-// MultiAddr structure of the result when querying multiple addresses
-type MultiAddr struct {
+// MultiAddress structure of the result when querying multiple addresses
+type MultiAddress struct {
 	RecommendIncludeFee bool      `json:"recommend_include_fee,omitempty"`
 	SharedcoinEndpoint  string    `json:"sharedcoin_endpoint,omitempty"`
 	Wallet              Wallet    `json:"wallet"`
@@ -74,66 +72,65 @@ type Info struct {
 	LatestBlock LatestBlock `json:"latest_block"`
 }
 
+// ValidateBitcoinAddress bitcoin address validator
+func ValidateBitcoinAddress(address string) bool {
+	return validateBitcoinAddress(address) != -1
+}
+
+// ValidateBitcoinXpub bitcoin address validator
+func ValidateBitcoinXpub(xpub string) bool {
+	return validateBitcoinXpub(xpub) != -1
+}
+
 // GetAddress alias GetAddressAdv without additional parameters
 func (c *Client) GetAddress(address string) (*Address, error) {
-	return c.GetAddressAdv(address, map[string]string{})
+	return c.GetAddressAdv(address, nil)
 }
 
 // GetAddressAdv is a mechanism which is used to obtain information about the address
-func (c *Client) GetAddressAdv(address string, params ...map[string]string) (response *Address, e error) {
-	addressLength := len(address)
-	if address == "" || addressLength > 35 || addressLength < 26 {
-		return nil, c.setError(WAE, nil, nil, nil)
+func (c *Client) GetAddressAdv(address string, options map[string]string) (resp *Address, e error) {
+	if e = c.checkAddress(address); e != nil {
+		return
 	}
-
-	options := map[string]string{"format": "json"}
-	if len(params) > 0 {
-		for k, v := range params[0] {
-			options[k] = v
-		}
-	}
-	response = &Address{}
-	e = c.DoRequest("/address/"+address, response, options)
-
-	return
+	resp = &Address{}
+	return resp, c.Do("/address/"+address, resp, options)
 }
 
 // GetAddresses alias GetAddressesAdv without additional parameters
-func (c *Client) GetAddresses(addresses []string) (*MultiAddr, error) {
-	return c.GetAddressesAdv(addresses, map[string]string{})
-}
-
-func (c *Client) CheckAddresses(addresses []string) (e error) {
-	if len(addresses) == 0 {
-		return c.setErrorOne(PAE)
-	}
-
-	for _, addr := range addresses {
-		addressLength := len(addr)
-		if addr == "" || addressLength > 35 || addressLength < 26 {
-			return c.setError(WAE, nil, nil, &addr)
-		}
-	}
-
-	return
+func (c *Client) GetAddresses(addresses []string) (*MultiAddress, error) {
+	return c.GetAddressesAdv(addresses, nil)
 }
 
 // GetAddressesAdv is a mechanism which is used to obtain information about the addresses
-func (c *Client) GetAddressesAdv(addresses []string, params ...map[string]string) (multiAddr *MultiAddr, e error) {
-	e = c.CheckAddresses(addresses)
-	if e != nil {
+func (c *Client) GetAddressesAdv(addresses []string, options map[string]string) (resp *MultiAddress, e error) {
+	if e = c.checkAddresses(addresses); e != nil {
 		return
 	}
 
-	options := map[string]string{"active": strings.Join(addresses, "|")}
-	if len(params) > 0 {
-		for k, v := range params[0] {
-			options[k] = v
+	options = ApproveOptions(options)
+	options["active"] = strings.Join(addresses, "|")
+	resp = &MultiAddress{}
+	return resp, c.Do("/multiaddr", resp, options)
+}
+
+func (c *Client) checkAddress(address string) error {
+	if !ValidateBitcoinAddress(address) {
+		return c.setError(ErrAIW, nil, nil, &address)
+	}
+
+	return nil
+}
+
+func (c *Client) checkAddresses(addresses []string) (e error) {
+	if len(addresses) == 0 {
+		return c.setErrorOne(ErrNAP)
+	}
+
+	for _, address := range addresses {
+		if !ValidateBitcoinAddress(address) && !ValidateBitcoinXpub(address) {
+			return c.setError(ErrAIW, nil, nil, &address)
 		}
 	}
 
-	multiAddr = &MultiAddr{}
-	e = c.DoRequest("/multiaddr", multiAddr, options)
-
-	return
+	return nil
 }

@@ -1,4 +1,4 @@
-// Copyright 2017 Vasiliy Vasilyuk. All rights reserved.
+// Copyright 2017-2018 Vasiliy Vasilyuk. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -37,45 +37,37 @@ type Blocks struct {
 }
 
 // GetBlock get the block by the hash
-func (c *Client) GetBlock(blockHash string) (response *Block, e error) {
-	if blockHash == "" || len(blockHash) != 64 {
-		return nil, c.setErrorOne(BHW)
+func (c *Client) GetBlock(hash string) (resp *Block, e error) {
+	if hash == "" || len(hash) != 64 {
+		return nil, c.setErrorOne(ErrBHW)
 	}
 
-	response = &Block{}
-	e = c.DoRequest("/rawblock/"+blockHash, response, map[string]string{"format": "json"})
-
-	return
+	resp = &Block{}
+	return resp, c.Do("/rawblock/"+hash, resp, nil)
 }
 
 // GetBlockHeight get the block at height
-func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e error) {
-	if blockHeight == "" {
-		return nil, c.setErrorOne(BEW)
+func (c *Client) GetBlockHeight(height string) (resp *Blocks, e error) {
+	if height == "" {
+		return nil, c.setErrorOne(ErrBEW)
 	}
 
-	response = &Blocks{}
-	e = c.DoRequest("/block-height/"+blockHeight, response, map[string]string{"format": "json"})
-
-	return
+	resp = &Blocks{}
+	return resp, c.Do("/block-height/"+height, resp, nil)
 }
 
 // GetBlocks getting blocks at a certain height
-func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e error) {
-	if blockHeight == "" {
-		return nil, c.setErrorOne(BEW)
+func (c *Client) GetBlocks(height string) (resp *Blocks, e error) {
+	if height == "" {
+		return nil, c.setErrorOne(ErrBEW)
 	}
 
-	response = &Blocks{}
-	e = c.DoRequest("/blocks/"+blockHeight, response, map[string]string{"format": "json"})
-
-	return
+	resp = &Blocks{}
+	return resp, c.Do("/blocks/"+height, resp, nil)
 }
 
 // GetLatestBlock receive the latest block of the main chain
-func (c *Client) GetLatestBlock() (response *LatestBlock, e error) {
-	response = &LatestBlock{}
-	e = c.DoRequest("/latestblock", response, map[string]string{"format": "json"})
-
-	return
+func (c *Client) GetLatestBlock() (resp *LatestBlock, e error) {
+	resp = &LatestBlock{}
+	return resp, c.Do("/latestblock", resp, nil)
 }

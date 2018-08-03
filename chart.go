@@ -1,4 +1,4 @@
-// Copyright 2017 Vasiliy Vasilyuk. All rights reserved.
+// Copyright 2017-2018 Vasiliy Vasilyuk. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -50,9 +50,9 @@ type Stats struct {
 // GetStats is a special mechanism to obtain data behind Blockchain's stats
 // This method can be used to get the data behind Blockchain.info's stats.
 // URL: https://blockchain.info/stats
-func (c *Client) GetStats() (response *Stats, e error) {
-	response = &Stats{}
-	e = c.DoRequest("/stats", response, map[string]string{"format": "json"})
+func (c *Client) GetStats() (resp *Stats, e error) {
+	resp = &Stats{}
+	e = c.Do("/stats", resp, nil)
 
 	return
 }
@@ -60,9 +60,9 @@ func (c *Client) GetStats() (response *Stats, e error) {
 // GetPools is a special mechanism to obtain data behind Blockchain's pools information
 // This method can be used to get the data behind Blockchain.info's pools information.
 // URL: https://blockchain.info/pools
-func (c *Client) GetPools() (response ChartPools, e error) {
-	response = ChartPools{}
-	e = c.DoRequest("/pools", &response, map[string]string{"format": "json"})
+func (c *Client) GetPools() (resp ChartPools, e error) {
+	resp = ChartPools{}
+	e = c.Do("/pools", &resp, nil)
 
 	return
 }
@@ -142,7 +142,7 @@ func (c *Client) GetPools() (response ChartPools, e error) {
 //
 // https://blockchain.info/charts/difficulty
 // Difficulty.
-// A relative measure of how difficult it is to find a new block.
+// A relative measure of how difficult it is to find a newClient block.
 //
 // https://blockchain.info/charts/miners-revenue
 // Mining Revenue.
@@ -166,20 +166,12 @@ func (c *Client) GetPools() (response ChartPools, e error) {
 //
 // https://blockchain.info/charts/my-wallet-n-users
 // Blockchain Wallet Users
-func (c *Client) GetChartAdv(chartType string, params ...map[string]string) (response *Chart, e error) {
-	options := map[string]string{"format": "json"}
-	if len(params) > 0 {
-		for k, v := range params[0] {
-			options[k] = v
-		}
-	}
-	response = &Chart{}
-	e = c.DoRequest("/charts/"+chartType, response, options)
-
-	return
+func (c *Client) GetChartAdv(chartType string, options map[string]string) (resp *Chart, e error) {
+	resp = &Chart{}
+	return resp, c.Do("/charts/"+chartType, resp, options)
 }
 
 // GetChart alias GetChartAdv without additional parameters
 func (c *Client) GetChart(chartType string) (*Chart, error) {
-	return c.GetChartAdv(chartType, map[string]string{})
+	return c.GetChartAdv(chartType, nil)
 }
