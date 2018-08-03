@@ -4,8 +4,6 @@
 
 package blockchain
 
-import "errors"
-
 // Tx the basic structure of the transaction
 type Tx struct {
 	Result      int64    `json:"result"`
@@ -70,7 +68,7 @@ type Txs struct {
 // GetTransaction get the transaction on its hash
 func (c *Client) GetTransaction(transaction string) (response *Tx, e error) {
 	if transaction == "" || len(transaction) != 64 {
-		return nil, errors.New("Transaction hash is wrong")
+		return nil, c.setErrorOne(THW)
 	}
 
 	response = &Tx{}

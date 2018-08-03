@@ -4,8 +4,6 @@
 
 package blockchain
 
-import "errors"
-
 // Block the structure of one specific block
 type Block struct {
 	Hash       string `json:"hash"`
@@ -41,7 +39,7 @@ type Blocks struct {
 // GetBlock get the block by the hash
 func (c *Client) GetBlock(blockHash string) (response *Block, e error) {
 	if blockHash == "" || len(blockHash) != 64 {
-		return nil, errors.New("Block hash is wrong")
+		return nil, c.setErrorOne(BHW)
 	}
 
 	response = &Block{}
@@ -53,7 +51,7 @@ func (c *Client) GetBlock(blockHash string) (response *Block, e error) {
 // GetBlockHeight get the block at height
 func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e error) {
 	if blockHeight == "" {
-		return nil, errors.New("Empty block height is wrong")
+		return nil, c.setErrorOne(BEW)
 	}
 
 	response = &Blocks{}
@@ -65,7 +63,7 @@ func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e error) 
 // GetBlocks getting blocks at a certain height
 func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e error) {
 	if blockHeight == "" {
-		return nil, errors.New("Empty block height is wrong")
+		return nil, c.setErrorOne(BEW)
 	}
 
 	response = &Blocks{}
