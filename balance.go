@@ -5,8 +5,6 @@
 package blockchain
 
 import (
-	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -25,15 +23,9 @@ type Balance struct {
 // addresses. For times check out the better not more than 200
 // locations.
 func (c *Client) GetBalance(addresses []string) (response Balances, e error) {
-	if len(addresses) == 0 {
-		return nil, errors.New("No Address Provided")
-	}
-
-	for n, addr := range addresses {
-		addressLength := len(addr)
-		if addr == "" || addressLength > 35 || addressLength < 26 {
-			return nil, fmt.Errorf("Address numder %d is wrong", n)
-		}
+	e = c.CheckAddresses(addresses)
+	if e != nil {
+		return
 	}
 
 	response = Balances{}

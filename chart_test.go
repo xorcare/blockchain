@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetChart(t *testing.T) {
-	chart, e := New().GetChartAdv("market-price")
+	chart, e := New().GetChart("market-price")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -43,9 +43,9 @@ func TestGetStats(t *testing.T) {
 		t.Fatal(e)
 	}
 
-	bytes, e := json.MarshalIndent(stats, "", "\t")
-	if e != nil {
-		t.Fatal(e)
+	bytes, e2 := json.MarshalIndent(stats, "", "\t")
+	if e2 != nil {
+		t.Fatal(e2)
 	}
 	t.Log(string(bytes))
 }
