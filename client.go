@@ -86,7 +86,7 @@ func (c *Client) setErrorTwo(errorMain error, errorExec error) error {
 	return c.setError(errorMain, errorExec, nil, nil)
 }
 
-func (c *Client) setError(errorMain error, errorExec error, response *http.Response, address *string) error {
+func (c *Client) setError(errorMain error, errorExec error, resp *http.Response, address *string) error {
 	c.error = nil
 
 	if errorMain == nil {
@@ -96,16 +96,16 @@ func (c *Client) setError(errorMain error, errorExec error, response *http.Respo
 	c.error = &Error{
 		ErrorMain: errorMain,
 		ErrorExec: errorExec,
-		Response:  response,
+		Response:  resp,
 		Address:   address,
 	}
 
 	return errorMain
 }
 
-// DoRequest to send an client request, which is then converted to the passed type.
-func (c *Client) DoRequest(path string, i interface{}, options map[string]string) error {
-	options = ApproveParams(options)
+// Do to send an client request, which is then converted to the passed type.
+func (c *Client) Do(path string, i interface{}, options map[string]string) error {
+	options = ApproveOptions(options)
 
 	options["format"] = "json"
 	values := url.Values{}
@@ -141,7 +141,7 @@ func (c *Client) DoRequest(path string, i interface{}, options map[string]string
 	return nil
 }
 
-func ApproveParams(options map[string]string) map[string]string {
+func ApproveOptions(options map[string]string) map[string]string {
 	if options == nil {
 		return DefaultOptions
 	}

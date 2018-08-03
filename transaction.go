@@ -66,21 +66,17 @@ type Txs struct {
 }
 
 // GetTransaction get the transaction on its hash
-func (c *Client) GetTransaction(transaction string) (response *Tx, e error) {
+func (c *Client) GetTransaction(transaction string) (resp *Tx, e error) {
 	if transaction == "" || len(transaction) != 64 {
 		return nil, c.setErrorOne(THW)
 	}
 
-	response = &Tx{}
-	e = c.DoRequest("/rawtx/"+transaction, response, nil)
-
-	return
+	resp = &Tx{}
+	return resp, c.Do("/rawtx/"+transaction, resp, nil)
 }
 
 // GetUnconfirmedTransactions get the unconfirmed transactions
-func (c *Client) GetUnconfirmedTransactions() (reaponse *Txs, e error) {
-	reaponse = &Txs{}
-	e = c.DoRequest("/unconfirmed-transactions", reaponse, nil)
-
-	return
+func (c *Client) GetUnconfirmedTransactions() (resp *Txs, e error) {
+	resp = &Txs{}
+	return resp, c.Do("/unconfirmed-transactions", resp, nil)
 }

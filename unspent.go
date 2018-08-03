@@ -28,21 +28,13 @@ func (c *Client) GetUnspent(addresses []string) (*UnspentOutputs, error) {
 }
 
 // GetUnspentAdv specifies the mechanism by getting unspent outputs multiple addresses
-func (c *Client) GetUnspentAdv(addresses []string, params ...map[string]string) (response *UnspentOutputs, e error) {
-	e = c.CheckAddresses(addresses)
-	if e != nil {
+func (c *Client) GetUnspentAdv(addresses []string, options map[string]string) (resp *UnspentOutputs, e error) {
+	if e = c.CheckAddresses(addresses); e != nil {
 		return
 	}
 
-	options := map[string]string{"active": strings.Join(addresses, "|")}
-	if len(params) > 0 {
-		for k, v := range params[0] {
-			options[k] = v
-		}
-	}
-
-	response = &UnspentOutputs{}
-	e = c.DoRequest("/unspent", response, options)
-
-	return
+	options = ApproveOptions(options)
+	options["active"] = strings.Join(addresses, "|")
+	resp = &UnspentOutputs{}
+	return resp, c.Do("/unspent", resp, options)
 }

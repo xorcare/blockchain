@@ -36,22 +36,14 @@ type Blocks struct {
 	Blocks []Block `json:"blocks"`
 }
 
-func (c *Client) CheckBlockHash(s string) (e error) {
-	if s == "" || len(s) != 64 {
-		return c.setErrorOne(BHW)
-	}
-
-	return nil
-}
-
 // GetBlock get the block by the hash
 func (c *Client) GetBlock(hash string) (resp *Block, e error) {
-	if e := c.CheckBlockHash(hash); e != nil {
-		return nil, e
+	if hash == "" || len(hash) != 64 {
+		return nil, c.setErrorOne(BHW)
 	}
 
 	resp = &Block{}
-	return resp, c.DoRequest("/rawblock/"+hash, resp, nil)
+	return resp, c.Do("/rawblock/"+hash, resp, nil)
 }
 
 // GetBlockHeight get the block at height
@@ -61,7 +53,7 @@ func (c *Client) GetBlockHeight(height string) (resp *Blocks, e error) {
 	}
 
 	resp = &Blocks{}
-	return resp, c.DoRequest("/block-height/"+height, resp, nil)
+	return resp, c.Do("/block-height/"+height, resp, nil)
 }
 
 // GetBlocks getting blocks at a certain height
@@ -71,11 +63,11 @@ func (c *Client) GetBlocks(height string) (resp *Blocks, e error) {
 	}
 
 	resp = &Blocks{}
-	return resp, c.DoRequest("/blocks/"+height, resp, nil)
+	return resp, c.Do("/blocks/"+height, resp, nil)
 }
 
 // GetLatestBlock receive the latest block of the main chain
 func (c *Client) GetLatestBlock() (resp *LatestBlock, e error) {
 	resp = &LatestBlock{}
-	return resp, c.DoRequest("/latestblock", resp, nil)
+	return resp, c.Do("/latestblock", resp, nil)
 }

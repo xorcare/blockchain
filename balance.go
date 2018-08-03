@@ -6,7 +6,7 @@ package blockchain
 
 import "strings"
 
-// Balances structure of the Response to the balance request
+// Balances structure of the response to the balance request
 type Balances map[string]Balance
 
 // Balance describes the available data at the same address
@@ -21,13 +21,12 @@ type Balance struct {
 // addresses. For times check out the better not more than 200
 // locations.
 func (c *Client) GetBalance(addresses []string) (resp Balances, e error) {
-	e = c.CheckAddresses(addresses)
-	if e != nil {
+	if e = c.CheckAddresses(addresses); e != nil {
 		return
 	}
 
 	resp = Balances{}
-	return resp, c.DoRequest("/balance", &resp, map[string]string{
+	return resp, c.Do("/balance", &resp, map[string]string{
 		"active": strings.Join(addresses, "|"),
 	})
 }

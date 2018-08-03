@@ -16,11 +16,11 @@ func TestClient_GetAddress(t *testing.T) {
 	}
 
 	if resp.Address != "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" {
-		t.Fatal("Failed check address in the Response")
+		t.Fatal("Failed check address in the response")
 	}
 
 	if resp.Hash160 != "62e907b15cbf27d5425399ebf6f0fb50ebb88f18" {
-		t.Fatal("Failed check Hash160 in the Response")
+		t.Fatal("Failed check Hash160 in the response")
 	}
 
 	if resp.NTx < 1000 {
@@ -33,12 +33,9 @@ func TestClient_GetAddress(t *testing.T) {
 }
 
 func TestClient_GetAddresses(t *testing.T) {
-	addresses := []string{
-		"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
-		"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
-	}
+	t.Log("Max addresses count:", GetMaxAddressesCount())
 
-	resp, e := New().GetAddresses(addresses)
+	resp, e := New().GetAddresses(addressesForTestings)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -47,9 +44,7 @@ func TestClient_GetAddresses(t *testing.T) {
 		t.Fatal("Failed check Txs")
 	}
 
-	for i := range resp.Addresses {
-		addr := resp.Addresses[i]
-
+	for _, addr := range resp.Addresses {
 		switch addr.Address {
 		case "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa":
 			if addr.NTx < 1105 {
@@ -60,7 +55,9 @@ func TestClient_GetAddresses(t *testing.T) {
 				t.Fatal("Failed check number of transactions")
 			}
 		default:
-			t.Fatal("Do not ordered address: " + addr.Address)
+			if addr.NTx < 1 {
+				t.Fatal("Failed check number of transactions")
+			}
 		}
 
 		if len(addr.Txs) != 0 {
@@ -93,7 +90,7 @@ func TestGetAddressesOneAddress(t *testing.T) {
 	}
 }
 
-func TestGetAddressMoreParams(t *testing.T) {
+func TestGetAddressMoreOptions(t *testing.T) {
 	resp, e := New().GetAddressAdv("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", map[string]string{"offset": "2147483647"})
 	if e != nil {
 		t.Fatal(e)
@@ -104,7 +101,7 @@ func TestGetAddressMoreParams(t *testing.T) {
 	}
 }
 
-func TestGetAddressesMoreParams(t *testing.T) {
+func TestGetAddressesMoreOptions(t *testing.T) {
 	addresses := []string{
 		"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
 		"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
@@ -120,7 +117,7 @@ func TestGetAddressesMoreParams(t *testing.T) {
 	}
 }
 
-func TestAddressesBadParams(t *testing.T) {
+func TestAddressesBadOptions(t *testing.T) {
 	if _, e := New().GetAddresses([]string{}); e == nil {
 		t.Fatal("There must be a mistake")
 	}
