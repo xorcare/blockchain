@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetAddress(t *testing.T) {
-	response, e := New().GetAddressAdv("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
+	response, e := New().GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -38,7 +38,7 @@ func TestGetAddresses(t *testing.T) {
 		"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
 	}
 
-	response, e := New().GetAddressesAdv(addresses)
+	response, e := New().GetAddresses(addresses)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -138,9 +138,9 @@ func BenchmarkAddressUnmarshal(b *testing.B) {
 	if e != nil {
 		b.Fatal(e)
 	}
-	bytes, e := json.Marshal(response)
-	if e != nil {
-		b.Fatal(e)
+	bytes, e2 := json.Marshal(response)
+	if e2 != nil {
+		b.Fatal(e2)
 	}
 
 	address := &Address{}

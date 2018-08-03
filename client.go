@@ -12,14 +12,13 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
 )
 
 const (
-	// APIRootTor the root address in the tor network
+	// APIRootTor the root Address in the tor network
 	APIRootTor = "https://blockchainbdgpzk.onion"
 
-	// APIRootNet the root address in the network
+	// APIRootNet the root Address in the network
 	APIRootNet = "https://blockchain.info"
 )
 
@@ -29,101 +28,80 @@ var (
 	RPE = errors.New("response parsing error")
 	WAE = errors.New("address is wrong")
 	PAE = errors.New("no address(es) provided")
+	CDE = errors.New("cannot get data on url")
+	THW = errors.New("transaction hash is wrong")
+	BEW = errors.New("block height is wrong")
+	BHW = errors.New("block hash is wrong")
 )
 
 // Client specifies the mechanism by which individual API requests are made.
 type Client struct {
-	http      *http.Client
-	apiRoot   string
-	lastError *Error
+	http    *http.Client
+	apiRoot string
 }
 
 type Error struct {
-	error    error
-	response *http.Response
-	address  string
+	// ErrorMain error information from the standard package error set,
+	ErrorMain error
+	// ErrorExec information about the error that occurred during
+	// the operation of the standard library or external packages
+	ErrorExec error
+	Response  *http.Response
+	Address   *string
 }
 
 func (e Error) Error() string {
-	return e.error.Error()
+	return e.ErrorMain.Error()
 }
 
-func (e Error) Response() http.Response {
-	return *e.response
-}
-func (e Error) Address() string {
-	return e.address
+func setErrorOne(e error) *Error {
+	return setError(e, nil, nil, nil)
 }
 
-func (c *Client) CleanError() {
-	c.lastError = nil
-}
-
-func (c *Client) GetLastError() (e *Error) {
-	e = c.lastError
-	c.CleanError()
-	return
-}
-
-func (c *Client) setErrorResponse(e error, r *http.Response) *Error {
-	c.lastError = &Error{
-		error:    e,
-		response: r,
+func setError(errorMain error, errorExec error, response *http.Response, address *string) *Error {
+	if errorMain == nil {
+		return nil
 	}
 
-	return c.lastError
-}
-func (c *Client) setErrorAddress(e error, a string) *Error {
-	c.lastError = &Error{
-		error:   e,
-		address: a,
+	return &Error{
+		ErrorMain: errorMain,
+		ErrorExec: errorExec,
+		Response:  response,
+		Address:   address,
 	}
-	return c.lastError
 }
 
 // DoRequest to send an http request, which is then converted to the passed type.
-func (c *Client) DoRequest(path string, i interface{}, params map[string]string) (e error) {
+func (c *Client) DoRequest(path string, i interface{}, params map[string]string) *Error {
 	params["format"] = "json"
 	urlValues := url.Values{}
 	for k, v := range params {
 		urlValues.Set(k, v)
 	}
 
-	fullPath := c.apiRoot + path + "?" + (urlValues.Encode())
-	response, e := c.http.Get(fullPath)
+	uri := c.apiRoot + path + "?" + (urlValues.Encode())
+	response, e := c.http.Get(uri)
 	if e != nil {
-		return
+		return setError(CDE, e, response, nil)
 	}
 
 	defer response.Body.Close()
 
 	bytes, e := ioutil.ReadAll(response.Body)
 	if e != nil {
-		c.setErrorResponse(e, response)
-		return RRE
+		return setError(RRE, e, response, nil)
 	}
 
 	if response.Status[0] != '2' {
-		c.setErrorResponse(RSE, response)
-		return RSE
+		return setError(RSE, e, response, nil)
 	}
 
 	e = json.Unmarshal(bytes, &i)
-
-	b := *c.setErrorResponse(RSE, response)
-
-	if b == RSE {
-		os.Exit(0)
+	if e != nil {
+		return setError(RPE, e, response, nil)
 	}
 
-	if e == nil {
-		c.CleanError()
-	} else {
-		c.setErrorResponse(RPE, response)
-		return RPE
-	}
-
-	return
+	return nil
 }
 
 // New specifies the mechanism by create new client the network internet

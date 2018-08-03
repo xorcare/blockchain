@@ -75,15 +75,15 @@ type Info struct {
 }
 
 // GetAddress alias GetAddressAdv without additional parameters
-func (c *Client) GetAddress(address string) (*Address, error) {
+func (c *Client) GetAddress(address string) (*Address, *Error) {
 	return c.GetAddressAdv(address, map[string]string{})
 }
 
-// GetAddressAdv is a mechanism which is used to obtain information about the address
-func (c *Client) GetAddressAdv(address string, params ...map[string]string) (response *Address, e error) {
+// GetAddressAdv is a mechanism which is used to obtain information about the Address
+func (c *Client) GetAddressAdv(address string, params ...map[string]string) (response *Address, e *Error) {
 	addressLength := len(address)
 	if address == "" || addressLength > 35 || addressLength < 26 {
-		return nil, WAE
+		return nil, setError(WAE, nil, nil, nil)
 	}
 
 	options := map[string]string{"format": "json"}
@@ -99,21 +99,30 @@ func (c *Client) GetAddressAdv(address string, params ...map[string]string) (res
 }
 
 // GetAddresses alias GetAddressesAdv without additional parameters
-func (c *Client) GetAddresses(addresses []string) (*MultiAddr, error) {
+func (c *Client) GetAddresses(addresses []string) (*MultiAddr, *Error) {
 	return c.GetAddressesAdv(addresses, map[string]string{})
 }
 
-// GetAddressesAdv is a mechanism which is used to obtain information about the addresses
-func (c *Client) GetAddressesAdv(addresses []string, params ...map[string]string) (multiAddr *MultiAddr, e error) {
+func CheckAddresses(addresses []string) (e *Error) {
 	if len(addresses) == 0 {
-		return nil, c.setErrorAddress(PAE, "")
+		return setErrorOne(PAE)
 	}
 
 	for _, addr := range addresses {
 		addressLength := len(addr)
 		if addr == "" || addressLength > 35 || addressLength < 26 {
-			return nil, c.setErrorAddress(WAE, addr)
+			return setError(WAE, nil, nil, &addr)
 		}
+	}
+
+	return
+}
+
+// GetAddressesAdv is a mechanism which is used to obtain information about the addresses
+func (c *Client) GetAddressesAdv(addresses []string, params ...map[string]string) (multiAddr *MultiAddr, e *Error) {
+	e = CheckAddresses(addresses)
+	if e != nil {
+		return
 	}
 
 	options := map[string]string{"active": strings.Join(addresses, "|")}

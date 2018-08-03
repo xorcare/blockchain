@@ -4,8 +4,6 @@
 
 package blockchain
 
-import "errors"
-
 // Block the structure of one specific block
 type Block struct {
 	Hash       string `json:"hash"`
@@ -39,9 +37,9 @@ type Blocks struct {
 }
 
 // GetBlock get the block by the hash
-func (c *Client) GetBlock(blockHash string) (response *Block, e error) {
+func (c *Client) GetBlock(blockHash string) (response *Block, e *Error) {
 	if blockHash == "" || len(blockHash) != 64 {
-		return nil, errors.New("Block hash is wrong")
+		return nil, setErrorOne(BHW)
 	}
 
 	response = &Block{}
@@ -51,9 +49,9 @@ func (c *Client) GetBlock(blockHash string) (response *Block, e error) {
 }
 
 // GetBlockHeight get the block at height
-func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e error) {
+func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e *Error) {
 	if blockHeight == "" {
-		return nil, errors.New("Empty block height is wrong")
+		return nil, setErrorOne(BEW)
 	}
 
 	response = &Blocks{}
@@ -63,9 +61,9 @@ func (c *Client) GetBlockHeight(blockHeight string) (response *Blocks, e error) 
 }
 
 // GetBlocks getting blocks at a certain height
-func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e error) {
+func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e *Error) {
 	if blockHeight == "" {
-		return nil, errors.New("Empty block height is wrong")
+		return nil, setErrorOne(BEW)
 	}
 
 	response = &Blocks{}
@@ -75,7 +73,7 @@ func (c *Client) GetBlocks(blockHeight string) (response *Blocks, e error) {
 }
 
 // GetLatestBlock receive the latest block of the main chain
-func (c *Client) GetLatestBlock() (response *LatestBlock, e error) {
+func (c *Client) GetLatestBlock() (response *LatestBlock, e *Error) {
 	response = &LatestBlock{}
 	e = c.DoRequest("/latestblock", response, map[string]string{"format": "json"})
 

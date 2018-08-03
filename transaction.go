@@ -4,8 +4,6 @@
 
 package blockchain
 
-import "errors"
-
 // Tx the basic structure of the transaction
 type Tx struct {
 	Result      int64    `json:"result"`
@@ -68,9 +66,9 @@ type Txs struct {
 }
 
 // GetTransaction get the transaction on its hash
-func (c *Client) GetTransaction(transaction string) (response *Tx, e error) {
+func (c *Client) GetTransaction(transaction string) (response *Tx, e *Error) {
 	if transaction == "" || len(transaction) != 64 {
-		return nil, errors.New("Transaction hash is wrong")
+		return nil, setErrorOne(THW)
 	}
 
 	response = &Tx{}
@@ -80,7 +78,7 @@ func (c *Client) GetTransaction(transaction string) (response *Tx, e error) {
 }
 
 // GetUnconfirmedTransactions get the unconfirmed transactions
-func (c *Client) GetUnconfirmedTransactions() (reaponse *Txs, e error) {
+func (c *Client) GetUnconfirmedTransactions() (reaponse *Txs, e *Error) {
 	reaponse = &Txs{}
 	e = c.DoRequest("/unconfirmed-transactions", reaponse, map[string]string{"format": "json"})
 

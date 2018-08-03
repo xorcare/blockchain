@@ -5,8 +5,6 @@
 package blockchain
 
 import (
-	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -32,16 +30,10 @@ func (c *Client) GetUnspent(addresses []string) (*UnspentOutputs, error) {
 }
 
 // GetUnspentAdv specifies the mechanism by getting unspent outputs multiple addresses
-func (c *Client) GetUnspentAdv(addresses []string, params ...map[string]string) (response *UnspentOutputs, e error) {
-	if len(addresses) == 0 {
-		return nil, errors.New("No Address Provided")
-	}
-
-	for n, addr := range addresses {
-		addressLength := len(addr)
-		if addr == "" || addressLength > 35 || addressLength < 26 {
-			return nil, fmt.Errorf("Address numder %d is wrong", n)
-		}
+func (c *Client) GetUnspentAdv(addresses []string, params ...map[string]string) (response *UnspentOutputs, e *Error) {
+	e = CheckAddresses(addresses)
+	if e != nil {
+		return
 	}
 
 	options := map[string]string{"active": strings.Join(addresses, "|")}
