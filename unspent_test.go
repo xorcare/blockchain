@@ -1,4 +1,4 @@
-// Copyright 2017 Vasiliy Vasilyuk. All rights reserved.
+// Copyright 2017-2018 Vasiliy Vasilyuk. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -18,12 +18,12 @@ func TestGetUnspent(t *testing.T) {
 		"1CYG7y3fukVLdobqgUtbknwWKUZ5p1HVmV",
 	}
 
-	response, e := New().GetUnspentAdv(addresses, map[string]string{"limit": "1000"})
+	resp, e := newClient().GetUnspentAdv(addresses, map[string]string{"limit": "1000"})
 	if e != nil {
 		t.Fatal(e)
 	}
 
-	for _, v := range response.UnspentOutputs {
+	for _, v := range resp.UnspentOutputs {
 		if len(v.TxHash) != 64 {
 			t.Fatal("Wrong length value on field 'TxHash'")
 		}

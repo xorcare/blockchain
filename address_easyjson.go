@@ -398,7 +398,7 @@ func (v *SymbolBtc) UnmarshalJSON(data []byte) error {
 func (v *SymbolBtc) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonF4fdf71eDecodeBlockchain2(l, v)
 }
-func easyjsonF4fdf71eDecodeBlockchain3(in *jlexer.Lexer, out *MultiAddr) {
+func easyjsonF4fdf71eDecodeBlockchain3(in *jlexer.Lexer, out *MultiAddress) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -463,7 +463,7 @@ func easyjsonF4fdf71eDecodeBlockchain3(in *jlexer.Lexer, out *MultiAddr) {
 				}
 				for !in.IsDelim(']') {
 					var v2 Tx
-					easyjsonF4fdf71eDecodeBlockchain4(in, &v2)
+					(v2).UnmarshalEasyJSON(in)
 					out.Txs = append(out.Txs, v2)
 					in.WantComma()
 				}
@@ -481,7 +481,7 @@ func easyjsonF4fdf71eDecodeBlockchain3(in *jlexer.Lexer, out *MultiAddr) {
 		in.Consumed()
 	}
 }
-func easyjsonF4fdf71eEncodeBlockchain3(out *jwriter.Writer, in MultiAddr) {
+func easyjsonF4fdf71eEncodeBlockchain3(out *jwriter.Writer, in MultiAddress) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -552,7 +552,7 @@ func easyjsonF4fdf71eEncodeBlockchain3(out *jwriter.Writer, in MultiAddr) {
 				if v5 > 0 {
 					out.RawByte(',')
 				}
-				easyjsonF4fdf71eEncodeBlockchain4(out, v6)
+				(v6).MarshalEasyJSON(out)
 			}
 			out.RawByte(']')
 		}
@@ -571,713 +571,29 @@ func easyjsonF4fdf71eEncodeBlockchain3(out *jwriter.Writer, in MultiAddr) {
 }
 
 // MarshalJSON supports json.Marshaler interface
-func (v MultiAddr) MarshalJSON() ([]byte, error) {
+func (v MultiAddress) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
 	easyjsonF4fdf71eEncodeBlockchain3(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
-func (v MultiAddr) MarshalEasyJSON(w *jwriter.Writer) {
+func (v MultiAddress) MarshalEasyJSON(w *jwriter.Writer) {
 	easyjsonF4fdf71eEncodeBlockchain3(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
-func (v *MultiAddr) UnmarshalJSON(data []byte) error {
+func (v *MultiAddress) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
 	easyjsonF4fdf71eDecodeBlockchain3(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
-func (v *MultiAddr) UnmarshalEasyJSON(l *jlexer.Lexer) {
+func (v *MultiAddress) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonF4fdf71eDecodeBlockchain3(l, v)
 }
-func easyjsonF4fdf71eDecodeBlockchain4(in *jlexer.Lexer, out *Tx) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeString()
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "result":
-			out.Result = int64(in.Int64())
-		case "ver":
-			out.Ver = int64(in.Int64())
-		case "size":
-			out.Size = uint64(in.Uint64())
-		case "inputs":
-			if in.IsNull() {
-				in.Skip()
-				out.Inputs = nil
-			} else {
-				in.Delim('[')
-				if out.Inputs == nil {
-					if !in.IsDelim(']') {
-						out.Inputs = make([]Inputs, 0, 1)
-					} else {
-						out.Inputs = []Inputs{}
-					}
-				} else {
-					out.Inputs = (out.Inputs)[:0]
-				}
-				for !in.IsDelim(']') {
-					var v7 Inputs
-					easyjsonF4fdf71eDecodeBlockchain5(in, &v7)
-					out.Inputs = append(out.Inputs, v7)
-					in.WantComma()
-				}
-				in.Delim(']')
-			}
-		case "time":
-			out.Time = uint64(in.Uint64())
-		case "block_height":
-			out.BlockHeight = uint64(in.Uint64())
-		case "tx_index":
-			out.TxIndex = uint64(in.Uint64())
-		case "vin_sz":
-			out.VinSz = uint64(in.Uint64())
-		case "hash":
-			out.Hash = string(in.String())
-		case "vout_sz":
-			out.VoutSz = uint64(in.Uint64())
-		case "relayed_by":
-			out.RelayedBy = string(in.String())
-		case "out":
-			if in.IsNull() {
-				in.Skip()
-				out.Out = nil
-			} else {
-				in.Delim('[')
-				if out.Out == nil {
-					if !in.IsDelim(']') {
-						out.Out = make([]Out, 0, 1)
-					} else {
-						out.Out = []Out{}
-					}
-				} else {
-					out.Out = (out.Out)[:0]
-				}
-				for !in.IsDelim(']') {
-					var v8 Out
-					easyjsonF4fdf71eDecodeBlockchain6(in, &v8)
-					out.Out = append(out.Out, v8)
-					in.WantComma()
-				}
-				in.Delim(']')
-			}
-		case "weight":
-			out.Weight = uint64(in.Uint64())
-		case "fee":
-			out.Fee = int64(in.Int64())
-		case "lock_time":
-			out.LockTime = int64(in.Int64())
-		case "double_spend":
-			out.DoubleSpend = bool(in.Bool())
-		case "balance":
-			out.Balance = int64(in.Int64())
-		case "rbf":
-			out.Rbf = bool(in.Bool())
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
-}
-func easyjsonF4fdf71eEncodeBlockchain4(out *jwriter.Writer, in Tx) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"result\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Int64(int64(in.Result))
-	}
-	{
-		const prefix string = ",\"ver\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Int64(int64(in.Ver))
-	}
-	{
-		const prefix string = ",\"size\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.Size))
-	}
-	{
-		const prefix string = ",\"inputs\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		if in.Inputs == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-			out.RawString("null")
-		} else {
-			out.RawByte('[')
-			for v9, v10 := range in.Inputs {
-				if v9 > 0 {
-					out.RawByte(',')
-				}
-				easyjsonF4fdf71eEncodeBlockchain5(out, v10)
-			}
-			out.RawByte(']')
-		}
-	}
-	{
-		const prefix string = ",\"time\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.Time))
-	}
-	{
-		const prefix string = ",\"block_height\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.BlockHeight))
-	}
-	{
-		const prefix string = ",\"tx_index\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.TxIndex))
-	}
-	{
-		const prefix string = ",\"vin_sz\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.VinSz))
-	}
-	{
-		const prefix string = ",\"hash\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.Hash))
-	}
-	{
-		const prefix string = ",\"vout_sz\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.VoutSz))
-	}
-	{
-		const prefix string = ",\"relayed_by\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.RelayedBy))
-	}
-	{
-		const prefix string = ",\"out\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		if in.Out == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-			out.RawString("null")
-		} else {
-			out.RawByte('[')
-			for v11, v12 := range in.Out {
-				if v11 > 0 {
-					out.RawByte(',')
-				}
-				easyjsonF4fdf71eEncodeBlockchain6(out, v12)
-			}
-			out.RawByte(']')
-		}
-	}
-	{
-		const prefix string = ",\"weight\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.Weight))
-	}
-	{
-		const prefix string = ",\"fee\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Int64(int64(in.Fee))
-	}
-	{
-		const prefix string = ",\"lock_time\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Int64(int64(in.LockTime))
-	}
-	{
-		const prefix string = ",\"double_spend\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Bool(bool(in.DoubleSpend))
-	}
-	{
-		const prefix string = ",\"balance\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Int64(int64(in.Balance))
-	}
-	{
-		const prefix string = ",\"rbf\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Bool(bool(in.Rbf))
-	}
-	out.RawByte('}')
-}
-func easyjsonF4fdf71eDecodeBlockchain6(in *jlexer.Lexer, out *Out) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeString()
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "addr_tag_link":
-			out.AddrTagLink = string(in.String())
-		case "addr_tag":
-			out.AddrTag = string(in.String())
-		case "spent":
-			out.Spent = bool(in.Bool())
-		case "tx_index":
-			out.TxIndex = uint64(in.Uint64())
-		case "type":
-			out.Type = uint64(in.Uint64())
-		case "addr":
-			out.Addr = string(in.String())
-		case "value":
-			out.Value = uint64(in.Uint64())
-		case "n":
-			out.N = uint64(in.Uint64())
-		case "script":
-			out.Script = string(in.String())
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
-}
-func easyjsonF4fdf71eEncodeBlockchain6(out *jwriter.Writer, in Out) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"addr_tag_link\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.AddrTagLink))
-	}
-	{
-		const prefix string = ",\"addr_tag\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.AddrTag))
-	}
-	{
-		const prefix string = ",\"spent\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Bool(bool(in.Spent))
-	}
-	{
-		const prefix string = ",\"tx_index\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.TxIndex))
-	}
-	{
-		const prefix string = ",\"type\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.Type))
-	}
-	{
-		const prefix string = ",\"addr\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.Addr))
-	}
-	{
-		const prefix string = ",\"value\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.Value))
-	}
-	{
-		const prefix string = ",\"n\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.N))
-	}
-	{
-		const prefix string = ",\"script\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.Script))
-	}
-	out.RawByte('}')
-}
-func easyjsonF4fdf71eDecodeBlockchain5(in *jlexer.Lexer, out *Inputs) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeString()
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "sequence":
-			out.Sequence = uint64(in.Uint64())
-		case "witness":
-			out.Witness = string(in.String())
-		case "prev_out":
-			easyjsonF4fdf71eDecodeBlockchain7(in, &out.PrevOut)
-		case "script":
-			out.Script = string(in.String())
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
-}
-func easyjsonF4fdf71eEncodeBlockchain5(out *jwriter.Writer, in Inputs) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"sequence\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.Sequence))
-	}
-	{
-		const prefix string = ",\"witness\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.Witness))
-	}
-	{
-		const prefix string = ",\"prev_out\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		easyjsonF4fdf71eEncodeBlockchain7(out, in.PrevOut)
-	}
-	{
-		const prefix string = ",\"script\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.Script))
-	}
-	out.RawByte('}')
-}
-func easyjsonF4fdf71eDecodeBlockchain7(in *jlexer.Lexer, out *PrevOut) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeString()
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "addr_tag_link":
-			out.AddrTagLink = string(in.String())
-		case "addr_tag":
-			out.AddrTag = string(in.String())
-		case "spent":
-			out.Spent = bool(in.Bool())
-		case "tx_index":
-			out.TxIndex = uint64(in.Uint64())
-		case "type":
-			out.Type = uint64(in.Uint64())
-		case "addr":
-			out.Addr = string(in.String())
-		case "value":
-			out.Value = uint64(in.Uint64())
-		case "n":
-			out.N = uint64(in.Uint64())
-		case "script":
-			out.Script = string(in.String())
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
-}
-func easyjsonF4fdf71eEncodeBlockchain7(out *jwriter.Writer, in PrevOut) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"addr_tag_link\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.AddrTagLink))
-	}
-	{
-		const prefix string = ",\"addr_tag\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.AddrTag))
-	}
-	{
-		const prefix string = ",\"spent\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Bool(bool(in.Spent))
-	}
-	{
-		const prefix string = ",\"tx_index\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.TxIndex))
-	}
-	{
-		const prefix string = ",\"type\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.Type))
-	}
-	{
-		const prefix string = ",\"addr\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.Addr))
-	}
-	{
-		const prefix string = ",\"value\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.Value))
-	}
-	{
-		const prefix string = ",\"n\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.N))
-	}
-	{
-		const prefix string = ",\"script\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.Script))
-	}
-	out.RawByte('}')
-}
-func easyjsonF4fdf71eDecodeBlockchain8(in *jlexer.Lexer, out *Info) {
+func easyjsonF4fdf71eDecodeBlockchain4(in *jlexer.Lexer, out *Info) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -1305,7 +621,7 @@ func easyjsonF4fdf71eDecodeBlockchain8(in *jlexer.Lexer, out *Info) {
 		case "symbol_btc":
 			(out.SymbolBtc).UnmarshalEasyJSON(in)
 		case "latest_block":
-			easyjsonF4fdf71eDecodeBlockchain9(in, &out.LatestBlock)
+			(out.LatestBlock).UnmarshalEasyJSON(in)
 		default:
 			in.SkipRecursive()
 		}
@@ -1316,7 +632,7 @@ func easyjsonF4fdf71eDecodeBlockchain8(in *jlexer.Lexer, out *Info) {
 		in.Consumed()
 	}
 }
-func easyjsonF4fdf71eEncodeBlockchain8(out *jwriter.Writer, in Info) {
+func easyjsonF4fdf71eEncodeBlockchain4(out *jwriter.Writer, in Info) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -1368,7 +684,7 @@ func easyjsonF4fdf71eEncodeBlockchain8(out *jwriter.Writer, in Info) {
 		} else {
 			out.RawString(prefix)
 		}
-		easyjsonF4fdf71eEncodeBlockchain9(out, in.LatestBlock)
+		(in.LatestBlock).MarshalEasyJSON(out)
 	}
 	out.RawByte('}')
 }
@@ -1376,154 +692,27 @@ func easyjsonF4fdf71eEncodeBlockchain8(out *jwriter.Writer, in Info) {
 // MarshalJSON supports json.Marshaler interface
 func (v Info) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjsonF4fdf71eEncodeBlockchain8(&w, v)
+	easyjsonF4fdf71eEncodeBlockchain4(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v Info) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjsonF4fdf71eEncodeBlockchain8(w, v)
+	easyjsonF4fdf71eEncodeBlockchain4(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *Info) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjsonF4fdf71eDecodeBlockchain8(&r, v)
+	easyjsonF4fdf71eDecodeBlockchain4(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *Info) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjsonF4fdf71eDecodeBlockchain8(l, v)
+	easyjsonF4fdf71eDecodeBlockchain4(l, v)
 }
-func easyjsonF4fdf71eDecodeBlockchain9(in *jlexer.Lexer, out *LatestBlock) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeString()
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "hash":
-			out.Hash = string(in.String())
-		case "time":
-			out.Time = uint64(in.Uint64())
-		case "block_index":
-			out.BlockIndex = uint64(in.Uint64())
-		case "height":
-			out.Height = uint64(in.Uint64())
-		case "txIndexes":
-			if in.IsNull() {
-				in.Skip()
-				out.TxIndexes = nil
-			} else {
-				in.Delim('[')
-				if out.TxIndexes == nil {
-					if !in.IsDelim(']') {
-						out.TxIndexes = make([]uint64, 0, 8)
-					} else {
-						out.TxIndexes = []uint64{}
-					}
-				} else {
-					out.TxIndexes = (out.TxIndexes)[:0]
-				}
-				for !in.IsDelim(']') {
-					var v13 uint64
-					v13 = uint64(in.Uint64())
-					out.TxIndexes = append(out.TxIndexes, v13)
-					in.WantComma()
-				}
-				in.Delim(']')
-			}
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
-}
-func easyjsonF4fdf71eEncodeBlockchain9(out *jwriter.Writer, in LatestBlock) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"hash\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.Hash))
-	}
-	{
-		const prefix string = ",\"time\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.Time))
-	}
-	{
-		const prefix string = ",\"block_index\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.BlockIndex))
-	}
-	{
-		const prefix string = ",\"height\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Uint64(uint64(in.Height))
-	}
-	{
-		const prefix string = ",\"txIndexes\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		if in.TxIndexes == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-			out.RawString("null")
-		} else {
-			out.RawByte('[')
-			for v14, v15 := range in.TxIndexes {
-				if v14 > 0 {
-					out.RawByte(',')
-				}
-				out.Uint64(uint64(v15))
-			}
-			out.RawByte(']')
-		}
-	}
-	out.RawByte('}')
-}
-func easyjsonF4fdf71eDecodeBlockchain10(in *jlexer.Lexer, out *Address) {
+func easyjsonF4fdf71eDecodeBlockchain5(in *jlexer.Lexer, out *Address) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -1570,9 +759,9 @@ func easyjsonF4fdf71eDecodeBlockchain10(in *jlexer.Lexer, out *Address) {
 					out.Txs = (out.Txs)[:0]
 				}
 				for !in.IsDelim(']') {
-					var v16 Tx
-					easyjsonF4fdf71eDecodeBlockchain4(in, &v16)
-					out.Txs = append(out.Txs, v16)
+					var v7 Tx
+					(v7).UnmarshalEasyJSON(in)
+					out.Txs = append(out.Txs, v7)
 					in.WantComma()
 				}
 				in.Delim(']')
@@ -1591,7 +780,7 @@ func easyjsonF4fdf71eDecodeBlockchain10(in *jlexer.Lexer, out *Address) {
 		in.Consumed()
 	}
 }
-func easyjsonF4fdf71eEncodeBlockchain10(out *jwriter.Writer, in Address) {
+func easyjsonF4fdf71eEncodeBlockchain5(out *jwriter.Writer, in Address) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -1665,11 +854,11 @@ func easyjsonF4fdf71eEncodeBlockchain10(out *jwriter.Writer, in Address) {
 		}
 		{
 			out.RawByte('[')
-			for v17, v18 := range in.Txs {
-				if v17 > 0 {
+			for v8, v9 := range in.Txs {
+				if v8 > 0 {
 					out.RawByte(',')
 				}
-				easyjsonF4fdf71eEncodeBlockchain4(out, v18)
+				(v9).MarshalEasyJSON(out)
 			}
 			out.RawByte(']')
 		}
@@ -1700,23 +889,23 @@ func easyjsonF4fdf71eEncodeBlockchain10(out *jwriter.Writer, in Address) {
 // MarshalJSON supports json.Marshaler interface
 func (v Address) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjsonF4fdf71eEncodeBlockchain10(&w, v)
+	easyjsonF4fdf71eEncodeBlockchain5(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v Address) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjsonF4fdf71eEncodeBlockchain10(w, v)
+	easyjsonF4fdf71eEncodeBlockchain5(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *Address) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjsonF4fdf71eDecodeBlockchain10(&r, v)
+	easyjsonF4fdf71eDecodeBlockchain5(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *Address) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjsonF4fdf71eDecodeBlockchain10(l, v)
+	easyjsonF4fdf71eDecodeBlockchain5(l, v)
 }

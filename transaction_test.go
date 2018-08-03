@@ -1,4 +1,4 @@
-// Copyright 2017 Vasiliy Vasilyuk. All rights reserved.
+// Copyright 2017-2018 Vasiliy Vasilyuk. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -7,7 +7,7 @@ package blockchain
 import "testing"
 
 func TestGetUnconfirmedTransactions(t *testing.T) {
-	txs, e := New().GetUnconfirmedTransactions()
+	txs, e := newClient().GetUnconfirmedTransactions()
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -42,7 +42,7 @@ func TestGetUnconfirmedTransactions(t *testing.T) {
 }
 
 func TestGetTransaction(t *testing.T) {
-	tx, e := New().GetTransaction("4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b")
+	tx, e := newClient().GetTransaction("4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -119,7 +119,7 @@ func checkFirstTxOut(t *testing.T, out Out) {
 		t.Fatal("Wrong value on field 'Tx[0].Out[0].Type'")
 	}
 
-	if out.Addr != "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" {
+	if out.Addr != firstBitcoinAddress {
 		t.Fatal("Wrong value on field 'Tx[0].Out[0].Addr'")
 	}
 
