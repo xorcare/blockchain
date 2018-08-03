@@ -1,4 +1,4 @@
-// Copyright 2017 Vasiliy Vasilyuk. All rights reserved.
+// Copyright 2017-2018 Vasiliy Vasilyuk. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestGetBalance(t *testing.T) {
+func TestClient_GetBalance(t *testing.T) {
 	// The first addresses of the first blocks of the bitcoin network
 	address := []string{
 		"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
@@ -232,11 +232,8 @@ func TestGetBalance(t *testing.T) {
 	if len(address) != len(balances) {
 		t.Fatal("The number of addresses does not match the number received balances")
 	}
-}
 
-func TestBalanceBadParams(t *testing.T) {
-	_, e := New().GetBalance([]string{})
-	if e == nil {
+	if _, e = New().GetBalance([]string{}); e == nil {
 		t.Fatal("There must be a mistake")
 	}
 }

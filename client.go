@@ -1,4 +1,4 @@
-// Copyright 2017 Vasiliy Vasilyuk. All rights reserved.
+// Copyright 2017-2018 Vasiliy Vasilyuk. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -26,16 +26,18 @@ const (
 )
 
 var (
-	RRE = errors.New("could not read answer response")
-	RSE = errors.New("incorrect response status")
+	CRR = errors.New("could not read answer response")
+	IRS = errors.New("incorrect response status")
 	RPE = errors.New("response parsing error")
-	WAE = errors.New("address is wrong")
-	PAE = errors.New("no address(es) provided")
-	CDE = errors.New("cannot get data on url")
+	AIW = errors.New("address is wrong")
+	ANP = errors.New("no address(es) provided")
+	CGD = errors.New("cannot get data on url")
 	THW = errors.New("transaction hash is wrong")
 	BEW = errors.New("block height is wrong")
 	BHW = errors.New("block hash is wrong")
 )
+
+var DefaultOptions = map[string]string{"format": "json"}
 
 // Client specifies the mechanism by which individual API requests are made.
 type Client struct {
@@ -61,6 +63,8 @@ func (c *Client) Error() *Error {
 }
 
 type Error struct {
+	// Address wrong address
+	Address *string
 	// ErrorMain error information from the standard package error set,
 	ErrorMain error
 	// ErrorExec information about the error that occurred during
@@ -68,8 +72,6 @@ type Error struct {
 	ErrorExec error
 	// Response http response
 	Response *http.Response
-	// Address wrong address
-	Address *string
 }
 
 func (e Error) Error() string {
@@ -102,42 +104,49 @@ func (c *Client) setError(errorMain error, errorExec error, response *http.Respo
 }
 
 // DoRequest to send an client request, which is then converted to the passed type.
-func (c *Client) DoRequest(path string, i interface{}, params map[string]string) error {
-	params["format"] = "json"
-	urlValues := url.Values{}
-	for k, v := range params {
-		urlValues.Set(k, v)
+func (c *Client) DoRequest(path string, i interface{}, options map[string]string) error {
+	options = ApproveParams(options)
+
+	options["format"] = "json"
+	values := url.Values{}
+	for k, v := range options {
+		values.Set(k, v)
 	}
 
-	req, e := http.NewRequest("GET", c.BasePath+path+"?"+(urlValues.Encode()), nil)
+	req, e := http.NewRequest("GET", c.BasePath+path+"?"+(values.Encode()), nil)
 	if e != nil {
-		return c.setErrorTwo(CDE, e)
+		return c.setErrorTwo(CGD, e)
 	}
-
 	req.Header.Set("User-Agent", c.userAgent())
 
 	resp, e := c.client.Do(req)
 	if e != nil {
-		return c.setError(CDE, e, resp, nil)
+		return c.setError(CGD, e, resp, nil)
 	}
-
 	defer resp.Body.Close()
 
 	bytes, e := ioutil.ReadAll(resp.Body)
 	if e != nil {
-		return c.setError(RRE, e, resp, nil)
+		return c.setError(CRR, e, resp, nil)
 	}
 
 	if resp.Status[0] != '2' {
-		return c.setError(RSE, e, resp, nil)
+		return c.setError(IRS, e, resp, nil)
 	}
 
-	e = json.Unmarshal(bytes, &i)
-	if e != nil {
+	if e = json.Unmarshal(bytes, &i); e != nil {
 		return c.setError(RPE, e, resp, nil)
 	}
 
 	return nil
+}
+
+func ApproveParams(options map[string]string) map[string]string {
+	if options == nil {
+		return DefaultOptions
+	}
+
+	return options
 }
 
 // New specifies the mechanism by create new client the network internet

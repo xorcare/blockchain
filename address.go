@@ -1,4 +1,4 @@
-// Copyright 2017 Vasiliy Vasilyuk. All rights reserved.
+// Copyright 2017-2018 Vasiliy Vasilyuk. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -74,66 +74,55 @@ type Info struct {
 	LatestBlock LatestBlock `json:"latest_block"`
 }
 
-// GetAddress alias GetAddressAdv without additional parameters
-func (c *Client) GetAddress(address string) (*Address, error) {
-	return c.GetAddressAdv(address, map[string]string{})
-}
-
-// GetAddressAdv is a mechanism which is used to obtain information about the address
-func (c *Client) GetAddressAdv(address string, params ...map[string]string) (response *Address, e error) {
-	addressLength := len(address)
-	if address == "" || addressLength > 35 || addressLength < 26 {
-		return nil, c.setError(WAE, nil, nil, nil)
+func (c *Client) CheckAddress(address string) error {
+	if res := ValidateBitcoinAddress(address); res == -1 {
+		return c.setError(AIW, nil, nil, nil)
 	}
 
-	options := map[string]string{"format": "json"}
-	if len(params) > 0 {
-		for k, v := range params[0] {
-			options[k] = v
-		}
-	}
-	response = &Address{}
-	e = c.DoRequest("/address/"+address, response, options)
-
-	return
-}
-
-// GetAddresses alias GetAddressesAdv without additional parameters
-func (c *Client) GetAddresses(addresses []string) (*MultiAddr, error) {
-	return c.GetAddressesAdv(addresses, map[string]string{})
+	return nil
 }
 
 func (c *Client) CheckAddresses(addresses []string) (e error) {
 	if len(addresses) == 0 {
-		return c.setErrorOne(PAE)
+		return c.setErrorOne(ANP)
 	}
 
-	for _, addr := range addresses {
-		addressLength := len(addr)
-		if addr == "" || addressLength > 35 || addressLength < 26 {
-			return c.setError(WAE, nil, nil, &addr)
+	for _, address := range addresses {
+		if e = c.CheckAddress(address); e != nil {
+			return e
 		}
 	}
 
-	return
+	return nil
+}
+
+// GetAddress alias GetAddressAdv without additional parameters
+func (c *Client) GetAddress(address string) (*Address, error) {
+	return c.GetAddressAdv(address, nil)
+}
+
+// GetAddressAdv is a mechanism which is used to obtain information about the address
+func (c *Client) GetAddressAdv(address string, options map[string]string) (resp *Address, e error) {
+	if e = c.CheckAddress(address); e != nil {
+		return
+	}
+	resp = &Address{}
+	return resp, c.DoRequest("/address/"+address, resp, options)
+}
+
+// GetAddresses alias GetAddressesAdv without additional parameters
+func (c *Client) GetAddresses(addresses []string) (*MultiAddr, error) {
+	return c.GetAddressesAdv(addresses, nil)
 }
 
 // GetAddressesAdv is a mechanism which is used to obtain information about the addresses
-func (c *Client) GetAddressesAdv(addresses []string, params ...map[string]string) (multiAddr *MultiAddr, e error) {
-	e = c.CheckAddresses(addresses)
-	if e != nil {
+func (c *Client) GetAddressesAdv(addresses []string, options map[string]string) (resp *MultiAddr, e error) {
+	if e = c.CheckAddresses(addresses); e != nil {
 		return
 	}
 
-	options := map[string]string{"active": strings.Join(addresses, "|")}
-	if len(params) > 0 {
-		for k, v := range params[0] {
-			options[k] = v
-		}
-	}
-
-	multiAddr = &MultiAddr{}
-	e = c.DoRequest("/multiaddr", multiAddr, options)
-
-	return
+	options = ApproveParams(options)
+	options["active"] = strings.Join(addresses, "|")
+	resp = &MultiAddr{}
+	return resp, c.DoRequest("/multiaddr", resp, options)
 }

@@ -1,4 +1,4 @@
-// Copyright 2017 Vasiliy Vasilyuk. All rights reserved.
+// Copyright 2017-2018 Vasiliy Vasilyuk. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -52,7 +52,7 @@ type Stats struct {
 // URL: https://blockchain.info/stats
 func (c *Client) GetStats() (response *Stats, e error) {
 	response = &Stats{}
-	e = c.DoRequest("/stats", response, map[string]string{"format": "json"})
+	e = c.DoRequest("/stats", response, nil)
 
 	return
 }
@@ -62,7 +62,7 @@ func (c *Client) GetStats() (response *Stats, e error) {
 // URL: https://blockchain.info/pools
 func (c *Client) GetPools() (response ChartPools, e error) {
 	response = ChartPools{}
-	e = c.DoRequest("/pools", &response, map[string]string{"format": "json"})
+	e = c.DoRequest("/pools", &response, nil)
 
 	return
 }
@@ -166,20 +166,12 @@ func (c *Client) GetPools() (response ChartPools, e error) {
 //
 // https://blockchain.info/charts/my-wallet-n-users
 // Blockchain Wallet Users
-func (c *Client) GetChartAdv(chartType string, params ...map[string]string) (response *Chart, e error) {
-	options := map[string]string{"format": "json"}
-	if len(params) > 0 {
-		for k, v := range params[0] {
-			options[k] = v
-		}
-	}
-	response = &Chart{}
-	e = c.DoRequest("/charts/"+chartType, response, options)
-
-	return
+func (c *Client) GetChartAdv(chartType string, params map[string]string) (resp *Chart, e error) {
+	resp = &Chart{}
+	return resp, c.DoRequest("/charts/"+chartType, resp, params)
 }
 
 // GetChart alias GetChartAdv without additional parameters
 func (c *Client) GetChart(chartType string) (*Chart, error) {
-	return c.GetChartAdv(chartType, map[string]string{})
+	return c.GetChartAdv(chartType, nil)
 }

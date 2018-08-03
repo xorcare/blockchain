@@ -1,4 +1,4 @@
-// Copyright 2017 Vasiliy Vasilyuk. All rights reserved.
+// Copyright 2017-2018 Vasiliy Vasilyuk. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -72,7 +72,7 @@ func (c *Client) GetTransaction(transaction string) (response *Tx, e error) {
 	}
 
 	response = &Tx{}
-	e = c.DoRequest("/rawtx/"+transaction, response, map[string]string{"format": "json"})
+	e = c.DoRequest("/rawtx/"+transaction, response, nil)
 
 	return
 }
@@ -80,7 +80,7 @@ func (c *Client) GetTransaction(transaction string) (response *Tx, e error) {
 // GetUnconfirmedTransactions get the unconfirmed transactions
 func (c *Client) GetUnconfirmedTransactions() (reaponse *Txs, e error) {
 	reaponse = &Txs{}
-	e = c.DoRequest("/unconfirmed-transactions", reaponse, map[string]string{"format": "json"})
+	e = c.DoRequest("/unconfirmed-transactions", reaponse, nil)
 
 	return
 }

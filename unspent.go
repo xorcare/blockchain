@@ -1,12 +1,10 @@
-// Copyright 2017 Vasiliy Vasilyuk. All rights reserved.
+// Copyright 2017-2018 Vasiliy Vasilyuk. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 package blockchain
 
-import (
-	"strings"
-)
+import "strings"
 
 // UnspentOutputs the set of unspent outputs
 type UnspentOutputs struct {
@@ -26,7 +24,7 @@ type UnspentOutput struct {
 
 // GetUnspent alias GetUnspentAdv without additional parameters
 func (c *Client) GetUnspent(addresses []string) (*UnspentOutputs, error) {
-	return c.GetUnspentAdv(addresses, map[string]string{})
+	return c.GetUnspentAdv(addresses, nil)
 }
 
 // GetUnspentAdv specifies the mechanism by getting unspent outputs multiple addresses
