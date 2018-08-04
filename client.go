@@ -26,25 +26,27 @@ const (
 )
 
 var (
+	AIW = errors.New("address is wrong")
+	ANP = errors.New("no address(es) provided")
+	BEW = errors.New("block height is wrong")
+	BHW = errors.New("block hash is wrong")
+	CGD = errors.New("cannot get data on url")
 	CRR = errors.New("could not read answer response")
 	IRS = errors.New("incorrect response status")
 	RPE = errors.New("response parsing error")
-	AIW = errors.New("address is wrong")
-	ANP = errors.New("no address(es) provided")
-	CGD = errors.New("cannot get data on url")
 	THW = errors.New("transaction hash is wrong")
-	BEW = errors.New("block height is wrong")
-	BHW = errors.New("block hash is wrong")
 )
 
 var DefaultOptions = map[string]string{"format": "json"}
 
 // Client specifies the mechanism by which individual API requests are made.
 type Client struct {
-	client    *http.Client
+	client *http.Client
+	error  *Error
+
+	ApiKey    string
 	BasePath  string // API endpoint base URL
 	UserAgent string // optional additional User-Agent fragment
-	error     *Error
 }
 
 func (c *Client) userAgent() string {
@@ -62,22 +64,6 @@ func (c *Client) Error() *Error {
 	return c.error
 }
 
-type Error struct {
-	// Address wrong address
-	Address *string
-	// ErrorMain error information from the standard package error set,
-	ErrorMain error
-	// ErrorExec information about the error that occurred during
-	// the operation of the standard library or external packages
-	ErrorExec error
-	// Response http response
-	Response *http.Response
-}
-
-func (e Error) Error() string {
-	return e.ErrorMain.Error()
-}
-
 func (c *Client) setErrorOne(errorMain error) error {
 	return c.setError(errorMain, nil, nil, nil)
 }
@@ -86,7 +72,7 @@ func (c *Client) setErrorTwo(errorMain error, errorExec error) error {
 	return c.setError(errorMain, errorExec, nil, nil)
 }
 
-func (c *Client) setError(errorMain error, errorExec error, resp *http.Response, address *string) error {
+func (c *Client) setError(errorMain error, errorExec error, response *http.Response, address *string) error {
 	c.error = nil
 
 	if errorMain == nil {
@@ -96,7 +82,7 @@ func (c *Client) setError(errorMain error, errorExec error, resp *http.Response,
 	c.error = &Error{
 		ErrorMain: errorMain,
 		ErrorExec: errorExec,
-		Response:  resp,
+		Response:  response,
 		Address:   address,
 	}
 
@@ -106,7 +92,8 @@ func (c *Client) setError(errorMain error, errorExec error, resp *http.Response,
 // Do to send an client request, which is then converted to the passed type.
 func (c *Client) Do(path string, i interface{}, options map[string]string) error {
 	options = ApproveOptions(options)
-
+	options["format"] = "json"
+	options["api_code"] = c.ApiKey
 	values := url.Values{}
 	for k, v := range options {
 		values.Set(k, v)
@@ -140,11 +127,26 @@ func (c *Client) Do(path string, i interface{}, options map[string]string) error
 	return nil
 }
 
+type Error struct {
+	// Address wrong address
+	Address *string
+	// ErrorMain error information from the standard package error set,
+	ErrorMain error
+	// ErrorExec information about the error that occurred during
+	// the operation of the standard library or external packages
+	ErrorExec error
+	// Response http response
+	Response *http.Response
+}
+
+func (e Error) Error() string {
+	return e.ErrorMain.Error()
+}
+
 func ApproveOptions(options map[string]string) map[string]string {
 	if options == nil {
 		return DefaultOptions
 	}
-	options["format"] = "json"
 	return options
 }
 
