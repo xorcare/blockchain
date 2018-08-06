@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetChart(t *testing.T) {
-	chart, e := New().GetChart("market-price")
+	chart, e := newClient().GetChart("market-price")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -27,7 +27,7 @@ func TestGetChart(t *testing.T) {
 }
 
 func TestGetChartPools(t *testing.T) {
-	pools, e := New().GetPools()
+	pools, e := newClient().GetPools()
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -38,7 +38,7 @@ func TestGetChartPools(t *testing.T) {
 }
 
 func TestGetStats(t *testing.T) {
-	stats, e := New().GetStats()
+	stats, e := newClient().GetStats()
 	if e != nil {
 		t.Fatal(e)
 	}

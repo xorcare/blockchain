@@ -142,7 +142,7 @@ func (c *Client) GetPools() (resp ChartPools, e error) {
 //
 // https://blockchain.info/charts/difficulty
 // Difficulty.
-// A relative measure of how difficult it is to find a new block.
+// A relative measure of how difficult it is to find a newClient block.
 //
 // https://blockchain.info/charts/miners-revenue
 // Mining Revenue.

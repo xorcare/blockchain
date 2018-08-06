@@ -10,7 +10,7 @@ import (
 )
 
 func TestClient_GetAddress(t *testing.T) {
-	resp, e := New().GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
+	resp, e := newClient().GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -35,7 +35,7 @@ func TestClient_GetAddress(t *testing.T) {
 func TestClient_GetAddresses(t *testing.T) {
 	t.Log("Max addresses count:", GetMaxAddressesCount())
 
-	resp, e := New().GetAddresses(addressesForTestings)
+	resp, e := newClient().GetAddresses(addressesForTestings)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -71,7 +71,7 @@ func TestGetAddressesOneAddress(t *testing.T) {
 		"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
 	}
 
-	resp, e := New().GetAddresses(addresses)
+	resp, e := newClient().GetAddresses(addresses)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -91,7 +91,7 @@ func TestGetAddressesOneAddress(t *testing.T) {
 }
 
 func TestGetAddressMoreOptions(t *testing.T) {
-	resp, e := New().GetAddressAdv("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", map[string]string{"offset": "2147483647"})
+	resp, e := newClient().GetAddressAdv("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", map[string]string{"offset": "2147483647"})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -107,7 +107,7 @@ func TestGetAddressesMoreOptions(t *testing.T) {
 		"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
 	}
 
-	resp, e := New().GetAddressesAdv(addresses, map[string]string{"offset": "2147483647"})
+	resp, e := newClient().GetAddressesAdv(addresses, map[string]string{"offset": "2147483647"})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -118,11 +118,11 @@ func TestGetAddressesMoreOptions(t *testing.T) {
 }
 
 func TestAddressesBadOptions(t *testing.T) {
-	if _, e := New().GetAddresses([]string{}); e == nil {
+	if _, e := newClient().GetAddresses([]string{}); e == nil {
 		t.Fatal("There must be a mistake")
 	}
 
-	if _, e := New().GetAddressAdv("", nil); e == nil {
+	if _, e := newClient().GetAddressAdv("", nil); e == nil {
 		t.Fatal("There must be a mistake")
 	}
 }
@@ -147,7 +147,7 @@ func TestClient_CheckAddresses(t *testing.T) {
 
 func BenchmarkAddressUnmarshal(b *testing.B) {
 	b.StopTimer()
-	resp, e := New().GetAddressAdv("16rCmCmbuWDhPjWTrpQGaU3EPdZF7MTdUk", map[string]string{})
+	resp, e := newClient().GetAddressAdv("16rCmCmbuWDhPjWTrpQGaU3EPdZF7MTdUk", map[string]string{})
 	if e != nil {
 		b.Fatal(e)
 	}

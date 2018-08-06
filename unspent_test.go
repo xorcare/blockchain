@@ -18,7 +18,7 @@ func TestGetUnspent(t *testing.T) {
 		"1CYG7y3fukVLdobqgUtbknwWKUZ5p1HVmV",
 	}
 
-	resp, e := New().GetUnspentAdv(addresses, map[string]string{"limit": "1000"})
+	resp, e := newClient().GetUnspentAdv(addresses, map[string]string{"limit": "1000"})
 	if e != nil {
 		t.Fatal(e)
 	}

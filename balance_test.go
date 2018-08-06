@@ -9,7 +9,7 @@ import "testing"
 func TestClient_GetBalance(t *testing.T) {
 	t.Log("Max addresses count:", GetMaxAddressesCount())
 
-	balances, e := New().GetBalance(addressesForTestings)
+	balances, e := newClient().GetBalance(addressesForTestings)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -31,7 +31,7 @@ func TestClient_GetBalance(t *testing.T) {
 		t.Fatal("The number of addresses does not match the number received balances")
 	}
 
-	if _, e = New().GetBalance([]string{}); e == nil {
+	if _, e = newClient().GetBalance([]string{}); e == nil {
 		t.Fatal("There must be a mistake")
 	}
 }

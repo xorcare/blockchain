@@ -57,7 +57,7 @@ func (c *Client) userAgent() string {
 	return UserAgent + " " + c.UserAgent
 }
 
-func (c *Client) Error() *Error {
+func (c *Client) GetLastError() *Error {
 	defer func(c *Client) {
 		c.error = nil
 	}(c)
@@ -150,17 +150,17 @@ func ApproveOptions(options map[string]string) map[string]string {
 	return options
 }
 
-// New specifies the mechanism by create new client the network internet
+// New specifies the mechanism by create newClient client the network internet
 func New() *Client {
 	return &Client{client: &http.Client{}, BasePath: APIRootNet}
 }
 
-// NewTor specifies the mechanism by create new client the network internet
+// NewTor specifies the mechanism by create newClient client the network internet
 func NewTor() *Client {
 	return &Client{client: &http.Client{}, BasePath: APIRootTor}
 }
 
-// SetHTTP client client setter
+// SetHTTP http client setter
 func (c *Client) SetHTTP(cli *http.Client) {
 	c.client = cli
 }
