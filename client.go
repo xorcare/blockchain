@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	// Version api client version
+	// Version api client
 	Version = "1.0"
 
 	// UserAgent is the header string used to identify this package.
@@ -47,7 +47,7 @@ type Client struct {
 	client *http.Client
 	error  *Error
 
-	APIKey    string
+	APIKey    string // API access key
 	BasePath  string // API endpoint base URL
 	UserAgent string // optional additional User-Agent fragment
 }
