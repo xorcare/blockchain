@@ -68,7 +68,7 @@ type Txs struct {
 // GetTransaction get the transaction on its hash
 func (c *Client) GetTransaction(transaction string) (resp *Tx, e error) {
 	if transaction == "" || len(transaction) != 64 {
-		return nil, c.setErrorOne(THW)
+		return nil, c.setErrorOne(ErrTHW)
 	}
 
 	resp = &Tx{}

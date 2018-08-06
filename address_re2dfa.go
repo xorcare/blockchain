@@ -4,6 +4,7 @@ package blockchain
 
 import "unicode/utf8"
 
+// ValidateBitcoinAddress bitcoin address validator
 func ValidateBitcoinAddress(s string) (end int) {
 	end = -1
 	var r rune

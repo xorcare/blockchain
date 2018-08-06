@@ -129,18 +129,18 @@ func TestAddressesBadOptions(t *testing.T) {
 
 func TestClient_GetAddress__Errors(t *testing.T) {
 	c := New()
-	if _, e := c.GetAddress(""); e != AIW {
+	if _, e := c.GetAddress(""); e != ErrAIW {
 		t.Fatal("incorrect error: " + e.Error())
 	}
 
-	if _, e := c.GetAddresses([]string{}); e != ANP {
+	if _, e := c.GetAddresses([]string{}); e != ErrANP {
 		t.Fatal("incorrect error: " + e.Error())
 	}
 }
 
 func TestClient_CheckAddresses(t *testing.T) {
 	c := New()
-	if e := c.CheckAddresses([]string{}); e != ANP {
+	if e := c.CheckAddresses([]string{}); e != ErrANP {
 		t.Fatal("incorrect error: " + e.Error())
 	}
 }

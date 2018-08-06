@@ -13,30 +13,33 @@ import (
 )
 
 const (
+	// Version api client version
 	Version = "1.0"
 
 	// UserAgent is the header string used to identify this package.
 	UserAgent = "blockchain-api-v1-client-go/" + Version + " (go; github; +https://git.io/v5dN0)"
 
-	// APIRootTor the root address in the tor network
-	APIRootTor = "https://blockchainbdgpzk.onion"
+	// BasePath the root address in the network
+	BasePath = "https://blockchain.info"
 
-	// APIRootNet the root address in the network
-	APIRootNet = "https://blockchain.info"
+	// BasePathTor the root address in the tor network
+	BasePathTor = "https://blockchainbdgpzk.onion"
 )
 
+// Errors it is a set of errors returned when working with the package
 var (
-	AIW = errors.New("address is wrong")
-	ANP = errors.New("no address(es) provided")
-	BEW = errors.New("block height is wrong")
-	BHW = errors.New("block hash is wrong")
-	CGD = errors.New("cannot get data on url")
-	CRR = errors.New("could not read answer response")
-	IRS = errors.New("incorrect response status")
-	RPE = errors.New("response parsing error")
-	THW = errors.New("transaction hash is wrong")
+	ErrAIW = errors.New("address is wrong")
+	ErrANP = errors.New("no address(es) provided")
+	ErrBEW = errors.New("block height is wrong")
+	ErrBHW = errors.New("block hash is wrong")
+	ErrCGD = errors.New("cannot get data on url")
+	ErrCRR = errors.New("could not read answer response")
+	ErrIRS = errors.New("incorrect response status")
+	ErrRPE = errors.New("response parsing error")
+	ErrTHW = errors.New("transaction hash is wrong")
 )
 
+// DefaultOptions map contains the default settings for requests to the api
 var DefaultOptions = map[string]string{"format": "json"}
 
 // Client specifies the mechanism by which individual API requests are made.
@@ -44,9 +47,18 @@ type Client struct {
 	client *http.Client
 	error  *Error
 
-	ApiKey    string
+	APIKey    string
 	BasePath  string // API endpoint base URL
 	UserAgent string // optional additional User-Agent fragment
+}
+
+// GetLastError returns the data set of the last error that occurred
+// representing an error condition, with the nil value representing no error.
+func (c *Client) GetLastError() *Error {
+	defer func(c *Client) {
+		c.error = nil
+	}(c)
+	return c.error
 }
 
 func (c *Client) userAgent() string {
@@ -55,13 +67,6 @@ func (c *Client) userAgent() string {
 	}
 
 	return UserAgent + " " + c.UserAgent
-}
-
-func (c *Client) GetLastError() *Error {
-	defer func(c *Client) {
-		c.error = nil
-	}(c)
-	return c.error
 }
 
 func (c *Client) setErrorOne(errorMain error) error {
@@ -80,10 +85,10 @@ func (c *Client) setError(errorMain error, errorExec error, response *http.Respo
 	}
 
 	c.error = &Error{
-		ErrorMain: errorMain,
-		ErrorExec: errorExec,
-		Response:  response,
-		Address:   address,
+		ErrMain:  errorMain,
+		ErrExec:  errorExec,
+		Response: response,
+		Address:  address,
 	}
 
 	return errorMain
@@ -93,7 +98,7 @@ func (c *Client) setError(errorMain error, errorExec error, response *http.Respo
 func (c *Client) Do(path string, i interface{}, options map[string]string) error {
 	options = ApproveOptions(options)
 	options["format"] = "json"
-	options["api_code"] = c.ApiKey
+	options["api_code"] = c.APIKey
 	values := url.Values{}
 	for k, v := range options {
 		values.Set(k, v)
@@ -101,48 +106,51 @@ func (c *Client) Do(path string, i interface{}, options map[string]string) error
 
 	req, e := http.NewRequest("GET", c.BasePath+path+"?"+(values.Encode()), nil)
 	if e != nil {
-		return c.setErrorTwo(CGD, e)
+		return c.setErrorTwo(ErrCGD, e)
 	}
 	req.Header.Set("User-Agent", c.userAgent())
 
 	resp, e := c.client.Do(req)
 	if e != nil {
-		return c.setError(CGD, e, resp, nil)
+		return c.setError(ErrCGD, e, resp, nil)
 	}
 	defer resp.Body.Close()
 
 	bytes, e := ioutil.ReadAll(resp.Body)
 	if e != nil {
-		return c.setError(CRR, e, resp, nil)
+		return c.setError(ErrCRR, e, resp, nil)
 	}
 
 	if resp.Status[0] != '2' {
-		return c.setError(IRS, e, resp, nil)
+		return c.setError(ErrIRS, e, resp, nil)
 	}
 
 	if e = json.Unmarshal(bytes, &i); e != nil {
-		return c.setError(RPE, e, resp, nil)
+		return c.setError(ErrRPE, e, resp, nil)
 	}
 
 	return nil
 }
 
+// Error data structure describing the error
 type Error struct {
 	// Address wrong address
 	Address *string
-	// ErrorMain error information from the standard package error set,
-	ErrorMain error
-	// ErrorExec information about the error that occurred during
+	// ErrMain error information from the standard package error set,
+	ErrMain error
+	// ErrExec information about the error that occurred during
 	// the operation of the standard library or external packages
-	ErrorExec error
+	ErrExec error
 	// Response http response
 	Response *http.Response
 }
 
+// Error compatibility with error interface
 func (e Error) Error() string {
-	return e.ErrorMain.Error()
+	return e.ErrMain.Error()
 }
 
+// ApproveOptions automatic check and substitution of options
 func ApproveOptions(options map[string]string) map[string]string {
 	if options == nil {
 		return DefaultOptions
@@ -152,12 +160,12 @@ func ApproveOptions(options map[string]string) map[string]string {
 
 // New specifies the mechanism by create newClient client the network internet
 func New() *Client {
-	return &Client{client: &http.Client{}, BasePath: APIRootNet}
+	return &Client{client: &http.Client{}, BasePath: BasePath}
 }
 
 // NewTor specifies the mechanism by create newClient client the network internet
 func NewTor() *Client {
-	return &Client{client: &http.Client{}, BasePath: APIRootTor}
+	return &Client{client: &http.Client{}, BasePath: BasePathTor}
 }
 
 // SetHTTP http client setter

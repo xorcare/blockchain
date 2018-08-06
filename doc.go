@@ -3,6 +3,6 @@
 // license that can be found in the LICENSE file.
 
 /*
-Golang client blockchain api -> https://blockchain.info/api
+Package blockchain golang client blockchain api -> https://blockchain.info/api
 */
 package blockchain

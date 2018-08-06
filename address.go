@@ -72,17 +72,19 @@ type Info struct {
 	LatestBlock LatestBlock `json:"latest_block"`
 }
 
+//CheckAddress ...
 func (c *Client) CheckAddress(address string) error {
 	if res := ValidateBitcoinAddress(address); res == -1 {
-		return c.setError(AIW, nil, nil, nil)
+		return c.setError(ErrAIW, nil, nil, nil)
 	}
 
 	return nil
 }
 
+//CheckAddresses ...
 func (c *Client) CheckAddresses(addresses []string) (e error) {
 	if len(addresses) == 0 {
-		return c.setErrorOne(ANP)
+		return c.setErrorOne(ErrANP)
 	}
 
 	for _, address := range addresses {
