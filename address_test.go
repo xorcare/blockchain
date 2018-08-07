@@ -30,12 +30,40 @@ func TestClient_GetAddress(t *testing.T) {
 	if len(resp.Txs) < 50 {
 		t.Fatal("Failed check count of transactions")
 	}
+
+	tests := []struct {
+		address string
+	}{
+		// Unique addresses
+		{"1111111111111111111114oLvT2"},
+		// one signature addresses
+		{"1dyoBoF5vDmPCxwSsUZbbYhA5qjAfBTx9"},
+		{"15yN7NPEpu82sHhB6TzCW5z5aXoamiKeGy"},
+		{"1F3EpcBBjVGaUuEJff9xYZBfBBALm1yfsd"},
+		// multi signature addresses
+		{"3BGvENmRvUNaiEFPeUdNQgqebznN7Vqeqk"},
+		{"3B8SEgcT9JDVKUZvm8HoKX5Av3nnn7pHqa"},
+		{"3KGPnzYshia2uSSz8BED2kSpx22bbGCkzq"},
+	}
+	for _, test := range tests {
+		t.Run(test.address, func(t *testing.T) {
+			resp, e := newClient().GetAddress(test.address)
+			if e != nil {
+				t.Fatal(e)
+			}
+
+			if resp == nil || resp.Address != test.address {
+				t.Fatalf("GetAddress test failed: %s", test.address)
+			}
+		})
+	}
 }
 
 func TestClient_GetAddresses(t *testing.T) {
 	t.Log("Max addresses count:", GetMaxAddressesCount())
 
-	resp, e := newClient().GetAddresses(addressesForTestings)
+	c := newClient()
+	resp, e := c.GetAddresses(addressesForTestings)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -63,6 +91,28 @@ func TestClient_GetAddresses(t *testing.T) {
 		if len(addr.Txs) != 0 {
 			t.Fatal("Failed check count of transactions")
 		}
+	}
+
+	addresses := []string{
+		// Unique addresses
+		"1111111111111111111114oLvT2",
+		// one signature addresses
+		"1dyoBoF5vDmPCxwSsUZbbYhA5qjAfBTx9",
+		"15yN7NPEpu82sHhB6TzCW5z5aXoamiKeGy",
+		"1F3EpcBBjVGaUuEJff9xYZBfBBALm1yfsd",
+		// multi signature addresses
+		"3BGvENmRvUNaiEFPeUdNQgqebznN7Vqeqk",
+		"3B8SEgcT9JDVKUZvm8HoKX5Av3nnn7pHqa",
+		"3KGPnzYshia2uSSz8BED2kSpx22bbGCkzq",
+		// xpub addresses
+		"xpub6CUGRUonZSQ4TWtTMmzXdrXDtypWKiKrhko4egpiMZbpiaQL2jkwSB1icqYh2cfDfVxdx4df189oLKnC5fSwqPfgyP3hooxujYzAu3fDVmz",
+		"xpub6FnCn6nSzZAw5Tw7cgR9bi15UV96gLZhjDstkXXxvCLsUXBGXPdSnLFbdpq8p9HmGsApME5hQTZ3emM2rnY5agb9rXpVGyy3bdW6EEgAtqt",
+		"xpub6DF8uhdarytz3FWdA8TvFSvvAh8dP3283MY7p2V4SeE2wyWmG5mg5EwVvmdMVCQcoNJxGoWaU9DCWh89LojfZ537wTfunKau47EL2dhHKon",
+	}
+
+	resp, e = c.GetAddresses(addresses)
+	if e != nil || c.GetLastError() != nil {
+		t.Fatal(e)
 	}
 }
 
@@ -138,6 +188,67 @@ func TestClient_CheckAddresses(t *testing.T) {
 	c := New()
 	if e := c.checkAddresses([]string{}); e != ErrNAP {
 		t.Fatal("incorrect error: " + e.Error())
+	}
+}
+
+func TestValidateBitcoinAddress(t *testing.T) {
+	tests := []struct {
+		address string
+		result  bool
+	}{
+		// Unique addresses
+		{"1111111111111111111114oLvT2", true},
+		// one signature addresses
+		{"1dyoBoF5vDmPCxwSsUZbbYhA5qjAfBTx9", true},
+		{"15yN7NPEpu82sHhB6TzCW5z5aXoamiKeGy", true},
+		{"1F3EpcBBjVGaUuEJff9xYZBfBBALm1yfsd", true},
+		// multi signature addresses
+		{"3B8SEgcT9JDVKUZvm8HoKX5Av3nnn7pHqa", true},
+		{"3KGPnzYshia2uSSz8BED2kSpx22bbGCkzq", true},
+		// bad addresses
+		{"", false},
+		{"1111111111111111111114oLvT", false},
+		{"0111111111111111111114oLvT2", false},
+		{"xpub6DF8uhdarytz3FWdA8TvFSv", false},
+		{"xpub3KGPnzYshia2uSSz8BED2kSpx22bbGCkzq", false},
+		{"xpub6CUGRUonZSQ4TWtTMmzXdrXDtypWKiKrhko4egpiMZbpiaQL2jkwSB1icqYh2cfDfVxdx4df189oLKnC5fSwqPfgyP3hooxujYzAu3fDVmz", false},
+		{"xpub6FnCn6nSzZAw5Tw7cgR9bi15UV96gLZhjDstkXXxvCLsUXBGXPdSnLFbdpq8p9HmGsApME5hQTZ3emM2rnY5agb9rXpVGyy3bdW6EEgAtqt", false},
+		{"xpub6DF8uhdarytz3FWdA8TvFSvvAh8dP3283MY7p2V4SeE2wyWmG5mg5EwVvmdMVCQcoNJxGoWaU9DCWh89LojfZ537wTfunKau47EL2dhHKon", false},
+	}
+	t.Parallel()
+	for _, test := range tests {
+		t.Run(test.address, func(t *testing.T) {
+			if ValidateBitcoinAddress(test.address) != test.result {
+				t.Fatalf("validate test failed address: %s", test.address)
+			}
+		})
+	}
+}
+
+func TestValidateBitcoinXpub(t *testing.T) {
+	tests := []struct {
+		address string
+		result  bool
+	}{
+		// good xpub
+		{"xpub6CUGRUonZSQ4TWtTMmzXdrXDtypWKiKrhko4egpiMZbpiaQL2jkwSB1icqYh2cfDfVxdx4df189oLKnC5fSwqPfgyP3hooxujYzAu3fDVmz", true},
+		{"xpub6FnCn6nSzZAw5Tw7cgR9bi15UV96gLZhjDstkXXxvCLsUXBGXPdSnLFbdpq8p9HmGsApME5hQTZ3emM2rnY5agb9rXpVGyy3bdW6EEgAtqt", true},
+		{"xpub6DF8uhdarytz3FWdA8TvFSvvAh8dP3283MY7p2V4SeE2wyWmG5mg5EwVvmdMVCQcoNJxGoWaU9DCWh89LojfZ537wTfunKau47EL2dhHKon", true},
+		// bad xpub
+		{"", false},
+		{"xpub6DF8uhdarytz3FWdA8TvFSv", false},
+		{"xpub3KGPnzYshia2uSSz8BED2kSpx22bbGCkzq", false},
+		{"1111111111111111111114oLvT2", false},
+		{"1F3EpcBBjVGaUuEJff9xYZBfBBALm1yfsd", false},
+		{"3KGPnzYshia2uSSz8BED2kSpx22bbGCkzq", false},
+	}
+	t.Parallel()
+	for _, test := range tests {
+		t.Run(test.address, func(t *testing.T) {
+			if ValidateBitcoinXpub(test.address) != test.result {
+				t.Fatalf("validate test failed xpub: %s", test.address)
+			}
+		})
 	}
 }
 
