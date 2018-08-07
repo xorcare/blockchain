@@ -11,5 +11,5 @@ Golang package for interacting with the blockchain.info API.
 - [x] A full set of working methods with API
 - [x] Support for additional parameters in methods
 - [x] Complete suite of unit tests
-- [ ] API frozen, new releases will not break your code
-- [ ] Battle tested
+- [x] API frozen, new releases will not break your code
+- [x] Battle tested

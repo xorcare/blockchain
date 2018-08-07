@@ -29,12 +29,12 @@ const (
 // Errors it is a set of errors returned when working with the package
 var (
 	ErrAIW = errors.New("address is wrong")
-	ErrNAP = errors.New("no address(es) provided")
 	ErrBEW = errors.New("block height is wrong")
 	ErrBHW = errors.New("block hash is wrong")
 	ErrCGD = errors.New("cannot get data on url")
 	ErrCRR = errors.New("could not read answer response")
 	ErrIRS = errors.New("incorrect response status")
+	ErrNAP = errors.New("no address(es) provided")
 	ErrRPE = errors.New("response parsing error")
 	ErrTHW = errors.New("transaction hash is wrong")
 )
