@@ -29,7 +29,7 @@ func (c *Client) GetUnspent(addresses []string) (*UnspentOutputs, error) {
 
 // GetUnspentAdv specifies the mechanism by getting unspent outputs multiple addresses
 func (c *Client) GetUnspentAdv(addresses []string, options map[string]string) (resp *UnspentOutputs, e error) {
-	if e = c.CheckAddresses(addresses); e != nil {
+	if e = c.checkAddresses(addresses); e != nil {
 		return
 	}
 

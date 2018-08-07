@@ -398,7 +398,7 @@ func (v *SymbolBtc) UnmarshalJSON(data []byte) error {
 func (v *SymbolBtc) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonF4fdf71eDecodeBlockchain2(l, v)
 }
-func easyjsonF4fdf71eDecodeBlockchain3(in *jlexer.Lexer, out *MultiAddr) {
+func easyjsonF4fdf71eDecodeBlockchain3(in *jlexer.Lexer, out *MultiAddress) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -481,7 +481,7 @@ func easyjsonF4fdf71eDecodeBlockchain3(in *jlexer.Lexer, out *MultiAddr) {
 		in.Consumed()
 	}
 }
-func easyjsonF4fdf71eEncodeBlockchain3(out *jwriter.Writer, in MultiAddr) {
+func easyjsonF4fdf71eEncodeBlockchain3(out *jwriter.Writer, in MultiAddress) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -571,26 +571,26 @@ func easyjsonF4fdf71eEncodeBlockchain3(out *jwriter.Writer, in MultiAddr) {
 }
 
 // MarshalJSON supports json.Marshaler interface
-func (v MultiAddr) MarshalJSON() ([]byte, error) {
+func (v MultiAddress) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
 	easyjsonF4fdf71eEncodeBlockchain3(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
-func (v MultiAddr) MarshalEasyJSON(w *jwriter.Writer) {
+func (v MultiAddress) MarshalEasyJSON(w *jwriter.Writer) {
 	easyjsonF4fdf71eEncodeBlockchain3(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
-func (v *MultiAddr) UnmarshalJSON(data []byte) error {
+func (v *MultiAddress) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
 	easyjsonF4fdf71eDecodeBlockchain3(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
-func (v *MultiAddr) UnmarshalEasyJSON(l *jlexer.Lexer) {
+func (v *MultiAddress) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonF4fdf71eDecodeBlockchain3(l, v)
 }
 func easyjsonF4fdf71eDecodeBlockchain4(in *jlexer.Lexer, out *Info) {

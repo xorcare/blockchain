@@ -127,20 +127,16 @@ func TestAddressesBadOptions(t *testing.T) {
 	}
 }
 
-func TestClient_GetAddress__Errors(t *testing.T) {
+func TestClient_CheckAddress(t *testing.T) {
 	c := New()
-	if _, e := c.GetAddress(""); e != ErrAIW {
-		t.Fatal("incorrect error: " + e.Error())
-	}
-
-	if _, e := c.GetAddresses([]string{}); e != ErrANP {
+	if e := c.checkAddress(""); e != ErrAIW {
 		t.Fatal("incorrect error: " + e.Error())
 	}
 }
 
 func TestClient_CheckAddresses(t *testing.T) {
 	c := New()
-	if e := c.CheckAddresses([]string{}); e != ErrANP {
+	if e := c.checkAddresses([]string{}); e != ErrNAP {
 		t.Fatal("incorrect error: " + e.Error())
 	}
 }
@@ -151,6 +147,7 @@ func BenchmarkAddressUnmarshal(b *testing.B) {
 	if e != nil {
 		b.Fatal(e)
 	}
+
 	bytes, e2 := json.Marshal(resp)
 	if e2 != nil {
 		b.Fatal(e2)

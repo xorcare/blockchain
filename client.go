@@ -29,7 +29,7 @@ const (
 // Errors it is a set of errors returned when working with the package
 var (
 	ErrAIW = errors.New("address is wrong")
-	ErrANP = errors.New("no address(es) provided")
+	ErrNAP = errors.New("no address(es) provided")
 	ErrBEW = errors.New("block height is wrong")
 	ErrBHW = errors.New("block hash is wrong")
 	ErrCGD = errors.New("cannot get data on url")
@@ -39,8 +39,8 @@ var (
 	ErrTHW = errors.New("transaction hash is wrong")
 )
 
-// DefaultOptions map contains the default settings for requests to the api
-var DefaultOptions = map[string]string{"format": "json"}
+// Options map contains the default settings for requests to the api
+var Options = map[string]string{"format": "json"}
 
 // Client specifies the mechanism by which individual API requests are made.
 type Client struct {
@@ -75,6 +75,10 @@ func (c *Client) setErrorOne(errorMain error) error {
 
 func (c *Client) setErrorTwo(errorMain error, errorExec error) error {
 	return c.setError(errorMain, errorExec, nil, nil)
+}
+
+func (c *Client) setErrorThree(errorMain error, errorExec error, response *http.Response) error {
+	return c.setError(errorMain, errorExec, response, nil)
 }
 
 func (c *Client) setError(errorMain error, errorExec error, response *http.Response, address *string) error {
@@ -112,21 +116,21 @@ func (c *Client) Do(path string, i interface{}, options map[string]string) error
 
 	resp, e := c.client.Do(req)
 	if e != nil {
-		return c.setError(ErrCGD, e, resp, nil)
+		return c.setErrorThree(ErrCGD, e, resp)
 	}
 	defer resp.Body.Close()
 
 	bytes, e := ioutil.ReadAll(resp.Body)
 	if e != nil {
-		return c.setError(ErrCRR, e, resp, nil)
+		return c.setErrorThree(ErrCRR, e, resp)
 	}
 
 	if resp.Status[0] != '2' {
-		return c.setError(ErrIRS, e, resp, nil)
+		return c.setErrorThree(ErrIRS, e, resp)
 	}
 
 	if e = json.Unmarshal(bytes, &i); e != nil {
-		return c.setError(ErrRPE, e, resp, nil)
+		return c.setErrorThree(ErrRPE, e, resp)
 	}
 
 	return nil
@@ -153,7 +157,7 @@ func (e Error) Error() string {
 // ApproveOptions automatic check and substitution of options
 func ApproveOptions(options map[string]string) map[string]string {
 	if options == nil {
-		return DefaultOptions
+		return Options
 	}
 	return options
 }

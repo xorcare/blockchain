@@ -24,8 +24,8 @@ type Address struct {
 	AccountIndex uint64 `json:"account_index,omitempty"`
 }
 
-// MultiAddr structure of the result when querying multiple addresses
-type MultiAddr struct {
+// MultiAddress structure of the result when querying multiple addresses
+type MultiAddress struct {
 	RecommendIncludeFee bool      `json:"recommend_include_fee,omitempty"`
 	SharedcoinEndpoint  string    `json:"sharedcoin_endpoint,omitempty"`
 	Wallet              Wallet    `json:"wallet"`
@@ -72,23 +72,21 @@ type Info struct {
 	LatestBlock LatestBlock `json:"latest_block"`
 }
 
-//CheckAddress ...
-func (c *Client) CheckAddress(address string) error {
-	if res := ValidateBitcoinAddress(address); res == -1 {
+func (c *Client) checkAddress(address string) error {
+	if res := validateBitcoinAddress(address); res == -1 {
 		return c.setError(ErrAIW, nil, nil, nil)
 	}
 
 	return nil
 }
 
-//CheckAddresses ...
-func (c *Client) CheckAddresses(addresses []string) (e error) {
+func (c *Client) checkAddresses(addresses []string) (e error) {
 	if len(addresses) == 0 {
-		return c.setErrorOne(ErrANP)
+		return c.setErrorOne(ErrNAP)
 	}
 
 	for _, address := range addresses {
-		if e = c.CheckAddress(address); e != nil {
+		if e = c.checkAddress(address); e != nil {
 			return e
 		}
 	}
@@ -103,7 +101,7 @@ func (c *Client) GetAddress(address string) (*Address, error) {
 
 // GetAddressAdv is a mechanism which is used to obtain information about the address
 func (c *Client) GetAddressAdv(address string, options map[string]string) (resp *Address, e error) {
-	if e = c.CheckAddress(address); e != nil {
+	if e = c.checkAddress(address); e != nil {
 		return
 	}
 	resp = &Address{}
@@ -111,18 +109,18 @@ func (c *Client) GetAddressAdv(address string, options map[string]string) (resp 
 }
 
 // GetAddresses alias GetAddressesAdv without additional parameters
-func (c *Client) GetAddresses(addresses []string) (*MultiAddr, error) {
+func (c *Client) GetAddresses(addresses []string) (*MultiAddress, error) {
 	return c.GetAddressesAdv(addresses, nil)
 }
 
 // GetAddressesAdv is a mechanism which is used to obtain information about the addresses
-func (c *Client) GetAddressesAdv(addresses []string, options map[string]string) (resp *MultiAddr, e error) {
-	if e = c.CheckAddresses(addresses); e != nil {
+func (c *Client) GetAddressesAdv(addresses []string, options map[string]string) (resp *MultiAddress, e error) {
+	if e = c.checkAddresses(addresses); e != nil {
 		return
 	}
 
 	options = ApproveOptions(options)
 	options["active"] = strings.Join(addresses, "|")
-	resp = &MultiAddr{}
+	resp = &MultiAddress{}
 	return resp, c.Do("/multiaddr", resp, options)
 }

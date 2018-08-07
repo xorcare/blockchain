@@ -21,7 +21,7 @@ type Balance struct {
 // addresses. For times check out the better not more than 200
 // locations.
 func (c *Client) GetBalance(addresses []string) (resp Balances, e error) {
-	if e = c.CheckAddresses(addresses); e != nil {
+	if e = c.checkAddresses(addresses); e != nil {
 		return
 	}
 
