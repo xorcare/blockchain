@@ -16,7 +16,7 @@ func GetMaxAddressesCount() int {
 // addressesForTestings list of addresses to test and get the maximum
 // number of addresses to be checked at the same time
 var addressesForTestings = []string{
-	"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+	firstBitcoinAddress,
 	"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
 	"1HLoD9E4SDFFPDiYfNYnkBLQ85Y51J3Zb1",
 	"1FvzCLoTPGANNjWoUo6jUGuAG3wg1w4YjR",

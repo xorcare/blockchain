@@ -6,6 +6,8 @@ import (
 	"testing"
 )
 
+const firstBitcoinAddress = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+
 func newClient() *Client {
 	c := New()
 	c.APIKey = os.Getenv("api_key")

@@ -119,7 +119,7 @@ func checkFirstTxOut(t *testing.T, out Out) {
 		t.Fatal("Wrong value on field 'Tx[0].Out[0].Type'")
 	}
 
-	if out.Addr != "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" {
+	if out.Addr != firstBitcoinAddress {
 		t.Fatal("Wrong value on field 'Tx[0].Out[0].Addr'")
 	}
 

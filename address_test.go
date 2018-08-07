@@ -10,12 +10,12 @@ import (
 )
 
 func TestClient_GetAddress(t *testing.T) {
-	resp, e := newClient().GetAddress("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
+	resp, e := newClient().GetAddress(firstBitcoinAddress)
 	if e != nil {
 		t.Fatal(e)
 	}
 
-	if resp.Address != "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" {
+	if resp.Address != firstBitcoinAddress {
 		t.Fatal("Failed check address in the response")
 	}
 
@@ -34,9 +34,8 @@ func TestClient_GetAddress(t *testing.T) {
 	tests := []struct {
 		address string
 	}{
-		// Unique addresses
-		{"1111111111111111111114oLvT2"},
 		// one signature addresses
+		{"1111111111111111111114oLvT2"},
 		{"1dyoBoF5vDmPCxwSsUZbbYhA5qjAfBTx9"},
 		{"15yN7NPEpu82sHhB6TzCW5z5aXoamiKeGy"},
 		{"1F3EpcBBjVGaUuEJff9xYZBfBBALm1yfsd"},
@@ -74,7 +73,7 @@ func TestClient_GetAddresses(t *testing.T) {
 
 	for _, addr := range resp.Addresses {
 		switch addr.Address {
-		case "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa":
+		case firstBitcoinAddress:
 			if addr.NTx < 1105 {
 				t.Fatal("Failed check number of transactions")
 			}
@@ -94,9 +93,8 @@ func TestClient_GetAddresses(t *testing.T) {
 	}
 
 	addresses := []string{
-		// Unique addresses
-		"1111111111111111111114oLvT2",
 		// one signature addresses
+		"1111111111111111111114oLvT2",
 		"1dyoBoF5vDmPCxwSsUZbbYhA5qjAfBTx9",
 		"15yN7NPEpu82sHhB6TzCW5z5aXoamiKeGy",
 		"1F3EpcBBjVGaUuEJff9xYZBfBBALm1yfsd",
@@ -113,12 +111,16 @@ func TestClient_GetAddresses(t *testing.T) {
 	resp, e = c.GetAddresses(addresses)
 	if e != nil || c.GetLastError() != nil {
 		t.Fatal(e)
+	} else {
+		for _, v := range resp.Addresses {
+			t.Logf("%34s %11d %11d %5d", v.Address, v.FinalBalance, v.TotalReceived, v.NTx)
+		}
 	}
 }
 
 func TestGetAddressesOneAddress(t *testing.T) {
 	addresses := []string{
-		"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+		firstBitcoinAddress,
 	}
 
 	resp, e := newClient().GetAddresses(addresses)
@@ -127,7 +129,7 @@ func TestGetAddressesOneAddress(t *testing.T) {
 	}
 
 	addr := resp.Addresses[0]
-	if addr.Address != "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" {
+	if addr.Address != firstBitcoinAddress {
 		t.Fatal("Failed check address in the addr")
 	}
 
@@ -141,7 +143,7 @@ func TestGetAddressesOneAddress(t *testing.T) {
 }
 
 func TestGetAddressMoreOptions(t *testing.T) {
-	resp, e := newClient().GetAddressAdv("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", map[string]string{"offset": "2147483647"})
+	resp, e := newClient().GetAddressAdv(firstBitcoinAddress, map[string]string{"offset": "2147483647"})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -153,7 +155,7 @@ func TestGetAddressMoreOptions(t *testing.T) {
 
 func TestGetAddressesMoreOptions(t *testing.T) {
 	addresses := []string{
-		"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+		firstBitcoinAddress,
 		"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
 	}
 
@@ -196,9 +198,8 @@ func TestValidateBitcoinAddress(t *testing.T) {
 		address string
 		result  bool
 	}{
-		// Unique addresses
-		{"1111111111111111111114oLvT2", true},
 		// one signature addresses
+		{"1111111111111111111114oLvT2", true},
 		{"1dyoBoF5vDmPCxwSsUZbbYhA5qjAfBTx9", true},
 		{"15yN7NPEpu82sHhB6TzCW5z5aXoamiKeGy", true},
 		{"1F3EpcBBjVGaUuEJff9xYZBfBBALm1yfsd", true},
@@ -208,12 +209,10 @@ func TestValidateBitcoinAddress(t *testing.T) {
 		// bad addresses
 		{"", false},
 		{"1111111111111111111114oLvT", false},
+		{"1111111111111111111114iLvT", false},
 		{"0111111111111111111114oLvT2", false},
 		{"xpub6DF8uhdarytz3FWdA8TvFSv", false},
 		{"xpub3KGPnzYshia2uSSz8BED2kSpx22bbGCkzq", false},
-		{"xpub6CUGRUonZSQ4TWtTMmzXdrXDtypWKiKrhko4egpiMZbpiaQL2jkwSB1icqYh2cfDfVxdx4df189oLKnC5fSwqPfgyP3hooxujYzAu3fDVmz", false},
-		{"xpub6FnCn6nSzZAw5Tw7cgR9bi15UV96gLZhjDstkXXxvCLsUXBGXPdSnLFbdpq8p9HmGsApME5hQTZ3emM2rnY5agb9rXpVGyy3bdW6EEgAtqt", false},
-		{"xpub6DF8uhdarytz3FWdA8TvFSvvAh8dP3283MY7p2V4SeE2wyWmG5mg5EwVvmdMVCQcoNJxGoWaU9DCWh89LojfZ537wTfunKau47EL2dhHKon", false},
 	}
 	t.Parallel()
 	for _, test := range tests {
@@ -236,11 +235,11 @@ func TestValidateBitcoinXpub(t *testing.T) {
 		{"xpub6DF8uhdarytz3FWdA8TvFSvvAh8dP3283MY7p2V4SeE2wyWmG5mg5EwVvmdMVCQcoNJxGoWaU9DCWh89LojfZ537wTfunKau47EL2dhHKon", true},
 		// bad xpub
 		{"", false},
-		{"xpub6DF8uhdarytz3FWdA8TvFSv", false},
-		{"xpub3KGPnzYshia2uSSz8BED2kSpx22bbGCkzq", false},
 		{"1111111111111111111114oLvT2", false},
+		{"xpub6DF8uhdarytz3FWdA8TvFSv", false},
 		{"1F3EpcBBjVGaUuEJff9xYZBfBBALm1yfsd", false},
 		{"3KGPnzYshia2uSSz8BED2kSpx22bbGCkzq", false},
+		{"xpub3KGPnzYshia2uSSz8BED2kSpx22bbGCkzq", false},
 	}
 	t.Parallel()
 	for _, test := range tests {
