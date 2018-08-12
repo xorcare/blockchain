@@ -208,8 +208,6 @@ func TestValidateBitcoinAddress(t *testing.T) {
 		{"3KGPnzYshia2uSSz8BED2kSpx22bbGCkzq", true},
 		// bad addresses
 		{"", false},
-		{"1111111111111111111114oLvT", false},
-		{"1111111111111111111114iLvT", false},
 		{"0111111111111111111114oLvT2", false},
 		{"xpub6DF8uhdarytz3FWdA8TvFSv", false},
 		{"xpub3KGPnzYshia2uSSz8BED2kSpx22bbGCkzq", false},
