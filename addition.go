@@ -4,12 +4,12 @@
 
 package blockchain
 
-// ValidateBitcoinAddress bitcoin address validator
+// ValidateBitcoinAddress bitcoin address validator.
 func ValidateBitcoinAddress(address string) bool {
 	return validateBitcoinAddress(address) != -1
 }
 
-// ValidateBitcoinXpub bitcoin address validator
+// ValidateBitcoinXpub bitcoin address validator.
 func ValidateBitcoinXpub(xpub string) bool {
 	return validateBitcoinXpub(xpub) != -1
 }
@@ -49,7 +49,7 @@ func removeDuplicates(elements []string) (result []string) {
 }
 
 // addressesForTestings list of addresses to test and get the maximum
-// number of addresses to be checked at the same time
+// number of addresses to be checked at the same time.
 var addressesForTestings = []string{
 	"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
 	"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX",
