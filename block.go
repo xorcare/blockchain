@@ -4,7 +4,7 @@
 
 package blockchain
 
-// Block the structure of one specific block
+// Block the structure of one specific block.
 type Block struct {
 	Hash       string `json:"hash"`
 	Ver        int64  `json:"ver"`
@@ -22,7 +22,7 @@ type Block struct {
 	Tx         []Tx   `json:"tx"`
 }
 
-// LatestBlock the structure of the last block in the chain
+// LatestBlock the structure of the last block in the chain.
 type LatestBlock struct {
 	Hash       string   `json:"hash"`
 	Time       uint64   `json:"time"`
@@ -31,12 +31,12 @@ type LatestBlock struct {
 	TxIndexes  []uint64 `json:"txIndexes"`
 }
 
-// Blocks the structure of the set of blocks
+// Blocks the structure of the set of blocks.
 type Blocks struct {
 	Blocks []Block `json:"blocks"`
 }
 
-// GetBlock get the block by the hash
+// GetBlock get the block by the hash.
 func (c *Client) GetBlock(hash string) (resp *Block, e error) {
 	if hash == "" || len(hash) != 64 {
 		return nil, c.setErrorOne(ErrBHW)
@@ -46,7 +46,7 @@ func (c *Client) GetBlock(hash string) (resp *Block, e error) {
 	return resp, c.Do("/rawblock/"+hash, resp, nil)
 }
 
-// GetBlockHeight get the block at height
+// GetBlockHeight get the block at height.
 func (c *Client) GetBlockHeight(height string) (resp *Blocks, e error) {
 	if height == "" {
 		return nil, c.setErrorOne(ErrBEW)
@@ -56,7 +56,7 @@ func (c *Client) GetBlockHeight(height string) (resp *Blocks, e error) {
 	return resp, c.Do("/block-height/"+height, resp, nil)
 }
 
-// GetBlocks getting blocks at a certain height
+// GetBlocks getting blocks at a certain height.
 func (c *Client) GetBlocks(height string) (resp *Blocks, e error) {
 	if height == "" {
 		return nil, c.setErrorOne(ErrBEW)
@@ -66,7 +66,7 @@ func (c *Client) GetBlocks(height string) (resp *Blocks, e error) {
 	return resp, c.Do("/blocks/"+height, resp, nil)
 }
 
-// GetLatestBlock receive the latest block of the main chain
+// GetLatestBlock receive the latest block of the main chain.
 func (c *Client) GetLatestBlock() (resp *LatestBlock, e error) {
 	resp = &LatestBlock{}
 	return resp, c.Do("/latestblock", resp, nil)

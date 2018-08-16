@@ -6,13 +6,13 @@ package blockchain
 
 import "strings"
 
-// UnspentOutputs the set of unspent outputs
+// UnspentOutputs the set of unspent outputs.
 type UnspentOutputs struct {
 	Notice         string          `json:"notice,omitempty"`
 	UnspentOutputs []UnspentOutput `json:"unspent_outputs"`
 }
 
-// UnspentOutput the basic structure unspent outputs
+// UnspentOutput the basic structure unspent outputs.
 type UnspentOutput struct {
 	TxAge     string `json:"tx_age"`
 	TxHash    string `json:"tx_hash"`
@@ -22,12 +22,12 @@ type UnspentOutput struct {
 	Value     int64  `json:"value"`
 }
 
-// GetUnspent alias GetUnspentAdv without additional parameters
+// GetUnspent alias GetUnspentAdv without additional parameters.
 func (c *Client) GetUnspent(addresses []string) (*UnspentOutputs, error) {
 	return c.GetUnspentAdv(addresses, nil)
 }
 
-// GetUnspentAdv specifies the mechanism by getting unspent outputs multiple addresses
+// GetUnspentAdv specifies the mechanism by getting unspent outputs multiple addresses.
 func (c *Client) GetUnspentAdv(addresses []string, options map[string]string) (resp *UnspentOutputs, e error) {
 	if e = c.checkAddresses(addresses); e != nil {
 		return
