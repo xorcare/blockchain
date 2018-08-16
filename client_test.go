@@ -39,29 +39,6 @@ func TestApproveOptions(t *testing.T) {
 	}
 }
 
-func TestClient_GetLastError(t *testing.T) {
-	c := newClient()
-	if c.error != nil {
-		t.Fatal("wrong error condition")
-	}
-
-	c.setErrorOne(ErrRPE)
-	if c.error == nil {
-		t.Fatal("wrong error condition")
-	}
-
-	e := c.GetLastError()
-	if e.ErrMain != ErrRPE || e.Error() != ErrRPE.Error() || c.error != nil {
-		t.Fatal("wrong error condition")
-	}
-
-	c.setErrorTwo(ErrCRR, ErrCGD)
-	e = c.GetLastError()
-	if e.ErrMain != ErrCRR || e.ErrExec != ErrCGD {
-		t.Fatal("wrong error condition")
-	}
-}
-
 func TestClient_SetHTTP(t *testing.T) {
 	c := New()
 	c.SetHTTP(nil)

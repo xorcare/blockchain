@@ -45,20 +45,10 @@ var Options = map[string]string{"format": "json"}
 // Client specifies the mechanism by which individual API requests are made.
 type Client struct {
 	client *http.Client
-	error  *Error
 
 	APIKey    string // API access key
 	BasePath  string // API endpoint base URL
 	UserAgent string // optional additional User-Agent fragment
-}
-
-// GetLastError returns the data set of the last error that occurred
-// representing an error condition, with the nil value representing no error.
-func (c *Client) GetLastError() *Error {
-	defer func(c *Client) {
-		c.error = nil
-	}(c)
-	return c.error
 }
 
 func (c *Client) userAgent() string {
@@ -82,20 +72,16 @@ func (c *Client) setErrorThree(errorMain error, errorExec error, response *http.
 }
 
 func (c *Client) setError(errorMain error, errorExec error, response *http.Response, address *string) error {
-	c.error = nil
-
 	if errorMain == nil {
 		return nil
 	}
 
-	c.error = &Error{
+	return Error{
 		ErrMain:  errorMain,
 		ErrExec:  errorExec,
 		Response: response,
 		Address:  address,
 	}
-
-	return errorMain
 }
 
 // Do to send an client request, which is then converted to the passed type.
@@ -126,7 +112,7 @@ func (c *Client) Do(path string, i interface{}, options map[string]string) error
 	}
 
 	if resp.Status[0] != '2' {
-		return c.setErrorThree(ErrIRS, e, resp)
+		return c.setErrorThree(ErrIRS, errors.New(string(bytes)), resp)
 	}
 
 	if e = json.Unmarshal(bytes, &i); e != nil {
