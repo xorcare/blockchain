@@ -39,8 +39,16 @@ var (
 	ErrTHW = errors.New("transaction hash is wrong")
 )
 
+// MaxAddressesCount the maximum number of addresses that can be checked at a time using
+// the address checking function or the balance.
+var MaxAddressesCount = 100
+
 // Options map contains the default settings for requests to the api
 var Options = map[string]string{"format": "json"}
+
+func init() {
+	MaxAddressesCount = len(addressesForTestings)
+}
 
 // Client specifies the mechanism by which individual API requests are made.
 type Client struct {

@@ -59,8 +59,6 @@ func TestClient_GetAddress(t *testing.T) {
 }
 
 func TestClient_GetAddresses(t *testing.T) {
-	t.Log("Max addresses count:", GetMaxAddressesCount())
-
 	c := newClient()
 	resp, e := c.GetAddresses(addressesForTestings)
 	if e != nil {
