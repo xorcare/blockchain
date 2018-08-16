@@ -72,16 +72,6 @@ type Info struct {
 	LatestBlock LatestBlock `json:"latest_block"`
 }
 
-// ValidateBitcoinAddress bitcoin address validator
-func ValidateBitcoinAddress(address string) bool {
-	return validateBitcoinAddress(address) != -1
-}
-
-// ValidateBitcoinXpub bitcoin address validator
-func ValidateBitcoinXpub(xpub string) bool {
-	return validateBitcoinXpub(xpub) != -1
-}
-
 // GetAddress alias GetAddressAdv without additional parameters
 func (c *Client) GetAddress(address string) (*Address, error) {
 	return c.GetAddressAdv(address, nil)
@@ -111,38 +101,4 @@ func (c *Client) GetAddressesAdv(addresses []string, options map[string]string) 
 	options["active"] = strings.Join(addresses, "|")
 	resp = &MultiAddress{}
 	return resp, c.Do("/multiaddr", resp, options)
-}
-
-func (c *Client) checkAddress(address string) error {
-	if !ValidateBitcoinAddress(address) {
-		return c.setError(ErrAIW, nil, nil, &address)
-	}
-
-	return nil
-}
-
-func (c *Client) checkAddresses(addresses []string) (e error) {
-	if len(addresses) == 0 {
-		return c.setErrorOne(ErrNAP)
-	}
-
-	for _, address := range removeDuplicates(addresses) {
-		if !ValidateBitcoinAddress(address) && !ValidateBitcoinXpub(address) {
-			return c.setError(ErrAIW, nil, nil, &address)
-		}
-	}
-
-	return nil
-}
-
-func removeDuplicates(elements []string) (result []string) {
-	encountered := map[string]bool{}
-	for _, v := range elements {
-		if !encountered[v] {
-			encountered[v] = true
-			result = append(result, v)
-		}
-	}
-
-	return
 }
