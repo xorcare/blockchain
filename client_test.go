@@ -10,7 +10,7 @@ const firstBitcoinAddress = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
 
 func newClient() *Client {
 	c := New()
-	c.APIKey = os.Getenv("api_key")
+	c.APIKey = os.Getenv("API_KEY")
 	return c
 }
 

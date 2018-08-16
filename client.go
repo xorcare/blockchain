@@ -13,20 +13,20 @@ import (
 )
 
 const (
-	// Version api client
+	// Version api client.
 	Version = "1.0"
 
 	// UserAgent is the header string used to identify this package.
 	UserAgent = "blockchain-api-go-client/" + Version + " (go; github; +https://git.io/v5dN0)"
 
-	// BasePath the root address in the network
+	// BasePath the root address in the network.
 	BasePath = "https://blockchain.info"
 
-	// BasePathTor the root address in the tor network
+	// BasePathTor the root address in the tor network.
 	BasePathTor = "https://blockchainbdgpzk.onion"
 )
 
-// Errors it is a set of errors returned when working with the package
+// Errors it is a set of errors returned when working with the package.
 var (
 	ErrAIW = errors.New("address is wrong")
 	ErrBEW = errors.New("block height is wrong")
@@ -43,7 +43,7 @@ var (
 // the address checking function or the balance.
 var MaxAddressesCount = 100
 
-// Options map contains the default settings for requests to the api
+// Options map contains the default settings for requests to the api.
 var Options = map[string]string{"format": "json"}
 
 func init() {
@@ -54,9 +54,9 @@ func init() {
 type Client struct {
 	client *http.Client
 
-	APIKey    string // API access key
-	BasePath  string // API endpoint base URL
-	UserAgent string // optional additional User-Agent fragment
+	APIKey    string // API access key.
+	BasePath  string // API endpoint base URL.
+	UserAgent string // optional additional User-Agent fragment.
 }
 
 func (c *Client) userAgent() string {
@@ -130,25 +130,25 @@ func (c *Client) Do(path string, i interface{}, options map[string]string) error
 	return nil
 }
 
-// Error data structure describing the error
+// Error data structure describing the error.
 type Error struct {
-	// Address wrong address
+	// Address wrong address.
 	Address *string
-	// ErrMain error information from the standard package error set,
+	// ErrMain error information from the standard package error set.
 	ErrMain error
 	// ErrExec information about the error that occurred during
-	// the operation of the standard library or external packages
+	// the operation of the standard library or external packages.
 	ErrExec error
-	// Response http response
+	// Response http response.
 	Response *http.Response
 }
 
-// Error compatibility with error interface
+// Error compatibility with error interface.
 func (e Error) Error() string {
 	return e.ErrMain.Error()
 }
 
-// ApproveOptions automatic check and substitution of options
+// ApproveOptions automatic check and substitution of options.
 func ApproveOptions(options map[string]string) map[string]string {
 	if options == nil {
 		return Options
@@ -156,17 +156,17 @@ func ApproveOptions(options map[string]string) map[string]string {
 	return options
 }
 
-// New specifies the mechanism by create newClient client the network internet
+// New specifies the mechanism by create newClient client the network internet.
 func New() *Client {
 	return &Client{client: &http.Client{}, BasePath: BasePath}
 }
 
-// NewTor specifies the mechanism by create newClient client the network internet
+// NewTor specifies the mechanism by create newClient client the network internet.
 func NewTor() *Client {
 	return &Client{client: &http.Client{}, BasePath: BasePathTor}
 }
 
-// SetHTTP http client setter
+// SetHTTP http client setter.
 func (c *Client) SetHTTP(cli *http.Client) {
 	c.client = cli
 }

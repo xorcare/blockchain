@@ -24,7 +24,7 @@ type Address struct {
 	AccountIndex uint64 `json:"account_index,omitempty"`
 }
 
-// MultiAddress structure of the result when querying multiple addresses
+// MultiAddress structure of the result when querying multiple addresses.
 type MultiAddress struct {
 	RecommendIncludeFee bool      `json:"recommend_include_fee,omitempty"`
 	SharedcoinEndpoint  string    `json:"sharedcoin_endpoint,omitempty"`
@@ -34,7 +34,7 @@ type MultiAddress struct {
 	Info                Info      `json:"info"`
 }
 
-// Wallet summary data about the requested addresses
+// Wallet summary data about the requested addresses.
 type Wallet struct {
 	NTx           uint64 `json:"n_tx"`
 	NTxFiltered   uint64 `json:"n_tx_filtered"`
@@ -72,12 +72,12 @@ type Info struct {
 	LatestBlock LatestBlock `json:"latest_block"`
 }
 
-// GetAddress alias GetAddressAdv without additional parameters
+// GetAddress alias GetAddressAdv without additional parameters.
 func (c *Client) GetAddress(address string) (*Address, error) {
 	return c.GetAddressAdv(address, nil)
 }
 
-// GetAddressAdv is a mechanism which is used to obtain information about the address
+// GetAddressAdv is a mechanism which is used to obtain information about the address.
 func (c *Client) GetAddressAdv(address string, options map[string]string) (resp *Address, e error) {
 	if e = c.checkAddress(address); e != nil {
 		return
@@ -86,12 +86,12 @@ func (c *Client) GetAddressAdv(address string, options map[string]string) (resp 
 	return resp, c.Do("/address/"+address, resp, options)
 }
 
-// GetAddresses alias GetAddressesAdv without additional parameters
+// GetAddresses alias GetAddressesAdv without additional parameters.
 func (c *Client) GetAddresses(addresses []string) (*MultiAddress, error) {
 	return c.GetAddressesAdv(addresses, nil)
 }
 
-// GetAddressesAdv is a mechanism which is used to obtain information about the addresses
+// GetAddressesAdv is a mechanism which is used to obtain information about the addresses.
 func (c *Client) GetAddressesAdv(addresses []string, options map[string]string) (resp *MultiAddress, e error) {
 	if e = c.checkAddresses(addresses); e != nil {
 		return

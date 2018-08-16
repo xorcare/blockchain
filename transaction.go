@@ -4,7 +4,7 @@
 
 package blockchain
 
-// Tx the basic structure of the transaction
+// Tx the basic structure of the transaction.
 type Tx struct {
 	Result      int64    `json:"result"`
 	Ver         int64    `json:"ver"`
@@ -26,7 +26,7 @@ type Tx struct {
 	Rbf         bool     `json:"rbf"`
 }
 
-// Inputs the main structure of the inputs
+// Inputs the main structure of the inputs.
 type Inputs struct {
 	Sequence uint64  `json:"sequence"`
 	Witness  string  `json:"witness"`
@@ -47,7 +47,7 @@ type PrevOut struct {
 	Script      string `json:"script"`
 }
 
-// Out the main structure of the inputs
+// Out the main structure of the inputs.
 type Out struct {
 	AddrTagLink string `json:"addr_tag_link"`
 	AddrTag     string `json:"addr_tag"`
@@ -60,12 +60,12 @@ type Out struct {
 	Script      string `json:"script"`
 }
 
-// Txs transaction set
+// Txs transaction set.
 type Txs struct {
 	Txs []Tx `json:"txs"`
 }
 
-// GetTransaction get the transaction on its hash
+// GetTransaction get the transaction on its hash.
 func (c *Client) GetTransaction(transaction string) (resp *Tx, e error) {
 	if transaction == "" || len(transaction) != 64 {
 		return nil, c.setErrorOne(ErrTHW)
@@ -75,7 +75,7 @@ func (c *Client) GetTransaction(transaction string) (resp *Tx, e error) {
 	return resp, c.Do("/rawtx/"+transaction, resp, nil)
 }
 
-// GetUnconfirmedTransactions get the unconfirmed transactions
+// GetUnconfirmedTransactions get the unconfirmed transactions.
 func (c *Client) GetUnconfirmedTransactions() (resp *Txs, e error) {
 	resp = &Txs{}
 	return resp, c.Do("/unconfirmed-transactions", resp, nil)

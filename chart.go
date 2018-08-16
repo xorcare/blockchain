@@ -4,7 +4,7 @@
 
 package blockchain
 
-// Chart API data struct
+// Chart API data struct.
 type Chart struct {
 	Status      string  `json:"status"`
 	Name        string  `json:"name"`
@@ -14,7 +14,7 @@ type Chart struct {
 	Values      []Value `json:"values"`
 }
 
-// ChartPools pools information map
+// ChartPools pools information map.
 type ChartPools map[string]uint64
 
 // Value charts API values
@@ -23,7 +23,7 @@ type Value struct {
 	Y float64 `json:"y"`
 }
 
-// Stats reflects the structure of the statistics
+// Stats reflects the structure of the statistics.
 type Stats struct {
 	MarketPriceUsd                float64 `json:"market_price_usd"`
 	HashRate                      float64 `json:"hash_rate"`
