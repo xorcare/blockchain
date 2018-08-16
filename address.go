@@ -126,11 +126,23 @@ func (c *Client) checkAddresses(addresses []string) (e error) {
 		return c.setErrorOne(ErrNAP)
 	}
 
-	for _, address := range addresses {
+	for _, address := range removeDuplicates(addresses) {
 		if !ValidateBitcoinAddress(address) && !ValidateBitcoinXpub(address) {
 			return c.setError(ErrAIW, nil, nil, &address)
 		}
 	}
 
 	return nil
+}
+
+func removeDuplicates(elements []string) (result []string) {
+	encountered := map[string]bool{}
+	for _, v := range elements {
+		if !encountered[v] {
+			encountered[v] = true
+			result = append(result, v)
+		}
+	}
+
+	return
 }
