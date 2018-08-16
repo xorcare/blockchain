@@ -17,7 +17,7 @@ const (
 	Version = "1.0"
 
 	// UserAgent is the header string used to identify this package.
-	UserAgent = "blockchain-api-v1-client-go/" + Version + " (go; github; +https://git.io/v5dN0)"
+	UserAgent = "blockchain-api-go-client/" + Version + " (go; github; +https://git.io/v5dN0)"
 
 	// BasePath the root address in the network
 	BasePath = "https://blockchain.info"
