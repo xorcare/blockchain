@@ -109,7 +109,7 @@ func TestClient_GetAddresses(t *testing.T) {
 	}
 
 	resp, e = c.GetAddresses(addresses)
-	if e != nil || c.GetLastError() != nil {
+	if e != nil {
 		t.Fatal(e)
 	} else {
 		for _, v := range resp.Addresses {
@@ -181,14 +181,14 @@ func TestAddressesBadOptions(t *testing.T) {
 
 func TestClient_CheckAddress(t *testing.T) {
 	c := New()
-	if e := c.checkAddress(""); e != ErrAIW {
+	if e := c.checkAddress(""); e.Error() != ErrAIW.Error() {
 		t.Fatal("incorrect error: " + e.Error())
 	}
 }
 
 func TestClient_CheckAddresses(t *testing.T) {
 	c := New()
-	if e := c.checkAddresses([]string{}); e != ErrNAP {
+	if e := c.checkAddresses([]string{}); e.Error() == ErrAIW.Error() {
 		t.Fatal("incorrect error: " + e.Error())
 	}
 }
