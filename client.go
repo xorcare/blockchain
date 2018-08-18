@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 const (
@@ -60,6 +61,7 @@ type Client struct {
 }
 
 func (c *Client) userAgent() string {
+	c.UserAgent = strings.TrimSpace(c.UserAgent)
 	if c.UserAgent == "" {
 		return UserAgent
 	}
@@ -84,7 +86,7 @@ func (c *Client) setError(errorMain error, errorExec error, response *http.Respo
 		return nil
 	}
 
-	return Error{
+	return &Error{
 		ErrMain:  errorMain,
 		ErrExec:  errorExec,
 		Response: response,

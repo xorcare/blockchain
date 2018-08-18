@@ -9,7 +9,7 @@ import "testing"
 func TestGetUnconfirmedTransactions(t *testing.T) {
 	txs, e := newClient().GetUnconfirmedTransactions()
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 
 	for i := range txs.Txs {
@@ -44,7 +44,7 @@ func TestGetUnconfirmedTransactions(t *testing.T) {
 func TestGetTransaction(t *testing.T) {
 	tx, e := newClient().GetTransaction("4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b")
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 	checkFirstTx(t, *tx)
 }
