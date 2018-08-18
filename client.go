@@ -56,7 +56,7 @@ type Client struct {
 
 	APIKey    string // API access key.
 	BasePath  string // API endpoint base URL.
-	UserAgent string // optional additional User-Agent fragment.
+	UserAgent string // Optional additional User-Agent fragment.
 }
 
 func (c *Client) userAgent() string {
