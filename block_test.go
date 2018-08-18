@@ -11,7 +11,7 @@ import (
 func TestGetBlock(t *testing.T) {
 	block, e := newClient().GetBlock("000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f")
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 	checkFirstBlock(t, *block)
 }
@@ -19,7 +19,7 @@ func TestGetBlock(t *testing.T) {
 func TestGetBlockHeight(t *testing.T) {
 	blockHeight, e := newClient().GetBlockHeight("0")
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 
 	if len(blockHeight.Blocks) != 1 {
@@ -74,7 +74,7 @@ func TestGetBlockHeightSpecialBlocksRecruitment(t *testing.T) {
 func TestGetBlocks(t *testing.T) {
 	blocks, e := newClient().GetBlocks("1231006505000")
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 
 	if len(blocks.Blocks) < 1 {
@@ -101,7 +101,7 @@ func TestGetBlocks(t *testing.T) {
 func TestGetLatestBlock(t *testing.T) {
 	block, e := newClient().GetLatestBlock()
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 
 	if len(block.Hash) != 64 {

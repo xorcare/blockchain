@@ -86,7 +86,7 @@ func (c *Client) setError(errorMain error, errorExec error, response *http.Respo
 		return nil
 	}
 
-	return Error{
+	return &Error{
 		ErrMain:  errorMain,
 		ErrExec:  errorExec,
 		Response: response,
