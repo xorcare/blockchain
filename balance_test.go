@@ -213,8 +213,7 @@ func TestClient_GetBalanceImp(t *testing.T) {
 
 	balances, e := c.GetBalanceImp(addresses)
 	if e != nil {
-		e := e.(*Error)
-		t.Fatal(e, e.ErrMain, e.Address)
+		t.Fatal(customError(e))
 	} else {
 		t.Log("GetBalanceImp: ", len(balances))
 	}
@@ -224,7 +223,7 @@ func TestClient_GetBalanceImp(t *testing.T) {
 func TestClient_GetBalance(t *testing.T) {
 	balances, e := newClient().GetBalance(addressesForTestings)
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 
 	for k, v := range balances {

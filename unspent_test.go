@@ -20,7 +20,7 @@ func TestGetUnspent(t *testing.T) {
 
 	resp, e := newClient().GetUnspentAdv(addresses, map[string]string{"limit": "1000"})
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 
 	for _, v := range resp.UnspentOutputs {

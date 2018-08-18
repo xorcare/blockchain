@@ -12,7 +12,7 @@ import (
 func TestClient_GetAddress(t *testing.T) {
 	resp, e := newClient().GetAddress(firstBitcoinAddress)
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 
 	if resp.Address != firstBitcoinAddress {
@@ -48,7 +48,7 @@ func TestClient_GetAddress(t *testing.T) {
 		t.Run(test.address, func(t *testing.T) {
 			resp, e := newClient().GetAddress(test.address)
 			if e != nil {
-				t.Fatal(e)
+				t.Fatal(customError(e))
 			}
 
 			if resp == nil || resp.Address != test.address {
@@ -62,7 +62,7 @@ func TestClient_GetAddresses(t *testing.T) {
 	c := newClient()
 	resp, e := c.GetAddresses(addressesForTestings)
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 
 	if len(resp.Txs) < 50 {
@@ -108,7 +108,7 @@ func TestClient_GetAddresses(t *testing.T) {
 
 	resp, e = c.GetAddresses(addresses)
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	} else {
 		for _, v := range resp.Addresses {
 			t.Logf("%34s %11d %11d %5d", v.Address, v.FinalBalance, v.TotalReceived, v.NTx)
@@ -123,7 +123,7 @@ func TestGetAddressesOneAddress(t *testing.T) {
 
 	resp, e := newClient().GetAddresses(addresses)
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 
 	addr := resp.Addresses[0]
@@ -143,7 +143,7 @@ func TestGetAddressesOneAddress(t *testing.T) {
 func TestGetAddressMoreOptions(t *testing.T) {
 	resp, e := newClient().GetAddressAdv(firstBitcoinAddress, map[string]string{"offset": "2147483647"})
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 
 	if len(resp.Txs) != 0 {
@@ -159,7 +159,7 @@ func TestGetAddressesMoreOptions(t *testing.T) {
 
 	resp, e := newClient().GetAddressesAdv(addresses, map[string]string{"offset": "2147483647"})
 	if e != nil {
-		t.Fatal(e)
+		t.Fatal(customError(e))
 	}
 
 	if len(resp.Txs) != 0 {
