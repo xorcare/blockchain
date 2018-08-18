@@ -4,10 +4,7 @@
 
 package blockchain
 
-import (
-	"encoding/json"
-	"testing"
-)
+import "testing"
 
 func TestClient_GetAddress(t *testing.T) {
 	resp, e := newClient().GetAddress(firstBitcoinAddress)
@@ -246,28 +243,5 @@ func TestValidateBitcoinXpub(t *testing.T) {
 				t.Fatalf("validate test failed xpub: %s", test.address)
 			}
 		})
-	}
-}
-
-func BenchmarkAddressUnmarshal(b *testing.B) {
-	b.StopTimer()
-	resp, e := newClient().GetAddressAdv("16rCmCmbuWDhPjWTrpQGaU3EPdZF7MTdUk", map[string]string{})
-	if e != nil {
-		b.Fatal(e)
-	}
-
-	bytes, e2 := json.Marshal(resp)
-	if e2 != nil {
-		b.Fatal(e2)
-	}
-
-	address := &Address{}
-	b.ReportAllocs()
-	b.StartTimer()
-	for i := 0; i < b.N; i++ {
-		e := json.Unmarshal(bytes, address)
-		if e != nil {
-			b.Fatal(e)
-		}
 	}
 }
