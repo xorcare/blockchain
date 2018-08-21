@@ -16,7 +16,7 @@ func ValidateBitcoinXpub(xpub string) bool {
 
 func (c *Client) checkAddress(address string) error {
 	if !ValidateBitcoinAddress(address) {
-		return c.setError(ErrAIW, nil, nil, &address)
+		return c.err4(ErrAIW, address)
 	}
 
 	return nil
@@ -24,12 +24,12 @@ func (c *Client) checkAddress(address string) error {
 
 func (c *Client) checkAddresses(addresses []string) (e error) {
 	if len(addresses) == 0 {
-		return c.setErrorOne(ErrNAP)
+		return c.err(ErrNAP)
 	}
 
 	for _, address := range removeDuplicates(addresses) {
 		if !ValidateBitcoinAddress(address) && !ValidateBitcoinXpub(address) {
-			return c.setError(ErrAIW, nil, nil, &address)
+			return c.err4(ErrAIW, address)
 		}
 	}
 

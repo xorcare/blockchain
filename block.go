@@ -39,7 +39,7 @@ type Blocks struct {
 // GetBlock get the block by the hash.
 func (c *Client) GetBlock(hash string) (resp *Block, e error) {
 	if hash == "" || len(hash) != 64 {
-		return nil, c.setErrorOne(ErrBHW)
+		return nil, c.err(ErrBHW)
 	}
 
 	resp = &Block{}
@@ -49,7 +49,7 @@ func (c *Client) GetBlock(hash string) (resp *Block, e error) {
 // GetBlockHeight get the block at height.
 func (c *Client) GetBlockHeight(height string) (resp *Blocks, e error) {
 	if height == "" {
-		return nil, c.setErrorOne(ErrBEW)
+		return nil, c.err(ErrBEW)
 	}
 
 	resp = &Blocks{}
@@ -59,7 +59,7 @@ func (c *Client) GetBlockHeight(height string) (resp *Blocks, e error) {
 // GetBlocks getting blocks at a certain height.
 func (c *Client) GetBlocks(height string) (resp *Blocks, e error) {
 	if height == "" {
-		return nil, c.setErrorOne(ErrBEW)
+		return nil, c.err(ErrBEW)
 	}
 
 	resp = &Blocks{}

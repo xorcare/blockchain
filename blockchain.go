@@ -72,36 +72,15 @@ func (c *Client) userAgent() string {
 	return UserAgent + " " + c.UserAgent
 }
 
-func (c *Client) setErrorOne(errorMain error) error {
-	return c.setError(errorMain, nil, nil, nil)
-}
-
-func (c *Client) setErrorTwo(errorMain error, errorExec error) error {
-	return c.setError(errorMain, errorExec, nil, nil)
-}
-
-func (c *Client) setErrorThree(errorMain error, errorExec error, response *http.Response) error {
-	return c.setError(errorMain, errorExec, response, nil)
-}
-
-func (c *Client) setError(errorMain error, errorExec error, response *http.Response, address *string) error {
-	if errorMain == nil {
-		return nil
-	}
-
-	return &Error{
-		ErrMain:  errorMain,
-		ErrExec:  errorExec,
-		Response: response,
-		Address:  address,
-	}
-}
-
 // Do to send an client request, which is then converted to the passed type.
 func (c *Client) Do(path string, i interface{}, options map[string]string) error {
 	options = ApproveOptions(options)
 	options["format"] = "json"
 	options["api_code"] = c.APIKey
+	if options["api_code"] == "" {
+		delete(options, "api_code")
+	}
+
 	values := url.Values{}
 	for k, v := range options {
 		values.Set(k, v)
@@ -109,48 +88,30 @@ func (c *Client) Do(path string, i interface{}, options map[string]string) error
 
 	req, e := http.NewRequest("GET", c.BasePath+path+"?"+(values.Encode()), nil)
 	if e != nil {
-		return c.setErrorTwo(ErrCGD, e)
+		return c.err2(ErrCGD, e)
 	}
 	req.Header.Set("User-Agent", c.userAgent())
 
 	resp, e := c.client.Do(req)
 	if e != nil {
-		return c.setErrorThree(ErrCGD, e, resp)
+		return c.err3(ErrCGD, e, resp)
 	}
 	defer resp.Body.Close()
 
 	bytes, e := ioutil.ReadAll(resp.Body)
 	if e != nil {
-		return c.setErrorThree(ErrCRR, e, resp)
+		return c.err3(ErrCRR, e, resp)
 	}
 
 	if resp.Status[0] != '2' {
-		return c.setErrorThree(ErrIRS, errors.New(string(bytes)), resp)
+		return c.err3(ErrIRS, errors.New(string(bytes)), resp)
 	}
 
 	if e = json.Unmarshal(bytes, &i); e != nil {
-		return c.setErrorThree(ErrRPE, e, resp)
+		return c.err3(ErrRPE, e, resp)
 	}
 
 	return nil
-}
-
-// Error data structure describing the error.
-type Error struct {
-	// Address wrong address.
-	Address *string
-	// ErrMain error information from the standard package error set.
-	ErrMain error
-	// ErrExec information about the error that occurred during
-	// the operation of the standard library or external packages.
-	ErrExec error
-	// Response http response.
-	Response *http.Response
-}
-
-// Error compatibility with error interface.
-func (e Error) Error() string {
-	return e.ErrMain.Error()
 }
 
 // ApproveOptions automatic check and substitution of options.
