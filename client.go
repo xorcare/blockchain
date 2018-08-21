@@ -17,8 +17,11 @@ const (
 	// Version api client.
 	Version = "1.0"
 
+	//Package package name const
+	Package = "blockchain"
+
 	// UserAgent is the header string used to identify this package.
-	UserAgent = "blockchain-api-go-client/" + Version + " (go; github; +https://git.io/fNhcB)"
+	UserAgent = Package + "-api-go-client/" + Version + " (go; github; +https://git.io/fNhcB)"
 
 	// BasePath the root address in the network.
 	BasePath = "https://blockchain.info"
@@ -29,15 +32,15 @@ const (
 
 // Errors it is a set of errors returned when working with the package.
 var (
-	ErrAIW = errors.New("address is wrong")
-	ErrBEW = errors.New("block height is wrong")
-	ErrBHW = errors.New("block hash is wrong")
-	ErrCGD = errors.New("cannot get data on url")
-	ErrCRR = errors.New("could not read answer response")
-	ErrIRS = errors.New("incorrect response status")
-	ErrNAP = errors.New("no address(es) provided")
-	ErrRPE = errors.New("response parsing error")
-	ErrTHW = errors.New("transaction hash is wrong")
+	ErrAIW = errors.New(Package + ": address is wrong")
+	ErrBEW = errors.New(Package + ": block height is wrong")
+	ErrBHW = errors.New(Package + ": block hash is wrong")
+	ErrCGD = errors.New(Package + ": cannot get data on url")
+	ErrCRR = errors.New(Package + ": could not read answer response")
+	ErrIRS = errors.New(Package + ": incorrect response status")
+	ErrNAP = errors.New(Package + ": no address(es) provided")
+	ErrRPE = errors.New(Package + ": response parsing error")
+	ErrTHW = errors.New(Package + ": transaction hash is wrong")
 )
 
 // MaxAddressesCount the maximum number of addresses that can be checked at a time using
@@ -171,7 +174,7 @@ func NewTor() *Client {
 // SetClient http client setter.
 func (c *Client) SetClient(client *http.Client) {
 	if client == nil {
-		panic("blockchain: impossible install the client as nil")
+		panic(Package + ": impossible install the client as nil")
 	}
 	c.client = client
 }
