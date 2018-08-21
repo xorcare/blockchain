@@ -78,12 +78,8 @@ func TestApproveOptions(t *testing.T) {
 
 func TestClient_SetHTTP(t *testing.T) {
 	c := New()
-	c.SetHTTP(nil)
-	if c.client != nil {
-		t.Fatal("wrong client condition")
-	}
-
-	c.SetHTTP(&http.Client{})
+	c.client = nil
+	c.SetClient(&http.Client{})
 	if c.client == nil {
 		t.Fatal("wrong client condition")
 	}

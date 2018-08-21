@@ -168,7 +168,10 @@ func NewTor() *Client {
 	return &Client{client: &http.Client{}, BasePath: BasePathTor}
 }
 
-// SetHTTP http client setter.
-func (c *Client) SetHTTP(cli *http.Client) {
-	c.client = cli
+// SetClient http client setter.
+func (c *Client) SetClient(client *http.Client) {
+	if client == nil {
+		panic("blockchain: impossible install the client as nil")
+	}
+	c.client = client
 }
