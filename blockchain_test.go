@@ -69,14 +69,14 @@ func TestApproveOptions(t *testing.T) {
 	var options map[string]string
 	options = ApproveOptions(options)
 	if options == nil {
-		t.Fatal("wrong oprions")
+		t.Fatal("wrong options")
 	}
 
 	var s = "test"
 	options[s] = s
 	options = ApproveOptions(options)
 	if options[s] != s {
-		t.Fatal("wrong oprions")
+		t.Fatal("wrong options")
 	}
 }
 
